@@ -110,8 +110,8 @@ body {
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
-    padding: 0 var(--space-lg);
-    gap: var(--space-md);
+    padding: 0 16px;
+    gap: 12px;
 }
 
 .logo {
@@ -128,30 +128,35 @@ body {
 /* === CONTENEDOR DE PESTAÑAS === */
 .tabs-container {
     display: flex;
-    gap: 4px;
+    gap: 2px;
+    /* ← Mantener pequeño o volver a 2px */
     background: var(--bg-tertiary);
-    padding: 5px;
+    padding: 4px;
+    /* ← Volver a 4px */
     border-radius: var(--radius-md);
     border: 1px solid var(--border);
 }
 
 /* === BOTÓN DE PESTAÑA (Base) === */
 .tab-btn {
-    padding: 8px 18px;
+    padding: 6px 16px;
+    /* ← Volver al original */
     background: transparent;
     border: 1px solid transparent;
     color: var(--text-secondary);
     cursor: pointer;
     border-radius: var(--radius-sm);
     font-size: 12px;
-    font-weight: 600;
-    transition: all 0.2s ease;
+    /* ← Volver a 12px */
+    font-weight: 500;
+    /* ← Volver a 500 (no 600) */
+    transition: all var(--transition-fast);
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    /* ← Volver a 6px */
     position: relative;
     user-select: none;
-    -webkit-user-select: none;
 }
 
 .tab-btn:hover {
@@ -180,25 +185,49 @@ body {
     border-radius: 2px;
 }
 
+/* === HEADER ACTIONS (Botones de la derecha) === */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    /* Empuja el contenedor a la derecha */
+    flex-wrap: nowrap;
+    /* Evita que los botones salten de línea */
+    overflow-x: auto;
+    /* Permite scroll horizontal si la pantalla es muy pequeña */
+    padding-bottom: 2px;
+    /* Espacio para el scrollbar si aparece */
+}
+
+/* Ocultar barra de scroll para que no afee el header pero siga funcionando con rueda/dedo */
+.header-actions::-webkit-scrollbar {
+    height: 0px;
+    background: transparent;
+}
+
 /* === VIEW TOGGLE (Dividido/Código/Visual) === */
 .view-toggle {
     display: flex;
     gap: 4px;
     background: var(--bg-tertiary);
-    padding: 6px;
+    padding: 4px;
+    /* ← Volver a 4px */
     border-bottom: 1px solid var(--border);
 }
 
 .view-btn {
     padding: 8px 16px;
+    /* ← Original */
     background: transparent;
     border: 1px solid transparent;
-    color: var(--text-muted);
+    color: var(--text-secondary);
     cursor: pointer;
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 500;
+    /* ← Volver a 500 */
     border-radius: var(--radius-sm);
-    transition: all 0.2s ease;
+    transition: all var(--transition-fast);
     display: flex;
     align-items: center;
     gap: 6px;
@@ -340,6 +369,7 @@ body {
     transition: all var(--transition-fast);
     background: var(--bg-hover);
     color: var(--text-primary);
+    white-space: nowrap;
 }
 
 .btn:hover {

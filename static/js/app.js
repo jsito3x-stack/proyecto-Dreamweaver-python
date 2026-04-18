@@ -437,15 +437,15 @@ const App = {
     },
 
     /**
-     * 🆕 Cambiar vista (Dividido/Código/Visual)
-     */
+ * Cambiar vista (Dividido/Código/Visual)
+ */
     setView(view) {
         console.log(`%c👁️ [VIEW] → ${view}`, 'color: #ffb86c; font-weight: bold;');
 
         this.previousView = this.currentView;
         this.currentView = view;
 
-        // Mostrar vista + actualizar botones (ya actualiza .view-btn.active)
+        // Mostrar vista + actualizar botones
         this.showOnlyView(`${view}-view`);
 
         // Actualizar preview si es necesario
@@ -453,7 +453,6 @@ const App = {
             setTimeout(() => Preview.update(), 50);
         }
 
-        // Guardar preferencia
         this.config.lastView = view;
         this.saveConfig();
     },
@@ -470,6 +469,52 @@ const App = {
      */
     setVisualOnly() {
         this.setView('visual');
+    },
+
+    /**
+     * Mostrar solo la vista indicada + ACTUALIZAR BOTONES
+     */
+    showOnlyView(viewId) {
+        console.log(`%c🔄 [VISTA] → ${viewId}`, 'color: cyan; font-weight: bold;');
+
+        // 1. OCULTAR TODAS LAS VISTAS
+        document.getElementById('split-view')?.classList.remove('active');
+        document.getElementById('code-view')?.classList.remove('active');
+        document.getElementById('visual-view')?.classList.remove('active');
+        document.getElementById('visor-view')?.classList.remove('active');
+
+        // 2. MOSTRAR LA VISTA SELECCIONADA
+        document.getElementById(viewId)?.classList.add('active');
+
+        // 3. ACTUALIZAR BOTONES DE VISTA
+        const viewName = viewId.replace('-view', '');
+
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        const activeBtn = document.querySelector(`.view-btn[data-view="${viewName}"]`);
+        if (activeBtn) {
+            activeBtn.classList.add('active');
+        }
+
+        // 4. Actualizar preview frames
+        setTimeout(() => {
+            if (typeof Preview !== 'undefined' && Preview.cachedHtml) {
+                const frameDividido = document.getElementById('preview-frame');
+                const frameVisual = document.getElementById('visual-only-frame');
+
+                if (frameDividido && document.getElementById('split-view')?.classList.contains('active')) {
+                    frameDividido.srcdoc = Preview.cachedHtml;
+                }
+                if (frameVisual && document.getElementById('visual-view')?.classList.contains('active')) {
+                    frameVisual.srcdoc = Preview.cachedHtml;
+                }
+            }
+            if (typeof Editor !== 'undefined' && Editor.refresh) {
+                Editor.refresh();
+            }
+        }, 10);
     },
 
     /**

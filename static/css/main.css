@@ -52,7 +52,7 @@
     --space-2xl: 32px;
 }
 
-/* === RESET Y BASE (Sin cambios) === */
+/* === RESET Y BASE === */
 *,
 *::before,
 *::after {
@@ -67,14 +67,15 @@ html {
 }
 
 body {
-    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
     background: var(--bg-primary);
     color: var(--text-primary);
     height: 100vh;
     overflow: hidden;
+    line-height: 1.5;
 }
 
-/* === SCROLLBAR === */
+/* === SCROLLBAR PERSONALIZADO === */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -113,6 +114,17 @@ body {
     gap: var(--space-md);
 }
 
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    width: 150px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
 /* === CONTENEDOR DE PESTAÑAS === */
 .tabs-container {
     display: flex;
@@ -123,7 +135,7 @@ body {
     border: 1px solid var(--border);
 }
 
-/* === BOTÓN DE PESTAÑA (Base - sin colores específicos) === */
+/* === BOTÓN DE PESTAÑA (Base) === */
 .tab-btn {
     padding: 8px 18px;
     background: transparent;
@@ -169,7 +181,6 @@ body {
 }
 
 /* === VIEW TOGGLE (Dividido/Código/Visual) === */
-/* === VIEW BUTTONS - Deben estar definidos === */
 .view-toggle {
     display: flex;
     gap: 4px;
@@ -200,13 +211,12 @@ body {
     color: var(--accent);
 }
 
-/* 👇 ESTE ES EL QUE FALTABA - ESTADO ACTIVO */
 .view-btn.active {
     background: var(--bg-active);
     color: var(--success);
     border-color: var(--success);
     font-weight: 700;
-    box-shadow: 0 0 10px rgba(var(--success-rgb, 80, 250, 123), 0.3);
+    box-shadow: 0 0 10px rgba(80, 250, 123, 0.3);
 }
 
 .view-btn.active::after {
@@ -230,6 +240,83 @@ body {
     overflow: hidden;
 }
 
+.panel-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+}
+
+.panel-tab {
+    flex: 1;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.panel-tab:hover {
+    background: var(--bg-hover);
+}
+
+.panel-tab.active {
+    background: var(--bg-primary);
+    color: var(--accent);
+    border-bottom: 2px solid var(--accent);
+}
+
+.panel-content {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-section {
+    display: none;
+    flex: 1;
+    overflow: auto;
+}
+
+.panel-section.active {
+    display: flex;
+    flex-direction: column;
+}
+
+/* === EXPLORADOR DE ARCHIVOS === */
+.file-tree {
+    padding: var(--space-md);
+    flex: 1;
+    overflow: auto;
+}
+
+.file-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: 2px;
+    transition: all var(--transition-fast);
+}
+
+.file-item:hover {
+    background: var(--bg-hover);
+}
+
+.file-item.active {
+    background: var(--accent);
+    color: #fff;
+}
+
 /* === PANEL CENTRAL === */
 .center-panel {
     display: flex;
@@ -239,7 +326,7 @@ body {
     background: var(--bg-primary);
 }
 
-/* === RESTO DE ESTILOS (botones, paneles, etc.) === */
+/* === BOTONES === */
 .btn {
     padding: 6px 14px;
     border: none;
@@ -282,34 +369,6 @@ body {
     color: var(--text-primary);
 }
 
-/* === EXPLORADOR DE ARCHIVOS === */
-.file-tree {
-    padding: var(--space-md);
-    flex: 1;
-    overflow: auto;
-}
-
-.file-item {
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: var(--radius-sm);
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    margin-bottom: 2px;
-    transition: all var(--transition-fast);
-}
-
-.file-item:hover {
-    background: var(--bg-hover);
-}
-
-.file-item.active {
-    background: var(--accent);
-    color: #fff;
-}
-
 /* === STATUS BAR === */
 .status-bar {
     display: flex;
@@ -322,66 +381,8 @@ body {
 }
 
 /* ════════════════════════════════════════════════════════════════
-   SPLIT VIEW - Layout mitad código + mitad visual
-   ════════════════════════════════════════════════════════════════ */
-
-.split-editor {
-    display: flex;
-    flex-direction: row;
-    /* ← Lado a lado */
-    flex: 1;
-    overflow: hidden;
-    min-height: 0;
-    width: 100%;
-    height: 100%;
-}
-
-/* ════════════════════════════════════════════════════
-   MITAD IZQUIERDA: EDITOR DE CÓDIGO (50%)
-   ════════════════════════════════════════════════════ */
-.split-editor .editor-half {
-    flex: 1;
-    /* ← 50% del ancho */
-    min-width: 0;
-    /* ← Permitir que se haga pequeño */
-    overflow: hidden;
-    border-right: 1px solid rgba(128, 128, 128, 0.15);
-    /* Casi invisible */
-    display: flex;
-    flex-direction: column;
-}
-
-/* CodeMirror dentro del split */
-.split-editor .CodeMirror {
-    height: 100% !important;
-    flex: 1;
-}
-
-/* ════════════════════════════════════════════════════
-   MITAD DERECHA: VISTA PREVIA (50%)
-   ════════════════════════════════════════════════════ */
-.split-editor .preview-half {
-    flex: 1;
-    /* ← 50% del ancho */
-    min-width: 0;
-    /* ← Permitir que se haga pequeño */
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Iframe preview dentro del split */
-.split-editor .preview-half iframe,
-.split-editor #preview-frame {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: var(--bg-primary);
-    flex: 1;
-}
-
-/* ════════════════════════════════════════════════════════════════
-   VISTAS - Versión LIMPIA (sin líneas ni cuadrados extraños)
+   VISTAS - Versión LIMPIA DEFINITIVA
+   Sin líneas de separación ni cuadrados extraños
    ════════════════════════════════════════════════════════════════ */
 
 /* Contenedor principal del editor */
@@ -392,149 +393,184 @@ body {
     overflow: hidden;
     min-height: 0;
     max-height: 100%;
+    background: var(--bg-primary);
+    position: relative;
+    /* Importante para contener vistas absolutas */
 }
 
-/* === VISTA DIVIDIDA === */
+/* ════════════════════════════════════════════════════════════════
+   REGLA UNIVERSAL: TODAS LAS VISTAS OCULTAS POR DEFECTO
+   No ocupan espacio en el layout
+   ════════════════════════════════════════════════════════════════ */
 #split-view,
-.split-view {
-    display: none;
-    flex-direction: column;
-    flex: 1;
-    overflow: hidden;
-    min-height: 0;
-    /* NADA más - sin padding, sin margin, sin borde */
+.split-view,
+#code-view,
+.code-view,
+#visual-view,
+.visual-view,
+#visor-view,
+.visor-view {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    overflow: hidden !important;
+    background: transparent !important;
 }
 
+/* ════════════════════════════════════════════════════════════════
+   VISTA ACTIVA: Visible y con layout normal
+   Ocupa su lugar normalmente en el flujo
+   ════════════════════════════════════════════════════════════════ */
 #split-view.active,
-.split-view.active {
-    display: flex;
+.split-view.active,
+#code-view.active,
+.code-view.active,
+#visual-view.active,
+.visual-view.active,
+#visor-view.active,
+.visor-view.active {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 2 !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    overflow: hidden !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    background: var(--bg-primary) !important;
 }
 
-/* Layout interno: 2 columnas lado a lado */
-#split-view .split-editor,
-.split-view .split-editor {
+/* ════════════════════════════════════════════════════════════════
+   SPLIT VIEW - Layout horizontal (50% código + 50% preview)
+   SIN línea de separación visible
+   ════════════════════════════════════════════════════════════════ */
+
+/* Contenedor split interno */
+#split-view.active .split-editor,
+.split-view.active .split-editor {
     display: flex !important;
     flex-direction: row !important;
-    /* ← Horizontal */
-    flex: 1;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    min-height: 0;
-    max-height: 100%;
-    /* SIN bordes, SIN gaps */
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    gap: 0 !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: var(--bg-primary) !important;
 }
 
-/* Mitad izquierda: Editor */
-#split-view .editor-half {
-    flex: 1;
-    /* 50% */
-    min-width: 0;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    background: var(--bg-primary);
+/* Mitad izquierda: Editor de Código (50%) */
+#split-view.active .editor-half,
+.split-view.active .editor-half {
+    flex: 1 1 50% !important;
+    min-width: 0 !important;
+    max-width: 50% !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    border: none !important;
+    /* ← SIN LÍNEA DE SEPARACIÓN */
+    padding: 0 !important;
+    margin: 0 !important;
+    background: var(--bg-primary) !important;
 }
 
-/* Mitad derecha: Preview */
-#split-view .preview-half {
-    flex: 1;
-    /* 50% */
-    min-width: 0;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    background: var(--bg-primary);
+/* Mitad derecha: Vista Previa (50%) */
+#split-view.active .preview-half,
+.split-view.active .preview-half {
+    flex: 1 1 50% !important;
+    min-width: 0 !important;
+    max-width: 50% !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: var(--bg-primary) !important;
+}
+
+/* CodeMirror dentro del split */
+#split-view.active .CodeMirror,
+.split-view.active .CodeMirror {
+    height: 100% !important;
+    flex: 1 1 auto !important;
+    background: var(--bg-primary) !important;
 }
 
 /* Iframes dentro del split */
 #split-view iframe,
 #preview-frame {
-    width: 100%;
-    height: 100%;
-    border: none;
-    /* ← SIN borde */
-    background: var(--bg-primary);
-    flex: 1;
-    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    background: var(--bg-primary) !important;
+    flex: 1 1 auto !important;
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
-/* === VISTA SOLO CÓDIGO === */
-#code-view,
-.code-view {
-    display: none;
-    flex-direction: column;
-    flex: 1;
-    overflow: hidden;
-    min-height: 0;
-    height: 100%;
-}
-
-#code-view.active,
-.code-view.active {
-    display: flex;
-}
-
+/* ════════════════════════════════════════════════════════════════
+   VISTA SOLO CÓDIGO - Editor ocupa todo el espacio
+   ════════════════════════════════════════════════════════════════ */
 #code-view textarea,
 #code-only-editor,
 .code-view .CodeMirror {
     width: 100% !important;
     height: 100% !important;
-    flex: 1;
-    border: none;
-    background: var(--bg-primary);
+    flex: 1 1 auto !important;
+    border: none !important;
+    background: var(--bg-primary) !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
-/* === VISTA SOLO VISUAL === */
-#visual-view,
-.visual-view {
-    display: none;
-    flex-direction: column;
-    flex: 1;
-    overflow: hidden;
-    min-height: 0;
-    height: 100%;
-}
-
-#visual-view.active,
-.visual-view.active {
-    display: flex;
-}
-
+/* ════════════════════════════════════════════════════════════════
+   VISTA SOLO VISUAL - Preview ocupa todo el espacio
+   ════════════════════════════════════════════════════════════════ */
 #visual-view iframe,
 #visual-only-frame {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: var(--bg-primary);
-    flex: 1;
-    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    background: var(--bg-primary) !important;
+    flex: 1 1 auto !important;
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
-/* === VISOR DE ARCHIVOS === */
-#visor-view,
-.visor-view {
-    display: none;
-    flex-direction: column;
-    flex: 1;
-    overflow: hidden;
-    min-height: 0;
-    height: 100%;
-    background: var(--bg-primary);
-}
-
-#visor-view.active,
-.visor-view.active {
-    display: flex;
-}
-
+/* ════════════════════════════════════════════════════════════════
+   VISOR DE ARCHIVOS - Iframe ocupa todo el espacio
+   ════════════════════════════════════════════════════════════════ */
 #visor-view iframe,
 #visor-frame {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: var(--bg-primary);
-    flex: 1;
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    background: var(--bg-primary) !important;
+    flex: 1 1 auto !important;
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }

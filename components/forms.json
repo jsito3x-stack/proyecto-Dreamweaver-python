@@ -1,0 +1,90 @@
+[
+    {
+        "name": "Formulario de Contacto",
+        "icon": "📧",
+        "description": "Formulario de contacto completo",
+        "category": "forms",
+        "html": "<form class=\"form\">\n    <div class=\"form-group\">\n        <label for=\"name\">Nombre</label>\n        <input type=\"text\" id=\"name\" class=\"form-control\" placeholder=\"Tu nombre\" required>\n    </div>\n    <div class=\"form-group\">\n        <label for=\"email\">Email</label>\n        <input type=\"email\" id=\"email\" class=\"form-control\" placeholder=\"tu@email.com\" required>\n    </div>\n    <div class=\"form-group\">\n        <label for=\"message\">Mensaje</label>\n        <textarea id=\"message\" class=\"form-control\" rows=\"5\" placeholder=\"Tu mensaje\" required></textarea>\n    </div>\n    <button type=\"submit\" class=\"btn btn-primary\">Enviar</button>\n</form>",
+        "css": ".form { max-width: 500px; } .form-group { margin-bottom: 20px; } .form-group label { display: block; margin-bottom: 8px; color: #94a3b8; font-size: 14px; } .form-control { width: 100%; padding: 12px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #e2e8f0; font-size: 14px; } .form-control:focus { outline: none; border-color: #3b82f6; }"
+    },
+    {
+        "name": "Input Text",
+        "icon": "📝",
+        "description": "Campo de texto simple",
+        "category": "forms",
+        "html": "<div class=\"form-group\">\n    <label for=\"input-text\">Etiqueta</label>\n    <input type=\"text\" id=\"input-text\" class=\"form-control\" placeholder=\"Placeholder\">\n</div>",
+        "css": ""
+    },
+    {
+        "name": "Input Email",
+        "icon": "📧",
+        "description": "Campo de email",
+        "category": "forms",
+        "html": "<div class=\"form-group\">\n    <label for=\"input-email\">Correo Electrónico</label>\n    <input type=\"email\" id=\"input-email\" class=\"form-control\" placeholder=\"tu@email.com\">\n</div>",
+        "css": ""
+    },
+    {
+        "name": "Input Password",
+        "icon": "🔒",
+        "description": "Campo de contraseña",
+        "category": "forms",
+        "html": "<div class=\"form-group\">\n    <label for=\"input-password\">Contraseña</label>\n    <input type=\"password\" id=\"input-password\" class=\"form-control\" placeholder=\"••••••••\">\n</div>",
+        "css": ""
+    },
+    {
+        "name": "Textarea",
+        "icon": "📝",
+        "description": "Área de texto multilinea",
+        "category": "forms",
+        "html": "<div class=\"form-group\">\n    <label for=\"textarea\">Mensaje</label>\n    <textarea id=\"textarea\" class=\"form-control\" rows=\"4\" placeholder=\"Escribe tu mensaje\"></textarea>\n</div>",
+        "css": ""
+    },
+    {
+        "name": "Select/Dropdown",
+        "icon": "📋",
+        "description": "Lista desplegable",
+        "category": "forms",
+        "html": "<div class=\"form-group\">\n    <label for=\"select\">Selecciona una opción</label>\n    <select id=\"select\" class=\"form-control\">\n        <option value=\"\">-- Selecciona --</option>\n        <option value=\"1\">Opción 1</option>\n        <option value=\"2\">Opción 2</option>\n        <option value=\"3\">Opción 3</option>\n    </select>\n</div>",
+        "css": ""
+    },
+    {
+        "name": "Checkbox",
+        "icon": "☑️",
+        "description": "Casilla de verificación",
+        "category": "forms",
+        "html": "<div class=\"form-check\">\n    <input type=\"checkbox\" id=\"checkbox\" class=\"form-check-input\">\n    <label for=\"checkbox\" class=\"form-check-label\">Acepto los términos y condiciones</label>\n</div>",
+        "css": ".form-check { display: flex; align-items: center; gap: 8px; margin-bottom: 15px; } .form-check-input { width: 18px; height: 18px; accent-color: #3b82f6; } .form-check-label { color: #94a3b8; }"
+    },
+    {
+        "name": "Radio Buttons",
+        "icon": "🔘",
+        "description": "Botones de opción",
+        "category": "forms",
+        "html": "<div class=\"form-group\">\n    <label>Selecciona una opción:</label>\n    <div class=\"form-check\">\n        <input type=\"radio\" name=\"opcion\" id=\"radio1\" value=\"1\" class=\"form-check-input\">\n        <label for=\"radio1\" class=\"form-check-label\">Opción 1</label>\n    </div>\n    <div class=\"form-check\">\n        <input type=\"radio\" name=\"opcion\" id=\"radio2\" value=\"2\" class=\"form-check-input\">\n        <label for=\"radio2\" class=\"form-check-label\">Opción 2</label>\n    </div>\n</div>",
+        "css": ""
+    },
+    {
+        "name": "Input File",
+        "icon": "📁",
+        "description": "Subir archivo",
+        "category": "forms",
+        "html": "<div class=\"form-group\">\n    <label for=\"file\">Subir archivo</label>\n    <input type=\"file\" id=\"file\" class=\"form-control-file\">\n</div>",
+        "css": ".form-control-file { padding: 10px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #94a3b8; }"
+    },
+    {
+        "name": "Formulario Login",
+        "icon": "🔐",
+        "description": "Formulario de inicio de sesión",
+        "category": "forms",
+        "html": "<form class=\"form form-login\">\n    <h2 class=\"form-title\">Iniciar Sesión</h2>\n    <div class=\"form-group\">\n        <label for=\"login-email\">Email</label>\n        <input type=\"email\" id=\"login-email\" class=\"form-control\" placeholder=\"tu@email.com\" required>\n    </div>\n    <div class=\"form-group\">\n        <label for=\"login-password\">Contraseña</label>\n        <input type=\"password\" id=\"login-password\" class=\"form-control\" placeholder=\"••••••••\" required>\n    </div>\n    <div class=\"form-check\">\n        <input type=\"checkbox\" id=\"remember\" class=\"form-check-input\">\n        <label for=\"remember\" class=\"form-check-label\">Recordarme</label>\n    </div>\n    <button type=\"submit\" class=\"btn btn-primary btn-block\">Iniciar Sesión</button>\n    <p class=\"form-footer\"><a href=\"#\">¿Olvidaste tu contraseña?</a></p>\n</form>",
+        "css": ".form-login { max-width: 400px; margin: 0 auto; padding: 30px; background: #1e293b; border-radius: 12px; } .form-title { text-align: center; color: #e2e8f0; margin-bottom: 30px; } .form-footer { text-align: center; margin-top: 20px; } .form-footer a { color: #3b82f6; text-decoration: none; }"
+    },
+    {
+        "name": "Input con Icono",
+        "icon": "🔍",
+        "description": "Campo con icono",
+        "category": "forms",
+        "html": "<div class=\"form-group\">\n    <label for=\"search\">Buscar</label>\n    <div class=\"input-group\">\n        <span class=\"input-icon\"><i class=\"fas fa-search\"></i></span>\n        <input type=\"text\" id=\"search\" class=\"form-control input-with-icon\" placeholder=\"Buscar...\">\n    </div>\n</div>",
+        "css": ".input-group { position: relative; } .input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; z-index: 1; } .input-with-icon { padding-left: 40px; }"
+    }
+]

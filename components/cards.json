@@ -1,0 +1,50 @@
+[
+    {
+        "name": "Card Básica",
+        "icon": "🃏",
+        "description": "Tarjeta simple con contenido",
+        "category": "cards",
+        "html": "<div class=\"card\">\n    <div class=\"card-header\">\n        <h3>Título de la Tarjeta</h3>\n    </div>\n    <div class=\"card-body\">\n        <p>Contenido descriptivo de la tarjeta. Puede incluir texto, imágenes u otros elementos.</p>\n    </div>\n    <div class=\"card-footer\">\n        <button class=\"btn btn-primary\">Acción</button>\n    </div>\n</div>",
+        "css": ".card { background: #1e293b; border-radius: 8px; overflow: hidden; margin-bottom: 20px; } .card-header { padding: 20px; border-bottom: 1px solid #334155; } .card-header h3 { margin: 0; color: #e2e8f0; } .card-body { padding: 20px; color: #94a3b8; } .card-footer { padding: 15px 20px; background: #0f172a; }"
+    },
+    {
+        "name": "Card con Imagen",
+        "icon": "🖼️",
+        "description": "Tarjeta con imagen superior",
+        "category": "cards",
+        "html": "<div class=\"card\">\n    <img src=\"https://via.placeholder.com/400x200\" alt=\"Imagen\" class=\"card-img-top\">\n    <div class=\"card-body\">\n        <h5 class=\"card-title\">Título de la Tarjeta</h5>\n        <p class=\"card-text\">Descripción breve de la tarjeta con información relevante.</p>\n        <a href=\"#\" class=\"btn btn-primary\">Ver más</a>\n    </div>\n</div>",
+        "css": ".card-img-top { width: 100%; height: auto; display: block; } .card-title { margin-bottom: 10px; color: #e2e8f0; } .card-text { color: #94a3b8; margin-bottom: 15px; }"
+    },
+    {
+        "name": "Card Horizontal",
+        "icon": "↔️",
+        "description": "Tarjeta con diseño horizontal",
+        "category": "cards",
+        "html": "<div class=\"card card-horizontal\">\n    <img src=\"https://via.placeholder.com/150\" alt=\"Imagen\" class=\"card-img-left\">\n    <div class=\"card-body\">\n        <h5 class=\"card-title\">Título</h5>\n        <p class=\"card-text\">Contenido de la tarjeta en disposición horizontal.</p>\n    </div>\n</div>",
+        "css": ".card-horizontal { display: flex; flex-direction: row; } .card-img-left { width: 150px; object-fit: cover; }"
+    },
+    {
+        "name": "Card Feature",
+        "icon": "✨",
+        "description": "Tarjeta de característica con icono",
+        "category": "cards",
+        "html": "<div class=\"card card-feature\">\n    <div class=\"card-feature-icon\">🚀</div>\n    <h4 class=\"card-feature-title\">Característica</h4>\n    <p class=\"card-feature-text\">Descripción de la característica principal.</p>\n</div>",
+        "css": ".card-feature { text-align: center; padding: 30px; } .card-feature-icon { font-size: 48px; margin-bottom: 15px; } .card-feature-title { color: #e2e8f0; margin-bottom: 10px; } .card-feature-text { color: #94a3b8; }"
+    },
+    {
+        "name": "Card Perfil",
+        "icon": "👤",
+        "description": "Tarjeta de perfil de usuario",
+        "category": "cards",
+        "html": "<div class=\"card card-profile\">\n    <img src=\"https://via.placeholder.com/100\" alt=\"Avatar\" class=\"card-avatar\">\n    <h4 class=\"card-profile-name\">Nombre Usuario</h4>\n    <p class=\"card-profile-role\">Desarrollador Web</p>\n    <div class=\"card-profile-social\">\n        <a href=\"#\"><i class=\"fab fa-twitter\"></i></a>\n        <a href=\"#\"><i class=\"fab fa-linkedin\"></i></a>\n        <a href=\"#\"><i class=\"fab fa-github\"></i></a>\n    </div>\n</div>",
+        "css": ".card-profile { text-align: center; padding: 30px; } .card-avatar { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 15px; } .card-profile-name { color: #e2e8f0; margin: 0; } .card-profile-role { color: #94a3b8; font-size: 14px; margin: 5px 0 15px; } .card-profile-social a { color: #64748b; margin: 0 10px; font-size: 18px; } .card-profile-social a:hover { color: #3b82f6; }"
+    },
+    {
+        "name": "Card Precio",
+        "icon": "💰",
+        "description": "Tarjeta de precios",
+        "category": "cards",
+        "html": "<div class=\"card card-pricing\">\n    <div class=\"pricing-header\">\n        <h4>Plan Básico</h4>\n        <div class=\"pricing-price\"><span class=\"currency\">$</span>19<span class=\"period\">/mes</span></div>\n    </div>\n    <ul class=\"pricing-features\">\n        <li>✓ Característica 1</li>\n        <li>✓ Característica 2</li>\n        <li>✗ Característica 3</li>\n    </ul>\n    <button class=\"btn btn-primary btn-block\">Elegir Plan</button>\n</div>",
+        "css": ".card-pricing { text-align: center; padding: 30px; } .pricing-header { margin-bottom: 20px; } .pricing-price { font-size: 48px; font-weight: bold; color: #e2e8f0; } .currency { font-size: 24px; vertical-align: super; } .period { font-size: 16px; color: #94a3b8; } .pricing-features { list-style: none; padding: 0; margin: 20px 0; text-align: left; } .pricing-features li { padding: 10px 0; color: #94a3b8; border-bottom: 1px solid #334155; } .btn-block { width: 100%; }"
+    }
+]

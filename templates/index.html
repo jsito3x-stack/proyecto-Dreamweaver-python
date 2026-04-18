@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/static/icons/favicon.ico">
+    <title>Dreamweaver Python - Editor Visual Web</title>
+
+    <!-- CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- App Styles -->
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/theme-dark.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+</head>
+
+<body class="theme-dark">
+    <div class="app-container">
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- HEADER -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <header class="header">
+            <div class="logo">
+                <img src="/static/icons/Logo.png" style="width: 150px; vertical-align: middle; margin-right: 8px;">
+            </div>
+
+            <div class="tabs-container">
+                <button class="tab-btn active" data-tab="html" onclick="App.switchTab('html')">
+                    <img src="/static/icons/html.png" style="width:20px; vertical-align:middle; margin-right:6px;"> HTML
+                </button>
+                <button class="tab-btn" data-tab="css" onclick="App.switchTab('css')">
+                    <img src="/static/icons/css.png" style="width:20px; vertical-align:middle; margin-right:6px;"> CSS
+                </button>
+                <button class="tab-btn" data-tab="js" onclick="App.switchTab('js')">
+                    <img src="/static/icons/javascript.png"
+                        style="width:20px; vertical-align:middle; margin-right:6px;">
+                    JavaScript
+                </button>
+                <!-- NUEVA PESTAÑA VISOR -->
+                <button class="tab-btn" data-tab="visor" onclick="App.switchTab('visor')">
+                    <img src="/static/icons/visor.png" style="height:20px; vertical-align:middle; margin-right:6px;">
+                    Visor de Archivos
+                </button>
+            </div>
+
+            <div class="header-actions">
+                <!-- Pestañas de vistas -->
+                <div class="view-toggle" style="display: flex; gap: 4px; margin-right: 8px;">
+                    <button class="btn-icon" onclick="Preview.setViewport('desktop')" title="Ordenador">
+                        <img src="/static/icons/desktop.png" style="height:20px;">
+                    </button>
+                    <button class="btn-icon" onclick="Preview.setViewport('tablet')" title="Tablet">
+                        <img src="/static/icons/tablet.png" style="height:20px;">
+                    </button>
+                    <button class="btn-icon" onclick="Preview.setViewport('mobile')" title="Movil">
+                        <img src="/static/icons/mobile.png" style="height:20px;">
+                    </button>
+                </div>
+
+                <!-- Snippets Button -->
+                <button class="btn btn-secondary" onclick="Snippets.toggle()" title="Componentes">
+                    <img src="/static/icons/components.png" style="width:25px; margin-right:6px;"> Componentes
+                </button>
+
+                <!-- Tema Toggle -->
+                <button class="btn-icon" onclick="Themes.toggle()" title="Cambiar tema">
+                    <img src="/static/icons/theme.png" style="width:20px;" id="theme-icon-img">
+                </button>
+
+                <!-- Atajos de teclado -->
+                <button class="btn-icon" onclick="Keyboard.showHelp()" title="Atajos de teclado">
+                    <img src="/static/icons/keyboard.png" style="height:20px;">
+                </button>
+
+                <!-- Deshacer/Rehacer -->
+                <button class="btn btn-secondary" onclick="App.undo()" title="Deshacer (Ctrl+Z)">
+                    <img src="/static/icons/undo.png" style="width:20px; margin-right:6px;"> Deshacer
+                </button>
+                <button class="btn btn-secondary" onclick="App.redo()" title="Rehacer (Ctrl+Y)">
+                    <img src="/static/icons/redo.png" style="width:20px; margin-right:6px;"> Rehacer
+                </button>
+
+                <!-- Abrir Archivo -->
+                <button class="btn btn-primary" onclick="App.openFile()" style="background-color: #4f46e5;">
+                    <img src="/static/icons/file.png" style="width:20px; margin-right:6px;"> Archivo
+                </button>
+
+                <!-- Abrir Carpeta -->
+                <button class="btn btn-primary" onclick="App.openFolder()" style="background-color: #0891b2;">
+                    <img src="/static/icons/open-folder.png" style="width:14px; margin-right:6px;"> Carpeta
+                </button>
+
+                <!-- Guardar -->
+                <button class="btn btn-success" onclick="App.saveFile()">
+                    <img src="/static/icons/save.png" style="width:20px; margin-right:6px;"> Guardar
+                </button>
+            </div>
+        </header>
+
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- PANEL IZQUIERDO -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <aside class="left-panel">
+            <div class="panel-tabs">
+                <button class="panel-tab active" data-panel="files" onclick="switchPanel('files')">
+                    <img src="/static/icons/files.png" style="width:20px; vertical-align:middle; margin-right:6px;">
+                    Archivos
+                </button>
+                <button class="panel-tab" data-panel="structure" onclick="switchPanel('structure')">
+                    <img src="/static/icons/structure.png"
+                        style="height:20px; vertical-align:middle; margin-right:6px;">
+                    Estructura
+                </button>
+            </div>
+
+            <div class="panel-content">
+                <!-- ARCHIVOS -->
+                <div class="panel-section active" id="panel-files">
+                    <div class="file-tree" id="file-tree">
+                        <div style="text-align: center; padding: 20px; color: var(--text-muted);">
+                            <i class="fas fa-folder-open"
+                                style="font-size: 32px; margin-bottom: 10px; display: block;"></i>
+                            No hay archivos cargados<br>
+                            <small>Abre un archivo HTML para comenzar</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ESTRUCTURA -->
+                <div class="panel-section" id="panel-structure">
+                    <div class="tree-container" id="structure-tree">
+                        <div style="text-align: center; padding: 20px; color: var(--text-muted);">
+                            <i class="fas fa-sitemap" style="font-size: 32px; margin-bottom: 10px; display: block;"></i>
+                            Carga un archivo HTML<br>
+                            <small>para ver la estructura</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tree Controls -->
+            <div style="padding: 8px; border-top: 1px solid var(--border); display: flex; gap: 8px;">
+                <button class="btn-icon" onclick="Tree.expandAll()" title="Expandir todo">
+                    <i class="fas fa-expand-alt"></i>
+                </button>
+                <button class="btn-icon" onclick="Tree.collapseAll()" title="Colapsar todo">
+                    <i class="fas fa-compress-alt"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- PANEL CENTRAL -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <main class="center-panel">
+            <div class="view-toggle">
+                <button class="view-btn active" onclick="App.setView('split')">
+                    <img src="/static/icons/split.png" style="height:20px; vertical-align:middle; margin-right:6px;">
+                    Dividido
+                </button>
+                <button class="view-btn" onclick="App.setView('code')">
+                    <img src="/static/icons/code.png" style="height:20px; vertical-align:middle; margin-right:6px;">
+                    Código
+                </button>
+                <button class="view-btn" onclick="App.setView('visual')">
+                    <img src="/static/icons/visual.png" style="height:20px; vertical-align:middle; margin-right:6px;">
+                    Visual
+                </button>
+            </div>
+
+            <div class="editor-container">
+                <!-- Split View -->
+                <div class="split-view active" id="split-view">
+                    <div class="split-editor">
+                        <div class="split-code">
+                            <textarea id="code-editor"></textarea>
+                        </div>
+                        <div class="split-preview">
+                            <iframe id="preview-frame" class="preview-frame"></iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visor de Archivos Multimedia -->
+                <div id="visor-view">
+                    <iframe id="visor-frame" class="preview-frame" style="background: #1e1e1e;"></iframe>
+                </div>
+
+                <!-- Code Only View -->
+                <div class="code-view" id="code-view">
+                    <textarea id="code-only-editor"></textarea>
+                </div>
+
+                <!-- Visual Only View -->
+                <div class="visual-view" id="visual-view">
+                    <iframe id="visual-only-frame" class="preview-frame"></iframe>
+                </div>
+            </div>
+        </main>
+
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- PANEL DERECHO - PROPIEDADES -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <aside class="right-panel">
+            <div class="props-header">
+                <i class="fas fa-sliders-h"></i> Propiedades
+            </div>
+
+            <div class="props-content" id="props-content">
+                <!-- Sin selección -->
+                <div id="no-selection">
+                    <p style="color: var(--text-muted); text-align: center; padding: 40px 20px;">
+                        <i class="fas fa-mouse-pointer"
+                            style="font-size: 32px; margin-bottom: 15px; display: block;"></i>
+                        Selecciona un elemento<br>
+                        <small>en la estructura o en la vista previa</small>
+                    </p>
+                </div>
+
+                <!-- Con selección -->
+                <div id="element-props" style="display: none;">
+                    <!-- Información del elemento -->
+                    <div class="prop-group">
+                        <div class="prop-group-title">
+                            <i class="fas fa-info-circle"></i> Elemento
+                        </div>
+
+                        <div class="prop-row">
+                            <div class="prop-label">Etiqueta</div>
+                            <input type="text" class="prop-input" id="prop-tag" readonly
+                                style="background: var(--bg-hover);">
+                        </div>
+
+                        <div class="prop-row">
+                            <div class="prop-label">ID</div>
+                            <input type="text" class="prop-input" id="prop-id" placeholder="Sin ID">
+                        </div>
+
+                        <div class="prop-row">
+                            <div class="prop-label">Clases CSS</div>
+                            <input type="text" class="prop-input" id="prop-classes" placeholder="clase1 clase2">
+                        </div>
+                    </div>
+
+                    <!-- Atributos -->
+                    <div class="prop-group">
+                        <div class="prop-group-title">
+                            <i class="fas fa-cog"></i> Atributos
+                        </div>
+                        <div id="attributes-list">
+                            <!-- Se llena dinámicamente -->
+                        </div>
+                        <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;"
+                            onclick="Properties.addAttribute()">
+                            <i class="fas fa-plus"></i> Agregar atributo
+                        </button>
+                    </div>
+
+                    <!-- Contenido -->
+                    <div class="prop-group" id="content-group">
+                        <div class="prop-group-title">
+                            <i class="fas fa-align-left"></i> Contenido
+                        </div>
+                        <textarea class="prop-input prop-textarea" id="prop-content"
+                            placeholder="Texto o contenido del elemento"></textarea>
+                    </div>
+
+                    <!-- Estilos -->
+                    <div class="prop-group">
+                        <div class="prop-group-title">
+                            <i class="fas fa-paint-brush"></i> Estilos Inline
+                        </div>
+
+                        <div class="prop-row">
+                            <div class="prop-label">Color de texto</div>
+                            <div class="color-input-wrapper">
+                                <input type="color" class="color-preview" id="prop-color-preview">
+                                <input type="text" class="prop-input color-input" id="prop-color" placeholder="#000000">
+                            </div>
+                        </div>
+
+                        <div class="prop-row">
+                            <div class="prop-label">Color de fondo</div>
+                            <div class="color-input-wrapper">
+                                <input type="color" class="color-preview" id="prop-bgcolor-preview">
+                                <input type="text" class="prop-input color-input" id="prop-bgcolor"
+                                    placeholder="transparent">
+                            </div>
+                        </div>
+
+                        <div class="prop-row">
+                            <div class="prop-label">Tamaño de fuente</div>
+                            <input type="text" class="prop-input" id="prop-fontsize" placeholder="16px">
+                        </div>
+
+                        <div class="prop-row">
+                            <div class="prop-label">Padding</div>
+                            <input type="text" class="prop-input" id="prop-padding" placeholder="10px">
+                        </div>
+
+                        <div class="prop-row">
+                            <div class="prop-label">Margin</div>
+                            <input type="text" class="prop-input" id="prop-margin" placeholder="10px">
+                        </div>
+
+                        <div class="prop-row">
+                            <div class="prop-label">Borde</div>
+                            <input type="text" class="prop-input" id="prop-border" placeholder="1px solid #ccc">
+                        </div>
+                    </div>
+
+                    <!-- Acciones -->
+                    <div class="prop-group">
+                        <div class="prop-group-title">
+                            <i class="fas fa-bolt"></i> Acciones
+                        </div>
+
+                        <div class="quick-actions">
+                            <button class="quick-btn" onclick="Properties.duplicateElement()">
+                                <i class="fas fa-copy"></i> Duplicar
+                            </button>
+                            <button class="quick-btn danger" onclick="Properties.deleteElement()">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                            <button class="quick-btn" onclick="Properties.moveUp()">
+                                <i class="fas fa-arrow-up"></i> Subir
+                            </button>
+                            <button class="quick-btn" onclick="Properties.moveDown()">
+                                <i class="fas fa-arrow-down"></i> Bajar
+                            </button>
+                        </div>
+
+                        <button class="btn btn-success" style="width: 100%; margin-top: 10px;"
+                            onclick="Properties.applyChanges()">
+                            <i class="fas fa-check"></i> Aplicar Cambios
+                        </button>
+                    </div>
+
+                    <!-- Insertar elementos -->
+                    <div class="insert-section">
+                        <div class="prop-group-title">
+                            <i class="fas fa-plus-circle"></i> Insertar Dentro
+                        </div>
+
+                        <div class="insert-grid">
+                            <button class="insert-btn" onclick="Properties.insertElement('div')">div</button>
+                            <button class="insert-btn" onclick="Properties.insertElement('p')">p</button>
+                            <button class="insert-btn" onclick="Properties.insertElement('h1')">h1</button>
+                            <button class="insert-btn" onclick="Properties.insertElement('h2')">h2</button>
+                            <button class="insert-btn" onclick="Properties.insertElement('h3')">h3</button>
+                            <button class="insert-btn" onclick="Properties.insertElement('span')">span</button>
+                            <button class="insert-btn" onclick="Properties.insertElement('a')">a</button>
+                            <button class="insert-btn" onclick="Properties.insertElement('img')">img</button>
+                            <button class="insert-btn" onclick="Properties.insertElement('ul')">ul</button>
+                            <button class="insert-btn" onclick="Properties.insertElement('li')">li</button>
+                            <button class="insert-btn" onclick="Properties.insertElement('button')">btn</button>
+                            <button class="insert-btn" onclick="Properties.insertElement('section')">sec</button>
+                            <button class="insert-btn" onclick="Properties.insertElement('article')">art</button>
+                            <button class="insert-btn" onclick="Properties.insertElement('nav')">nav</button>
+                            <button class="insert-btn" onclick="Properties.insertElement('footer')">foot</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!-- STATUS BAR -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <div class="status-bar">
+        <div class="status-item">
+            <i class="fas fa-file-code status-icon"></i>
+            <span id="status-file">Sin archivo</span>
+        </div>
+        <div class="status-item">
+            <i class="fas fa-code status-icon"></i>
+            <span id="status-elements">0 elementos</span>
+        </div>
+        <div class="status-item" style="flex: 1;">
+            <span id="status-message">Listo</span>
+        </div>
+        <div class="status-item">
+            <i class="fas fa-mouse-pointer status-icon"></i>
+            <span id="status-cursor">Línea 1, Col 1</span>
+        </div>
+        <div class="status-item">
+            <i class="fas fa-keyboard status-icon"></i>
+            <span>Ctrl+? Atajos</span>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!-- MODAL -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-box">
+            <div class="modal-title" id="modal-title">Confirmar acción</div>
+            <div class="modal-content" id="modal-content"></div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="App.hideModal()">Cancelar</button>
+                <button class="btn btn-danger" id="modal-confirm">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!-- SNIPPETS PANEL -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <div id="snippets-panel" style="display: none;">
+        <!-- Se crea dinámicamente -->
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!-- SEARCH PANEL -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <div class="search-panel" id="search-panel" style="display: none;">
+        <div class="search-header">
+            <span class="search-title"><i class="fas fa-search"></i> Buscar y Reemplazar</span>
+            <button class="btn-icon" onclick="this.parentElement.parentElement.style.display='none'">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="search-inputs">
+            <div class="search-input-group">
+                <input type="text" class="prop-input" id="search-find" placeholder="Buscar...">
+            </div>
+            <div class="search-input-group">
+                <input type="text" class="prop-input" id="search-replace" placeholder="Reemplazar con...">
+            </div>
+        </div>
+        <div class="search-options">
+            <label class="search-option">
+                <input type="checkbox" id="search-case"> Distinguir mayúsculas
+            </label>
+            <label class="search-option">
+                <input type="checkbox" id="search-whole"> Palabra completa
+            </label>
+            <label class="search-option">
+                <input type="checkbox" id="search-regex"> Expresión regular
+            </label>
+        </div>
+        <div class="search-buttons">
+            <button class="btn btn-secondary" onclick="Editor.findAndReplace(
+                document.getElementById('search-find').value,
+                document.getElementById('search-replace').value,
+                false
+            )">Buscar siguiente</button>
+            <button class="btn btn-primary" onclick="Editor.findAndReplace(
+                document.getElementById('search-find').value,
+                document.getElementById('search-replace').value,
+                true
+            )">Reemplazar todo</button>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!-- SCRIPTS -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!-- CodeMirror -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closetag.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldgutter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/brace-fold.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/xml-fold.min.js"></script>
+
+    <!-- App Scripts -->
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/editor.js"></script>
+    <script src="/static/js/tree.js"></script>
+    <script src="/static/js/properties.js"></script>
+    <script src="/static/js/preview.js"></script>
+    <script src="/static/js/keyboard.js"></script>
+    <script src="/static/js/snippets.js"></script>
+    <script src="/static/js/themes.js"></script>
+
+    <script>
+        // Funciones globales para compatibilidad con onclick
+        function switchPanel(panel) {
+            document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.panel-section').forEach(s => s.classList.remove('active'));
+            document.querySelector(`.panel-tab[data-panel="${panel}"]`).classList.add('active');
+            document.getElementById(`panel-${panel}`).classList.add('active');
+        }
+    </script>
+</body>
+
+</html>

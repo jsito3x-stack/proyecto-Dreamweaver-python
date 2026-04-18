@@ -1,0 +1,50 @@
+[
+    {
+        "name": "Navbar Simple",
+        "icon": "🧭",
+        "description": "Barra de navegación simple",
+        "category": "navigation",
+        "html": "<nav class=\"navbar\">\n    <div class=\"navbar-brand\">\n        <a href=\"#\">Mi Sitio</a>\n    </div>\n    <ul class=\"navbar-menu\">\n        <li><a href=\"#\">Inicio</a></li>\n        <li><a href=\"#\">Servicios</a></li>\n        <li><a href=\"#\">Nosotros</a></li>\n        <li><a href=\"#\">Contacto</a></li>\n    </ul>\n</nav>",
+        "css": ".navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: #1e293b; } .navbar-brand a { font-size: 20px; font-weight: bold; color: #e2e8f0; text-decoration: none; } .navbar-menu { display: flex; list-style: none; gap: 25px; margin: 0; padding: 0; } .navbar-menu a { color: #94a3b8; text-decoration: none; transition: color 0.3s; } .navbar-menu a:hover { color: #3b82f6; }"
+    },
+    {
+        "name": "Navbar con Logo",
+        "icon": "🏢",
+        "description": "Navbar con logo centrado",
+        "category": "navigation",
+        "html": "<nav class=\"navbar navbar-logo\">\n    <div class=\"navbar-left\">\n        <a href=\"#\" class=\"nav-link\">Inicio</a>\n        <a href=\"#\" class=\"nav-link\">Servicios</a>\n    </div>\n    <div class=\"navbar-center\">\n        <a href=\"#\" class=\"navbar-logo-text\">LOGO</a>\n    </div>\n    <div class=\"navbar-right\">\n        <a href=\"#\" class=\"nav-link\">Blog</a>\n        <a href=\"#\" class=\"btn btn-primary btn-sm\">Contacto</a>\n    </div>\n</nav>",
+        "css": ".navbar-logo { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: #0f172a; } .navbar-left, .navbar-right { display: flex; align-items: center; gap: 20px; } .navbar-center { position: absolute; left: 50%; transform: translateX(-50%); } .navbar-logo-text { font-size: 24px; font-weight: bold; color: #e2e8f0; text-decoration: none; } .nav-link { color: #94a3b8; text-decoration: none; transition: color 0.3s; } .nav-link:hover { color: #3b82f6; }"
+    },
+    {
+        "name": "Navbar Responsive",
+        "icon": "📱",
+        "description": "Navbar con menú hamburguesa",
+        "category": "navigation",
+        "html": "<nav class=\"navbar navbar-responsive\">\n    <div class=\"navbar-brand\">\n        <a href=\"#\">Mi Sitio</a>\n        <button class=\"navbar-toggle\" onclick=\"toggleMenu()\">\n            <span></span>\n            <span></span>\n            <span></span>\n        </button>\n    </div>\n    <ul class=\"navbar-menu\" id=\"navbar-menu\">\n        <li><a href=\"#\">Inicio</a></li>\n        <li><a href=\"#\">Servicios</a></li>\n        <li><a href=\"#\">Nosotros</a></li>\n        <li><a href=\"#\">Contacto</a></li>\n    </ul>\n</nav>",
+        "css": ".navbar-responsive { flex-direction: column; } .navbar-toggle { display: none; background: none; border: none; flex-direction: column; gap: 5px; padding: 10px; cursor: pointer; } .navbar-toggle span { width: 25px; height: 3px; background: #e2e8f0; transition: 0.3s; } @media (max-width: 768px) { .navbar-toggle { display: flex; } .navbar-menu { display: none; width: 100%; flex-direction: column; } .navbar-menu.active { display: flex; } }"
+    },
+    {
+        "name": "Breadcrumb",
+        "icon": "📍",
+        "description": "Navegación de migas de pan",
+        "category": "navigation",
+        "html": "<nav class=\"breadcrumb\" aria-label=\"breadcrumb\">\n    <ol class=\"breadcrumb-list\">\n        <li><a href=\"#\">Inicio</a></li>\n        <li><a href=\"#\">Categoría</a></li>\n        <li><span aria-current=\"page\">Página actual</span></li>\n    </ol>\n</nav>",
+        "css": ".breadcrumb { padding: 15px 0; } .breadcrumb-list { display: flex; list-style: none; padding: 0; margin: 0; gap: 10px; } .breadcrumb-list li { display: flex; align-items: center; } .breadcrumb-list li:not(:last-child)::after { content: '/'; margin-left: 10px; color: #64748b; } .breadcrumb-list a { color: #94a3b8; text-decoration: none; } .breadcrumb-list a:hover { color: #3b82f6; } .breadcrumb-list span { color: #e2e8f0; }"
+    },
+    {
+        "name": "Tabs Navigation",
+        "icon": "🗂️",
+        "description": "Navegación por pestañas",
+        "category": "navigation",
+        "html": "<div class=\"tabs\">\n    <button class=\"tab active\" onclick=\"switchTab('tab1')\">Tab 1</button>\n    <button class=\"tab\" onclick=\"switchTab('tab2')\">Tab 2</button>\n    <button class=\"tab\" onclick=\"switchTab('tab3')\">Tab 3</button>\n</div>\n<div class=\"tab-content\">\n    <div id=\"tab1\" class=\"tab-pane active\">Contenido Tab 1</div>\n    <div id=\"tab2\" class=\"tab-pane\">Contenido Tab 2</div>\n    <div id=\"tab3\" class=\"tab-pane\">Contenido Tab 3</div>\n</div>",
+        "css": ".tabs { display: flex; border-bottom: 2px solid #334155; margin-bottom: 20px; } .tab { padding: 12px 24px; background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 14px; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.3s; } .tab:hover { color: #e2e8f0; } .tab.active { color: #3b82f6; border-bottom-color: #3b82f6; } .tab-pane { display: none; } .tab-pane.active { display: block; }"
+    },
+    {
+        "name": "Pagination",
+        "icon": "📄",
+        "description": "Paginación",
+        "category": "navigation",
+        "html": "<nav class=\"pagination\">\n    <a href=\"#\" class=\"pagination-link\">&laquo;</a>\n    <a href=\"#\" class=\"pagination-link\">1</a>\n    <a href=\"#\" class=\"pagination-link active\">2</a>\n    <a href=\"#\" class=\"pagination-link\">3</a>\n    <a href=\"#\" class=\"pagination-link\">&raquo;</a>\n</nav>",
+        "css": ".pagination { display: flex; gap: 5px; } .pagination-link { display: inline-block; padding: 10px 15px; background: #1e293b; color: #94a3b8; text-decoration: none; border-radius: 6px; transition: all 0.3s; } .pagination-link:hover { background: #334155; color: #e2e8f0; } .pagination-link.active { background: #3b82f6; color: white; }"
+    }
+]

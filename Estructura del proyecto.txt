@@ -1,0 +1,44 @@
+dreamweaver-python/
+├── app.py                    # Punto de entrada principal
+├── requirements.txt          # Dependencias
+├── install.sh               # Script de instalación
+├── README.md                # Documentación
+│
+├── editor/                  # Módulo principal
+│   ├── __init__.py
+│   ├── core.py             # Núcleo del editor
+│   ├── parser.py           # Parser HTML/CSS/JS
+│   ├── structure.py        # Estructura web
+│   └── routes.py           # Rutas Flask
+│
+├── static/                  # Archivos estáticos
+│   ├── css/
+│   │   ├── main.css        # Estilos principales
+│   │   ├── theme-dark.css  # Tema oscuro
+│   │   ├── theme-light.css # Tema claro
+│   │   └── components.css  # Componentes UI
+│   │
+│   └── js/
+│       ├── app.js          # Aplicación principal
+│       ├── editor.js       # Editor CodeMirror
+│       ├── tree.js         # Árbol de estructura
+│       ├── properties.js   # Panel de propiedades
+│       ├── preview.js      # Vista previa
+│       ├── keyboard.js     # Atajos de teclado
+│       ├── snippets.js     # Snippets de código
+│       └── themes.js       # Gestión de temas
+│
+├── templates/               # Plantillas HTML
+│   └── index.html          # Interfaz principal
+│
+├── projects/                # Proyectos guardados
+│   └── .gitkeep
+│
+├── components/              # Snippets pre-hechos
+│   ├── buttons.json
+│   ├── forms.json
+│   ├── cards.json
+│   └── navbars.json
+│
+└── exports/                  # Exportaciones
+    └── .gitkeep

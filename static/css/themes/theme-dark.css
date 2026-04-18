@@ -1,0 +1,233 @@
+/* ════════════════════════════════════════════════════════════════
+   TEMA OSCURO - DRACULA 🧛‍♂️
+   Official Dracula Theme - https://draculatheme.com
+   ════════════════════════════════════════════════════════════════ */
+
+/*
+ * PALETA DRACULA OFICIAL
+ * ─────────────────────
+ * Background:    #282a36 (Morado oscuro)
+ * Current Line:  #44475a
+ * Selection:     #44475a
+ * Foreground:    #f8f8f2 (Blanco cálido)
+ * Comment:       #6272a4
+ * Cyan:          #8be9fd
+ * Green:         #50fa7b
+ * Orange:        #ffb86c
+ * Pink:          #ff79c6
+ * Purple:        #bd93f9
+ * Red:           #ff5555
+ * Yellow:        #f1fa8c
+ */
+
+.theme-dark {
+    /* === FONDOS DRACULA === */
+    --bg-primary: #282a36;
+    --bg-secondary: #21222c;
+    --bg-tertiary: #191a21;
+    --bg-input: #282a36;
+    --bg-hover: #44475a;
+    --bg-active: #343748;
+
+    /* === TEXTO DRACULA === */
+    --text-primary: #f8f8f2;
+    --text-secondary: #bd93f9;
+    --text-muted: #6272a4;
+
+    /* === ACENTOS DRACULA === */
+    --accent: #bd93f9;
+    --accent-hover: #ff79c6;
+    --success: #50fa7b;
+    --warning: #f1fa8c;
+    --error: #ff5555;
+    --info: #8be9fd;
+
+    /* === BORDES DRACULA === */
+    --border: #44475a;
+    --border-light: #343748;
+
+    /* === SCROLLBAR DRACULA === */
+    --scrollbar-bg: #21222c;
+    --scrollbar-thumb: #44475a;
+    --scrollbar-thumb-hover: #6272a4;
+
+    /* === SOMBRAS DRACULA === */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.5);
+
+    /* === RGB PARA TRANSPARENCIAS === */
+    --accent-rgb: 189, 147, 249;
+    --success-rgb: 80, 250, 123;
+}
+
+/* === CODEMIRROR - DRACULA === */
+.theme-dark .CodeMirror {
+    background: #282a36 !important;
+    color: #f8f8f2 !important;
+    font-family: 'Fira Code', Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.theme-dark .CodeMirror-gutters {
+    background: #21222c !important;
+    border-right: 1px solid #343748 !important;
+}
+
+.theme-dark .CodeMirror-linenumber {
+    color: #6272a4 !important;
+}
+
+.theme-dark .CodeMirror-cursor {
+    border-left: 2px solid #f8f8f2 !important;
+}
+
+.theme-dark .CodeMirror-selected {
+    background: rgba(68, 71, 90, 0.6) !important;
+}
+
+.theme-dark .CodeMirror-focused .CodeMirror-selected {
+    background: rgba(68, 71, 90, 0.8) !important;
+}
+
+.theme-dark .CodeMirror-activeline-background {
+    background: #343748 !important;
+}
+
+/* === SYNTAX HIGHLIGHTING - DRACULA === */
+.theme-dark .cm-keyword {
+    color: #ff79c6 !important;
+    font-weight: 500;
+}
+
+.theme-dark .cm-atom {
+    color: #bd93f9 !important;
+}
+
+.theme-dark .cm-number {
+    color: #ffb86c !important;
+}
+
+.theme-dark .cm-def {
+    color: #50fa7b !important;
+    font-style: italic;
+}
+
+.theme-dark .cm-variable {
+    color: #f8f8f2 !important;
+}
+
+.theme-dark .cm-variable-2 {
+    color: #8be9fd !important;
+}
+
+.theme-dark .cm-variable-3 {
+    color: #ffb86c !important;
+}
+
+.theme-dark .cm-property {
+    color: #66d9ef !important;
+}
+
+.theme-dark .cm-operator {
+    color: #ff79c6 !important;
+}
+
+.theme-dark .cm-comment {
+    color: #6272a4 !important;
+    font-style: italic;
+}
+
+.theme-dark .cm-string {
+    color: #f1fa8c !important;
+}
+
+.theme-dark .cm-string-2 {
+    color: #f1fa8c !important;
+}
+
+.theme-dark .cm-tag {
+    color: #ff79c6 !important;
+    font-weight: 500;
+}
+
+.theme-dark .cm-attribute {
+    color: #50fa7b !important;
+}
+
+.theme-dark .cm-header {
+    color: #bd93f9 !important;
+}
+
+.theme-dark .cm-quote {
+    color: #f1fa8c !important;
+}
+
+.theme-dark .cm-link {
+    color: #8be9fd !important;
+    text-decoration: underline;
+}
+
+.theme-dark .cm-error {
+    color: #ff5555 !important;
+    background: rgba(255, 85, 85, 0.15) !important;
+}
+
+/* Match brackets */
+.theme-dark .CodeMirror-matchingbracket {
+    background: rgba(80, 250, 123, 0.2) !important;
+    color: #50fa7b !important;
+    outline: 1px solid #50fa7b !important;
+}
+
+/* Scrollbar */
+.theme-dark .CodeMirror-scroll::-webkit-scrollbar-thumb {
+    background: #44475a;
+}
+
+.theme-dark .CodeMirror-scroll::-webkit-scrollbar-thumb:hover {
+    background: #6272a4;
+}
+
+/* === PESTAÑAS ACTIVAS - DRACULA (VERDE UNIFORME) === */
+.theme-dark .tab-btn.active {
+    background: rgba(80, 250, 123, 0.15) !important;
+    border-color: #50fa7b !important;
+    color: #50fa7b !important;
+    box-shadow: 0 0 12px rgba(80, 250, 123, 0.4) !important;
+}
+
+.theme-dark .tab-btn.active::after {
+    background: #50fa7b !important;
+}
+
+/* === VIEW BUTTONS ACTIVOS - DRACULA === */
+.theme-dark .view-btn.active {
+    background: rgba(80, 250, 123, 0.15) !important;
+    border-color: #50fa7b !important;
+    color: #50fa7b !important;
+    box-shadow: 0 0 12px rgba(80, 250, 123, 0.4) !important;
+}
+
+.theme-dark .view-btn.active::after {
+    background: #50fa7b !important;
+}
+
+/* Visor de archivos - Dracula */
+.theme-dark #visor-view {
+    background: #282a36 !important;
+}
+
+.theme-dark #visor-view.active {
+    background: #282a36 !important;
+    display: flex !important;
+    flex-direction: column;
+}
+
+.theme-dark #visor-frame {
+    background: #282a36 !important;
+    border: 1px solid #44475a;
+    border-radius: 4px;
+    margin: 8px;
+}

@@ -7,17 +7,20 @@
     <link rel="icon" type="image/png" href="/static/icons/favicon.ico">
     <title>Dreamweaver Python - Editor Visual Web</title>
 
-    <!-- CodeMirror CSS -->
+    <!-- CodeMirror BASE -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- App Styles -->
+    <!-- Estilos Base -->
     <link rel="stylesheet" href="/static/css/main.css">
-    <link rel="stylesheet" href="/static/css/theme-dark.css">
     <link rel="stylesheet" href="/static/css/components.css">
+
+    <!-- Temas Independientes -->
+    <link rel="stylesheet" href="/static/css/themes/theme-default.css" id="theme-default">
+    <link rel="stylesheet" href="/static/css/themes/theme-light.css" id="theme-light" disabled>
+    <link rel="stylesheet" href="/static/css/themes/theme-dark.css" id="theme-dark" disabled>
 </head>
 
 <body class="theme-dark">
@@ -159,48 +162,54 @@
         <!-- PANEL CENTRAL -->
         <!-- ════════════════════════════════════════════════════════ -->
         <main class="center-panel">
-            <div class="view-toggle">
-                <button class="view-btn active" onclick="App.setView('split')">
-                    <img src="/static/icons/split.png" style="height:20px; vertical-align:middle; margin-right:6px;">
-                    Dividido
-                </button>
-                <button class="view-btn" onclick="App.setView('code')">
-                    <img src="/static/icons/code.png" style="height:20px; vertical-align:middle; margin-right:6px;">
-                    Código
-                </button>
-                <button class="view-btn" onclick="App.setView('visual')">
-                    <img src="/static/icons/visual.png" style="height:20px; vertical-align:middle; margin-right:6px;">
-                    Visual
-                </button>
-            </div>
-
+            <!-- ════════════════════════════════════════════════════════════════
+     CONTENEDOR PRINCIPAL DEL EDITOR
+     ════════════════════════════════════════════════════════════════ -->
             <div class="editor-container">
-                <!-- Split View -->
-                <div class="split-view active" id="split-view">
+
+                <!-- ═══ VIEW TOGGLE (Botones Dividido/Código/Visual) ═══ -->
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="split" onclick="App.setView('split')">
+                        <img src="/static/icons/split.png" style="height:20px;"> Dividido
+                    </button>
+                    <button class="view-btn" data-view="code" onclick="App.setCodeOnly()">
+                        <img src="/static/icons/code.png" style="height:20px;"> Código
+                    </button>
+                    <button class="view-btn" data-view="visual" onclick="App.setVisualOnly()">
+                        <img src="/static/icons/visual.png" style="height:20px;"> Visual
+                    </button>
+                </div>
+
+                <!-- ═══ VISTA DIVIDIDA (50% código + 50% preview) ═══ -->
+                <div id="split-view" class="split-view">
                     <div class="split-editor">
-                        <div class="split-code">
+                        <!-- MITAD IZQUIERDA: Editor de Código -->
+                        <div class="editor-half">
                             <textarea id="code-editor"></textarea>
                         </div>
-                        <div class="split-preview">
-                            <iframe id="preview-frame" class="preview-frame"></iframe>
+
+                        <!-- MITAD DERECHA: Vista Previa -->
+                        <div class="preview-half">
+                            <iframe id="preview-frame"></iframe>
                         </div>
                     </div>
                 </div>
 
-                <!-- Visor de Archivos Multimedia -->
-                <div id="visor-view">
-                    <iframe id="visor-frame" class="preview-frame" style="background: #1e1e1e;"></iframe>
-                </div>
-
-                <!-- Code Only View -->
-                <div class="code-view" id="code-view">
+                <!-- ═══ VISTA SOLO CÓDIGO ═══ -->
+                <div id="code-view" class="code-view">
                     <textarea id="code-only-editor"></textarea>
                 </div>
 
-                <!-- Visual Only View -->
-                <div class="visual-view" id="visual-view">
-                    <iframe id="visual-only-frame" class="preview-frame"></iframe>
+                <!-- ═══ VISTA SOLO VISUAL ═══ -->
+                <div id="visual-view" class="visual-view">
+                    <iframe id="visual-only-frame"></iframe>
                 </div>
+
+                <!-- ═══ VISOR DE ARCHIVOS ═══ -->
+                <div id="visor-view" class="visor-view">
+                    <iframe id="visor-frame"></iframe>
+                </div>
+
             </div>
         </main>
 

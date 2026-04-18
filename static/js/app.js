@@ -83,25 +83,63 @@ const App = {
 
     /**
      * Cargar datos iniciales
+     * 
+     * ⚠️ CAMBIO IMPORTANTE: Ya NO carga código/estructura automáticamente.
+     * Ahora espera a que el usuario haga clic en un archivo del explorador.
      */
     async loadInitialData() {
         try {
-            // Cargar proyecto
+            // 1. Cargar proyecto (explorador de archivos) ✅ SIEMPRE
             await this.loadProject();
 
-            // Cargar estructura
-            await this.loadStructure();
+            // 2. Verificar si hay un archivo seleccionado
+            const response = await fetch('/api/project');
+            const data = await response.json();
 
-            // Cargar código
-            await this.loadCode();
+            const tieneArchivoActual = data.archivos?.some(a => a.activo);
 
-            // Cargar snippets
+            if (tieneArchivoActual) {
+                // Solo cargar si hay un archivo activo (cuando el usuario abre uno)
+                console.log('📄 Archivo detectado, cargando contenido...');
+                await this.loadStructure();
+                await this.loadCode();
+            } else {
+                // Mostrar estado vacío / bienvenida
+                console.log('📂 Proyecto cargado. Esperando selección de archivo...');
+                this.mostrarEstadoVacio();
+            }
+
+            // Cargar snippets (siempre disponible)
             await Snippets.load();
 
         } catch (error) {
             console.error('Error cargando datos iniciales:', error);
             this.showError('Error al cargar los datos iniciales');
         }
+    },
+
+    /**
+     * Mostrar estado vacío cuando no hay archivo abierto
+     */
+    mostrarEstadoVacio() {
+        // Limpiar editor si existe
+        if (Editor && Editor.setValue) {
+            Editor.setValue('<!-- Selecciona un archivo del explorador para comenzar -->');
+        }
+
+        // Limpiar estructura
+        const structureContainer = document.getElementById('structure-tree');
+        if (structureContainer) {
+            structureContainer.innerHTML = `
+                <div style="padding: 20px; text-align: center; color: #64748b;">
+                    <i class="fas fa-folder-open" style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                    <p style="margin: 0; font-size: 14px;">Selecciona un archivo para ver su estructura</p>
+                </div>
+            `;
+        }
+
+        // Actualizar barra de estado
+        this.updateStatusBar('Esperando selección de archivo...');
     },
 
     /**
@@ -257,54 +295,124 @@ const App = {
 
     /**
      * Cambiar pestaña (HTML/CSS/JavaScript/Visor)
+     * 🧛‍♂️ ACTUALIZADO: Gestiona tabs Y botones de vista
      */
     switchTab(tab) {
+        console.log(`%c🔄 [TAB] → ${tab}`, 'color: #bd93f9; font-weight: bold;');
+
+        // Guardar pestaña anterior
+        const previousTab = this.currentTab;
         this.currentTab = tab;
 
-        // SEGURIDAD: Apagar el visor siempre que cambiemos a HTML, CSS o JS
-        document.getElementById('visor-view')?.classList.remove('active');
+        // ════════════════════════════════════════
+        // 1. ACTUALIZAR PESTAÑAS (HTML/CSS/JS/Visor)
+        // ════════════════════════════════════════
 
-        // Si es la pestaña Visor, mostrar y parar
+        // Quitar "active" de todos los tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // Poner "active" al tab actual
+        const activeTab = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+        if (activeTab) {
+            activeTab.classList.add('active');
+        }
+
+        // ════════════════════════════════════════
+        // 2. GESTIONAR VISTAS
+        // ════════════════════════════════════════
+
+        // Ocultar todas las vistas primero
+        document.getElementById('visor-view')?.classList.remove('active');
+        document.getElementById('split-view')?.classList.remove('active');
+        document.getElementById('code-view')?.classList.remove('active');
+        document.getElementById('visual-view')?.classList.remove('active');
+
+        // Si es Visor, mostrar solo visor
         if (tab === 'visor') {
             this.showOnlyView('visor-view');
             return;
         }
 
-        // INTELIGENCIA: Si veníamos del Visor o del modo Visual, forzar la vista de Código
+        // Para HTML/CSS/JS: mostrar vista actual (split/code/visual)
         let viewToShow = this.currentView;
-        if (viewToShow === 'visual') {
-            viewToShow = 'code'; // Si le das a un código, mostramos el editor
+        if (!viewToShow || viewToShow === 'visual') {
+            viewToShow = 'split'; // Default a split si no hay vista válida
         }
 
-        // Mostrar la vista correspondiente
+        // Mostrar vista (esta función YA actualiza los botones)
         this.showOnlyView(`${viewToShow}-view`);
 
-        // Cambiar el color del editor de código
+        // ════════════════════════════════════════
+        // 3. CARGAR CONTENIDO
+        // ════════════════════════════════════════
         Editor.setMode(tab);
-
-        // Cargar contenido de la API
         this.loadTabContent(tab);
     },
-    // Función auxiliar nueva para mostrar solo la ventana que queramos
+
+
+    /**
+     * Mostrar solo la vista indicada + ACTUALIZAR BOTONES
+     * 🧛‍♂️ CORREGIDO: Ahora también marca el botón activo
+     */
     showOnlyView(viewId) {
         console.log(`%c🔄 [VISTA] Cambiando a: ${viewId}`, 'color: cyan; font-weight: bold;');
 
+        // 1. OCULTAR TODAS LAS VISTAS
         document.getElementById('split-view')?.classList.remove('active');
         document.getElementById('code-view')?.classList.remove('active');
         document.getElementById('visual-view')?.classList.remove('active');
         document.getElementById('visor-view')?.classList.remove('active');
 
+        // 2. MOSTRAR LA VISTA SELECCIONADA
         document.getElementById(viewId)?.classList.add('active');
 
+        // 3. ════════════════════════════════════════
+        //    NUEVO: ACTUALIZAR BOTONES DE VISTA
+        //    ════════════════════════════════════════
+
+        // Extraer nombre de la vista (quitar "-view" del final)
+        const viewName = viewId.replace('-view', '');
+
+        // Remover "active" de TODOS los botones de vista
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.classList.remove('active');
+            console.log(`  ❌ Botón vista desactivado:`, btn.textContent.trim());
+        });
+
+        // Agregar "active" al botón correspondiente
+        const activeBtn = document.querySelector(`.view-btn[onclick*="${viewName}"]`) ||
+            document.querySelector(`.view-btn[data-view="${viewName}"]`);
+
+        if (activeBtn) {
+            activeBtn.classList.add('active');
+            console.log(`  ✅ Botón vista activo: ${viewName}`, activeBtn);
+        } else {
+            // Buscar por texto del botón (fallback)
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                const text = btn.textContent.trim().toLowerCase();
+                if (
+                    (viewName === 'split' && (text.includes('dividido') || text.includes('split'))) ||
+                    (viewName === 'code' && (text.includes('código') || text.includes('code'))) ||
+                    (viewName === 'visual' && text.includes('visual'))
+                ) {
+                    btn.classList.add('active');
+                    console.log(`  ✅ Botón encontrado por texto:`, btn);
+                }
+            });
+        }
+
+        // 4. Actualizar preview frames si hay contenido cacheado
         setTimeout(() => {
             if (typeof Preview !== 'undefined' && Preview.cachedHtml) {
                 const frameDividido = document.getElementById('preview-frame');
                 const frameVisual = document.getElementById('visual-only-frame');
 
-                if (frameDividido && frameDividido.classList.contains('active')) {
+                if (frameDividido && frameDividido.closest('#split-view')?.classList.contains('active')) {
                     frameDividido.srcdoc = Preview.cachedHtml;
                 }
-                if (frameVisual && frameVisual.classList.contains('active')) {
+                if (frameVisual && frameVisual.closest('#visual-view')?.classList.contains('active')) {
                     frameVisual.srcdoc = Preview.cachedHtml;
                 }
             }
@@ -329,37 +437,39 @@ const App = {
     },
 
     /**
-     * Cambiar vista (Split/Code/Visual)
+     * 🆕 Cambiar vista (Dividido/Código/Visual)
      */
     setView(view) {
-        // Si estábamos en el Visor, volvemos a HTML y aplicamos la vista pedida
-        if (this.currentTab === 'visor') {
-            this.switchTab('html');
-            setTimeout(() => this.showOnlyView(`${view}-view`), 10);
-            return;
-        }
+        console.log(`%c👁️ [VIEW] → ${view}`, 'color: #ffb86c; font-weight: bold;');
 
+        this.previousView = this.currentView;
         this.currentView = view;
 
-        // Actualizar botones inferiores
-        document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelector(`.view-btn[onclick="setView('${view}')"]`)?.classList.add('active');
-
-        // Apagar todas las vistas
+        // Mostrar vista + actualizar botones (ya actualiza .view-btn.active)
         this.showOnlyView(`${view}-view`);
 
-        // Refrescar editor SI NO estamos en visual
-        if (view !== 'visual') {
-            Editor.refresh();
+        // Actualizar preview si es necesario
+        if ((view === 'split' || view === 'visual') && typeof Preview !== 'undefined') {
+            setTimeout(() => Preview.update(), 50);
         }
 
-        // ACTUALIZAR VISTA PREVIA solo si cambiamos de vista (evita parpadeos innecesarios)
-        if ((view === 'split' || view === 'visual') && this.previousView !== view) {
-            Preview.update();
-        }
+        // Guardar preferencia
+        this.config.lastView = view;
+        this.saveConfig();
+    },
 
-        // Recordar la vista actual para el próximo cambio
-        this.previousView = view;
+    /**
+     * Vista Solo Código
+     */
+    setCodeOnly() {
+        this.setView('code');
+    },
+
+    /**
+     * Vista Solo Visual
+     */
+    setVisualOnly() {
+        this.setView('visual');
     },
 
     /**
@@ -455,7 +565,7 @@ const App = {
                 if (data.success) {
                     // Ya no necesitamos llamar a loadCode() aquí porque 
                     // loadInitialData() de App.init() ya lo hace al arrancar.
-                    
+
                     // Refrescamos solo lo visual del proyecto (el árbol y la vista previa)
                     this.loadProject();
                     this.loadStructure();

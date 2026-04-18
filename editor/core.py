@@ -148,26 +148,16 @@ class EditorCore:
                             contenido=None
                         )
 
-            # ═══ INTELIGENCIA: Buscar el HTML principal real ═══
-            mejor_html = None
-            for nombre, archivo in self.proyecto.items():
-                if archivo.tipo == 'html':
-                    nombre_lower = nombre.lower()
-                    # 1. Prioridad máxima: index.html
-                    if 'index' in nombre_lower:
-                        mejor_html = nombre
-                        break
-                    # 2. Sino, buscar uno que tenga <body> (para ignorar archivos basura)
-                    if '<body' in archivo.contenido.lower():
-                        if not mejor_html or len(archivo.contenido) > len(self.proyecto[mejor_html].contenido):
-                            mejor_html = nombre
-                            
-            if mejor_html:
-                self.archivo_actual = mejor_html
-                self.soup = BeautifulSoup(self.proyecto[mejor_html].contenido, 'html.parser')
-            
+            # ═══ NUEVO COMPORTAMIENTO: NO auto-abrir archivos ═══
+            # El usuario debe hacer clic en el explorador para abrir archivos
+            self.archivo_actual = None       # ← Ningún archivo activo al inicio
+            self.soup = None                  # ← Sin HTML procesado
             self.archivo_principal = directorio
             self._limpiar_historial()
+            
+            print(f"✅ Proyecto cargado: {len(self.proyecto)} archivos")
+            print(f"ℹ️  Esperando que el usuario seleccione un archivo...")
+            
             return True
             
         except Exception as e:

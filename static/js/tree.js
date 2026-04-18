@@ -116,8 +116,12 @@ const Tree = {
 
                 item.innerHTML = `${this.getFileIcon(archivo.tipo, nombreSolo)}<span class="file-name">${nombreSolo}</span>`;
 
-                item.onclick = () => this.selectFile(archivo.nombre);
-                item.ondblclick = () => this.openFile(archivo.nombre); // Doble clic para abrir
+                // OPCIÓN A: Un solo clic abre el archivo (estilo VS Code)
+                item.onclick = () => this.openFile(archivo.nombre);
+
+                // OPCIÓN B: Mantener doble clic (descomenta si prefieres):
+                //item.onclick = () => this.selectFile(archivo.nombre);
+                //item.ondblclick = () => this.openFile(archivo.nombre);
                 padre.appendChild(item);
             });
         };

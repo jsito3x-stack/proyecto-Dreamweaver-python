@@ -1,0 +1,256 @@
+/* ════════════════════════════════════════════════════════════════
+   TEMA CLARO - WLA-DX AZULADO ☀️🔵
+   Basado en WLA-DX Light con tonos AZULADOS (sin morados)
+   Estilo limpio inspirado en editores clásicos + moderno
+   ════════════════════════════════════════════════════════════════ */
+
+/*
+ * PALETA WLA-DX AZULADA
+ * ─────────────────────
+ * Background:    #F5F7FA (Blanco grisáceo cálido)
+ * Secondary:     #EBF0F5 (Ligeramente más oscuro)
+ * Tertiary:      #E1E8EE (Panel lateral)
+ * Hover:         #D5E3F0 (Azul muy suave)
+ * Active:        #B8D4F0 (Azul claro medio)
+ * Foreground:    #2C3E50 (Azul oscuro - texto)
+ * Secondary Text:#5D6D7E (Gris azulado)
+ * Muted:         #95A5A6 (Gis claro)
+ * Accent:        #2980B9 (Azul principal)
+ * Success:       #27AE60 (Verde)
+ * Warning:       #F39C12 (Naranja)
+ * Error:         #E74C3C (Rojo)
+ * Info:          #3498DB (Cyan azul)
+ */
+
+.theme-light {
+    /* === FONDOS CLAROS AZULADOS === */
+    --bg-primary: #F5F7FA;
+    --bg-secondary: #EBF0F5;
+    --bg-tertiary: #E1E8EE;
+    --bg-input: #FFFFFF;
+    --bg-hover: #D5E3F0;
+    --bg-active: #B8D4F0;
+
+    /* === TEXTO CLARO === */
+    --text-primary: #2C3E50;
+    --text-secondary: #34495E;
+    --text-muted: #7F8C8D;
+
+    /* === ACENTOS AZULES === */
+    --accent: #2980B9;
+    /* Azul principal */
+    --accent-hover: #1F618D;
+    --success: #27AE60;
+    /* Verde */
+    --warning: #F39C12;
+    /* Naranja */
+    --error: #E74C3C;
+    /* Rojo */
+    --info: #3498DB;
+    /* Azul info */
+
+    /* === BORDES CLAROS === */
+    --border: #BDC3C7;
+    --border-light: #D5DBDB;
+
+    /* === SCROLLBAR CLARO === */
+    --scrollbar-bg: #F0F3F5;
+    --scrollbar-thumb: #BDC3C7;
+    --scrollbar-thumb-hover: #95A5A6;
+
+    /* === SOMBRAS CLARAS === */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.15);
+
+    /* === RGB PARA TRANSPARENCIAS === */
+    --accent-rgb: 41, 128, 185;
+    --success-rgb: 39, 174, 96;
+}
+
+/* === CODEMIRROR - LIGHT THEME === */
+.theme-light .CodeMirror {
+    background: #FFFFFF !important;
+    color: #2C3E50 !important;
+    font-family: 'Fira Code', Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.theme-light .CodeMirror-gutters {
+    background: #F5F7FA !important;
+    border-right: 1px solid #E1E8EE !important;
+}
+
+.theme-light .CodeMirror-linenumber {
+    color: #95A5A6 !important;
+}
+
+.theme-light .CodeMirror-cursor {
+    border-left: 2px solid #2980B9 !important;
+}
+
+.theme-light .CodeMirror-selected {
+    background: rgba(41, 128, 185, 0.2) !important;
+}
+
+.theme-light .CodeMirror-focused .CodeMirror-selected {
+    background: rgba(41, 128, 185, 0.3) !important;
+}
+
+.theme-light .CodeMirror-activeline-background {
+    background: #F0F7FC !important;
+}
+
+/* === SYNTAX HIGHLIGHTING - LIGHT AZUL === */
+.theme-light .cm-keyword {
+    color: #8E44AD !important;
+    font-weight: 500;
+}
+
+/* Púrpura suave */
+.theme-light .cm-atom {
+    color: #2980B9 !important;
+}
+
+/* Azul */
+.theme-light .cm-number {
+    color: #D35400 !important;
+}
+
+/* Naranja oscuro */
+.theme-light .cm-def {
+    color: #27AE60 !important;
+    font-style: italic;
+}
+
+/* Verde */
+.theme-light .cm-variable {
+    color: #2C3E50 !important;
+}
+
+/* Azul oscuro */
+.theme-light .cm-variable-2 {
+    color: #2980B9 !important;
+}
+
+/* Azul */
+.theme-light .cm-variable-3 {
+    color: #16A085 !important;
+}
+
+/* Teal */
+.theme-light .cm-property {
+    color: #2980B9 !important;
+}
+
+/* Azul */
+.theme-light .cm-operator {
+    color: #8E44AD !important;
+}
+
+/* Púrpura */
+.theme-light .cm-comment {
+    color: #95A5A6 !important;
+    font-style: italic;
+}
+
+/* Gris */
+.theme-light .cm-string {
+    color: #D35400 !important;
+}
+
+/* Naranja */
+.theme-light .cm-string-2 {
+    color: #D35400 !important;
+}
+
+/* Naranja */
+.theme-light .cm-tag {
+    color: #8E44AD !important;
+    font-weight: 500;
+}
+
+/* Púrpura */
+.theme-light .cm-attribute {
+    color: #27AE60 !important;
+}
+
+/* Verde */
+.theme-light .cm-header {
+    color: #2980B9 !important;
+}
+
+/* Azul */
+.theme-light .cm-quote {
+    color: #D35400 !important;
+}
+
+/* Naranja */
+.theme-light .cm-link {
+    color: #2980B9 !important;
+    text-decoration: underline;
+}
+
+.theme-light .cm-error {
+    color: #E74C3C !important;
+    background: rgba(231, 76, 60, 0.1) !important;
+}
+
+/* Match brackets */
+.theme-light .CodeMirror-matchingbracket {
+    background: rgba(41, 128, 185, 0.2) !important;
+    color: #2980B9 !important;
+    outline: 1px solid #2980B9 !important;
+}
+
+/* Scrollbar editor light */
+.theme-light .CodeMirror-scroll::-webkit-scrollbar-thumb {
+    background: #BDC3C7;
+}
+
+.theme-light .CodeMirror-scroll::-webkit-scrollbar-thumb:hover {
+    background: #95A5A6;
+}
+
+/* === PESTAÑAS ACTIVAS - LIGHT (AZUL) === */
+.theme-light .tab-btn.active {
+    background: rgba(41, 128, 185, 0.12) !important;
+    border-color: #2980B9 !important;
+    color: #2980B9 !important;
+    box-shadow: 0 0 12px rgba(41, 128, 185, 0.25) !important;
+}
+
+.theme-light .tab-btn.active::after {
+    background: #2980B9 !important;
+}
+
+/* === VIEW BUTTONS ACTIVOS - LIGHT === */
+.theme-light .view-btn.active {
+    background: rgba(41, 128, 185, 0.12) !important;
+    border-color: #2980B9 !important;
+    color: #2980B9 !important;
+    box-shadow: 0 0 12px rgba(41, 128, 185, 0.25) !important;
+}
+
+.theme-light .view-btn.active::after {
+    background: #2980B9 !important;
+}
+
+/* Visor de archivos - Light */
+.theme-light #visor-view {
+    background: #F5F7FA !important;
+}
+
+.theme-light #visor-view.active {
+    background: #F5F7FA !important;
+    display: flex !important;
+    flex-direction: column;
+}
+
+.theme-light #visor-frame {
+    background: #FFFFFF !important;
+    border: 1px solid #BDC3C7;
+    border-radius: 4px;
+    margin: 8px;
+}

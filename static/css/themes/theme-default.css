@@ -1,0 +1,294 @@
+/* ════════════════════════════════════════════════════════════════
+   TEMA POR DEFECTO - COBALT2 🎨
+   Official Theme by Wes Bos - https://github.com/wesbos/cobalt2-vscode
+   Inspirado en el clásico tema Cobalt para TextMate
+   ════════════════════════════════════════════════════════════════ */
+
+/*
+ * PALETA COBALT2 OFICIAL
+ * ─────────────────────
+ * Background:    #193549 (Azul oscuro profundo)
+ * Secondary:     #122738 (Más oscuro)
+ * Tertiary:      #15232d (Panel lateral)
+ * Line Highlight:#1F4662 (Línea activa)
+ * Selection:     #0050A4 (Selección)
+ * Foreground:    #FFFFFF (Texto blanco)
+ * Cursor:        #FFC600 (Amarillo/Dorado)
+ * Functions:     #FFC600 (Amarillo)
+ * Variables:     #FFFFFF
+ * Strings:       #3AD900 (Verde menta)
+ * Keywords:      #FF9D00 (Naranja)
+ * Types/Intfs:   #FF68B8 (Rosa)
+ * Properties:    #9EFFFF (Cian claro)
+ * Comments:      #AAAAAA (Gris)
+ * Error:         #A22929 (Rojo oscuro)
+ */
+
+.theme-default {
+    /* === FONDOS COBALT2 === */
+    --bg-primary: #193549;
+    --bg-secondary: #122738;
+    --bg-tertiary: #15232d;
+    --bg-input: #193549;
+    --bg-hover: #1F4662;
+    --bg-active: #0d3a58;
+
+    /* === TEXTO COBALT2 === */
+    --text-primary: #FFFFFF;
+    --text-secondary: #E0E0E0;
+    --text-muted: #888888;
+
+    /* === ACENTOS COBALT2 === */
+    --accent: #0088ff;
+    /* Azul principal */
+    --accent-hover: #0099ff;
+    --success: #3ad900;
+    /* Verde menta */
+    --warning: #ffc600;
+    /* Amarillo/Dorado */
+    --error: #ff5630;
+    /* Rojo error */
+    --info: #9effff;
+    /* Cyan info */
+
+    /* === BORDES COBALT2 === */
+    --border: #0d3a58;
+    --border-light: #234E6D;
+
+    /* === SCROLLBAR COBALT2 === */
+    --scrollbar-bg: #122738;
+    --scrollbar-thumb: #406179;
+    --scrollbar-thumb-hover: #437da3;
+
+    /* === SOMBRAS COBALT2 === */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.5);
+
+    /* === RGB PARA TRANSPARENCIAS === */
+    --accent-rgb: 0, 136, 255;
+    --success-rgb: 58, 217, 0;
+}
+
+/* === CODEMIRROR - COBALT2 THEME === */
+.theme-default .CodeMirror {
+    background: #193549 !important;
+    color: #FFFFFF !important;
+    font-family: 'Fira Code', Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.theme-default .CodeMirror-gutters {
+    background: #122738 !important;
+    border-right: 1px solid #0d3a58 !important;
+}
+
+.theme-default .CodeMirror-linenumber {
+    color: #888888 !important;
+}
+
+.theme-default .CodeMirror-cursor {
+    border-left: 2px solid #FFC600 !important;
+}
+
+.theme-default .CodeMirror-selected {
+    background: rgba(0, 80, 164, 0.6) !important;
+}
+
+.theme-default .CodeMirror-focused .CodeMirror-selected {
+    background: rgba(0, 80, 164, 0.8) !important;
+}
+
+.theme-default .CodeMirror-activeline-background {
+    background: #1F4662 !important;
+}
+
+/* === SYNTAX HIGHLIGHTING - COBALT2 === */
+.theme-default .cm-keyword {
+    color: #FF9D00 !important;
+    font-weight: 500;
+}
+
+/* Naranja */
+.theme-default .cm-atom {
+    color: #FF68B8 !important;
+}
+
+/* Rosa */
+.theme-default .cm-number {
+    color: #FF68B8 !important;
+}
+
+/* Rosa */
+.theme-default .cm-def {
+    color: #FFD700 !important;
+    font-style: italic;
+}
+
+/* Dorado */
+.theme-default .cm-variable {
+    color: #FFFFFF !important;
+}
+
+/* Blanco */
+.theme-default .cm-variable-2 {
+    color: #9EFFFF !important;
+}
+
+/* Cyan */
+.theme-default .cm-variable-3 {
+    color: #FFC600 !important;
+}
+
+/* Amarillo */
+.theme-default .cm-property {
+    color: #9EFFFF !important;
+}
+
+/* Cyan */
+.theme-default .cm-operator {
+    color: #FF9D00 !important;
+}
+
+/* Naranja */
+.theme-default .cm-comment {
+    color: #888888 !important;
+    font-style: italic;
+}
+
+/* Gris */
+.theme-default .cm-string {
+    color: #3AD900 !important;
+}
+
+/* Verde */
+.theme-default .cm-string-2 {
+    color: #3AD900 !important;
+}
+
+/* Verde */
+.theme-default .cm-tag {
+    color: #FF9D00 !important;
+    font-weight: 500;
+}
+
+/* Naranja */
+.theme-default .cm-attribute {
+    color: #FFC600 !important;
+}
+
+/* Amarillo */
+.theme-default .cm-header {
+    color: #FF68B8 !important;
+}
+
+/* Rosa */
+.theme-default .cm-quote {
+    color: #3AD900 !important;
+}
+
+/* Verde */
+.theme-default .cm-link {
+    color: #0088FF !important;
+    text-decoration: underline;
+}
+
+/* Azul */
+.theme-default .cm-error {
+    color: #A22929 !important;
+    background: rgba(162, 41, 41, 0.2) !important;
+}
+
+/* Match brackets */
+.theme-default .CodeMirror-matchingbracket {
+    background: rgba(255, 198, 0, 0.2) !important;
+    color: #FFC600 !important;
+    outline: 1px solid #FFC600 !important;
+}
+
+/* Scrollbar editor */
+.theme-default .CodeMirror-scroll::-webkit-scrollbar-thumb {
+    background: #406179;
+}
+
+.theme-default .CodeMirror-scroll::-webkit-scrollbar-thumb:hover {
+    background: #437da3;
+}
+
+/* === PESTAÑAS ACTIVAS - COBALT2 (AZUL) === */
+.theme-default .tab-btn.active {
+    background: rgba(0, 136, 255, 0.15) !important;
+    border-color: #0088ff !important;
+    color: #0088ff !important;
+    box-shadow: 0 0 12px rgba(0, 136, 255, 0.4) !important;
+}
+
+.theme-default .tab-btn.active::after {
+    background: #0088ff !important;
+}
+
+/* === VIEW BUTTONS ACTIVOS - COBALT2 === */
+.theme-default .view-btn.active {
+    background: rgba(0, 136, 255, 0.15) !important;
+    border-color: #0088ff !important;
+    color: #0088ff !important;
+    box-shadow: 0 0 12px rgba(0, 136, 255, 0.4) !important;
+}
+
+.theme-default .view-btn.active::after {
+    background: #0088ff !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   VISOR DE ARCHIVOS - COBALT2 (Igual que visual)
+   ════════════════════════════════════════════════════════════════ */
+
+/* Contenedor principal del visor */
+.theme-default #visor-view {
+    background: #193549 !important;
+    /* ← Igual que bg-primary Cobalt2 */
+}
+
+.theme-default #visor-view.active {
+    background: #193549 !important;
+    display: flex !important;
+    flex-direction: column;
+}
+
+/* Iframe del visor */
+.theme-default #visor-frame {
+    background: #193549 !important;
+    /* ← Igual que el editor */
+    border: 1px solid #0d3a58;
+    border-radius: 4px;
+    margin: 8px;
+}
+
+/* Asegurar que TODAS las vistas tengan el mismo fondo */
+.theme-default .split-view,
+.theme-default .code-view,
+.theme-default .visual-view,
+.theme-default #split-view,
+.theme-default #code-view,
+.theme-default #visual-view {
+    background: #193549 !important;
+}
+
+.theme-default .split-view.active,
+.theme-default .code-view.active,
+.theme-default .visual-view.active,
+.theme-default #split-view.active,
+.theme-default #code-view.active,
+.theme-default #visual-view.active {
+    background: #193549 !important;
+    display: flex !important;
+    flex-direction: column;
+}
+
+/* Preview frames */
+.theme-default .preview-frame,
+.theme-default #preview-frame,
+.theme-default #visual-only-frame {
+    background: #193549 !important;
+}

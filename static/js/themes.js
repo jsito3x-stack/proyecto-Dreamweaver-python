@@ -85,6 +85,18 @@ const Themes = {
             detail: { theme: themeName, previous: previousTheme }
         }));
 
+        // NUEVO: Cerrar el menú desplegable si está abierto
+        const dropdown = document.getElementById('theme-dropdown');
+        if (dropdown) dropdown.classList.remove('show');
+
+        // NUEVO: Actualizar el tooltip del botón
+        this.setupToggleButton();
+
+        // Notificar cambio
+        if (typeof App !== 'undefined' && App.showSuccess) {
+            App.showSuccess(`Tema: ${this.getThemeDisplayName()}`);
+        }
+
         return true;
     },
 
@@ -132,15 +144,31 @@ const Themes = {
     },
 
     /**
-     * Toggle simple (usado por el botón actual)
+     * Toggle para el menú desplegable
      */
-    toggle() {
-        this.cycleTheme();
-        this.setupToggleButton(); // Actualizar tooltip
-
-        // Mostrar notificación sutil
-        if (typeof App !== 'undefined' && App.showSuccess) {
-            App.showSuccess(`Tema: ${this.getThemeDisplayName()}`);
+    toggleDropdown(event) {
+        event.stopPropagation();
+        const dropdown = document.getElementById('theme-dropdown');
+        if (dropdown) {
+            const isShowing = dropdown.classList.contains('show');
+            // Cierra todos los otros menus context-menu si los hubiera
+            document.querySelectorAll('.context-menu').forEach(menu => menu.classList.remove('show'));
+            
+            if (!isShowing) {
+                const btnRect = event.currentTarget.getBoundingClientRect();
+                dropdown.style.position = 'fixed';
+                dropdown.style.top = `${btnRect.bottom + 8}px`;
+                dropdown.style.left = `${btnRect.right - 180}px`;
+                dropdown.classList.add('show');
+            }
         }
     }
 };
+
+// Cerrar el listado de temas al hacer clic fuera
+document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('theme-dropdown');
+    if (dropdown && !e.target.closest('.theme-dropdown-container')) {
+        dropdown.classList.remove('show');
+    }
+});

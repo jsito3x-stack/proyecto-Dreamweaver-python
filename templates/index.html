@@ -72,9 +72,23 @@
                 </button>
 
                 <!-- Tema Toggle -->
-                <button class="btn-icon" onclick="Themes.toggle()" title="Cambiar tema">
-                    <img src="/static/icons/theme.png" style="width:20px;" id="theme-icon-img">
-                </button>
+                <div class="theme-dropdown-container" style="position: relative; display: flex; align-items: center;">
+                    <button class="btn-icon" onclick="Themes.toggleDropdown(event)" title="Cambiar tema">
+                        <img src="/static/icons/theme.png" style="width:20px;" id="theme-icon-img">
+                    </button>
+                    <!-- Menú Desplegable de Temas -->
+                    <div id="theme-dropdown" class="context-menu" style="min-width: 180px; z-index: 3000;">
+                        <div class="context-menu-item" onclick="Themes.setTheme('default')">
+                            <i class="fas fa-paint-brush context-menu-icon" style="color: #89b4fa;"></i> Cobalt2 (Global)
+                        </div>
+                        <div class="context-menu-item" onclick="Themes.setTheme('light')">
+                            <i class="fas fa-sun context-menu-icon" style="color: #f59e0b;"></i> Claro (WLA-DX)
+                        </div>
+                        <div class="context-menu-item" onclick="Themes.setTheme('dark')">
+                            <i class="fas fa-moon context-menu-icon" style="color: #bd93f9;"></i> Oscuro (Dracula)
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Atajos de teclado -->
                 <button class="btn-icon" onclick="Keyboard.showHelp()" title="Atajos de teclado">

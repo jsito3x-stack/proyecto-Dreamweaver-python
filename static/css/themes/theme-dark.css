@@ -30,13 +30,13 @@
     --bg-active: #343748;
 
     /* === TEXTO DRACULA === */
-    --text-primary: #f8f8f2;
+    --text-primary: #52278f;
     --text-secondary: #bd93f9;
-    --text-muted: #6272a4;
+    --text-muted: #92a1d1;
 
     /* === ACENTOS DRACULA === */
     --accent: #bd93f9;
-    --accent-hover: #ff79c6;
+    --accent-hover: #5314ac;
     --success: #50fa7b;
     --warning: #f1fa8c;
     --error: #ff5555;

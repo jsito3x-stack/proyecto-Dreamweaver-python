@@ -34,9 +34,9 @@
     --bg-active: #0d3a58;
 
     /* === TEXTO COBALT2 === */
-    --text-primary: #FFFFFF;
-    --text-secondary: #E0E0E0;
-    --text-muted: #888888;
+    --text-primary: #0081f1;
+    --text-secondary: #0e8feb;
+    --text-muted: #69b9ff;
 
     /* === ACENTOS COBALT2 === */
     --accent: #0088ff;
@@ -292,3 +292,4 @@
 .theme-default #visual-only-frame {
     background: #193549 !important;
 }
+

@@ -158,7 +158,8 @@ const Themes = {
                 const btnRect = event.currentTarget.getBoundingClientRect();
                 dropdown.style.position = 'fixed';
                 dropdown.style.top = `${btnRect.bottom + 8}px`;
-                dropdown.style.left = `${btnRect.right - 180}px`;
+                // Alineamos el menú a la izquierda del botón para que no sea tan aparatoso por la derecha
+                dropdown.style.left = `${btnRect.left}px`;
                 dropdown.classList.add('show');
             }
         }

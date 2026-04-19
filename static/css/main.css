@@ -604,3 +604,210 @@ body {
     padding: 0 !important;
     margin: 0 !important;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   PANEL DERECHO (PROPIEDADES)
+   ════════════════════════════════════════════════════════════════ */
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-tertiary);
+    border-left: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.props-header {
+    padding: var(--space-md);
+    background: var(--bg-tertiary);
+    /* Mezclado uniformemente con el fondo del panel */
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.props-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-md);
+}
+
+#no-selection {
+    text-align: center;
+    color: var(--text-muted);
+    padding: var(--space-2xl) var(--space-md);
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+/* Tarjetas de grupos de propiedades */
+.prop-group {
+    background: var(--bg-primary);
+    /* Contraste respecto a bg-tertiary */
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.prop-group-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.prop-row {
+    margin-bottom: var(--space-sm);
+}
+
+.prop-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    display: block;
+}
+
+/* Controles de texto y formularios */
+.prop-input {
+    width: 100%;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 6px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    transition: all var(--transition-fast);
+}
+
+.prop-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(var(--accent-rgb, 137, 180, 250), 0.2);
+}
+
+.prop-input[readonly] {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background: var(--bg-secondary);
+}
+
+.prop-textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+/* Selector de color */
+.color-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.color-preview {
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+}
+
+.color-input {
+    flex: 1;
+}
+
+/* Botones rápidos y acciones */
+.quick-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.quick-btn {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 6px;
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all var(--transition-fast);
+}
+
+.quick-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+    border-color: var(--border-light);
+}
+
+.quick-btn.danger:hover {
+    color: var(--error);
+    border-color: var(--error);
+}
+
+/* Grid de inserción */
+.insert-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.insert-btn {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 6px;
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    cursor: pointer;
+    text-align: center;
+    transition: all var(--transition-fast);
+}
+
+.insert-btn:hover {
+    background: var(--accent);
+    color: var(--bg-secondary);
+    border-color: var(--accent);
+}
+
+/* Listas de atributos */
+#attributes-list .attr-row {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 4px;
+}
+
+#attributes-list .attr-row input {
+    flex: 1;
+}
+
+#attributes-list .attr-row button {
+    background: transparent;
+    border: none;
+    color: var(--error);
+    cursor: pointer;
+    padding: 0 4px;
+    transition: transform var(--transition-fast);
+}
+
+#attributes-list .attr-row button:hover {
+    transform: scale(1.1);
+}

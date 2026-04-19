@@ -30,13 +30,13 @@
     --bg-active: #343748;
 
     /* === TEXTO DRACULA === */
-    --text-primary: #52278f;
+    --text-primary: #f8f8f2;
     --text-secondary: #bd93f9;
     --text-muted: #92a1d1;
 
     /* === ACENTOS DRACULA === */
     --accent: #bd93f9;
-    --accent-hover: #5314ac;
+    --accent-hover: #ff79c6;
     --success: #50fa7b;
     --warning: #f1fa8c;
     --error: #ff5555;
@@ -190,30 +190,6 @@
     background: #6272a4;
 }
 
-/* === PESTAÑAS ACTIVAS - DRACULA (VERDE UNIFORME) === */
-.theme-dark .tab-btn.active {
-    background: rgba(80, 250, 123, 0.15) !important;
-    border-color: #50fa7b !important;
-    color: #50fa7b !important;
-    box-shadow: 0 0 12px rgba(80, 250, 123, 0.4) !important;
-}
-
-.theme-dark .tab-btn.active::after {
-    background: #50fa7b !important;
-}
-
-/* === VIEW BUTTONS ACTIVOS - DRACULA === */
-.theme-dark .view-btn.active {
-    background: rgba(80, 250, 123, 0.15) !important;
-    border-color: #50fa7b !important;
-    color: #50fa7b !important;
-    box-shadow: 0 0 12px rgba(80, 250, 123, 0.4) !important;
-}
-
-.theme-dark .view-btn.active::after {
-    background: #50fa7b !important;
-}
-
 /* Visor de archivos - Dracula */
 .theme-dark #visor-view {
     background: #282a36 !important;
@@ -230,4 +206,64 @@
     border: 1px solid #44475a;
     border-radius: 4px;
     margin: 8px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   UNIFICACIÓN DE BOTONES Y PESTAÑAS - DRACULA
+   ════════════════════════════════════════════════════════════════ */
+
+/* 1. Base para todos los botones del header y paneles */
+.theme-dark .tab-btn,
+.theme-dark .panel-tab,
+.theme-dark .view-btn,
+.theme-dark .btn,
+.theme-dark .btn-icon,
+.theme-dark .props-header {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    color: #bd93f9 !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: none !important;
+    outline: none !important;
+    font-family: inherit !important;
+    position: relative;
+    border-radius: 4px !important;
+}
+
+/* 2. Estado Hover (Efecto Inversión) */
+.theme-dark .tab-btn:hover,
+.theme-dark .panel-tab:hover,
+.theme-dark .view-btn:hover,
+.theme-dark .btn:hover,
+.theme-dark .btn-icon:hover {
+    background: #bd93f9 !important;
+    color: #282a36 !important;
+    border-color: #bd93f9 !important;
+}
+
+/* 3. Estado Activo (Seleccionado con línea inferior) */
+.theme-dark .tab-btn.active,
+.theme-dark .panel-tab.active,
+.theme-dark .view-btn.active,
+.theme-dark .btn-icon.active {
+    background: rgba(189, 147, 249, 0.15) !important;
+    border-color: #bd93f9 !important;
+    color: #bd93f9 !important;
+    box-shadow: 0 0 12px rgba(189, 147, 249, 0.3) !important;
+}
+
+.theme-dark .tab-btn.active::after,
+.theme-dark .panel-tab.active::after,
+.theme-dark .view-btn.active::after,
+.theme-dark .btn-icon.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 3px;
+    background: #bd93f9 !important;
+    border-radius: 2px;
 }

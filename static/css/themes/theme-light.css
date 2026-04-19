@@ -108,28 +108,23 @@
     font-weight: 500;
 }
 
-/* Púrpura suave */
 .theme-light .cm-atom {
     color: #2980B9 !important;
 }
 
-/* Azul */
 .theme-light .cm-number {
     color: #D35400 !important;
 }
 
-/* Naranja oscuro */
 .theme-light .cm-def {
     color: #27AE60 !important;
     font-style: italic;
 }
 
-/* Verde */
 .theme-light .cm-variable {
     color: #2C3E50 !important;
 }
 
-/* Azul oscuro */
 .theme-light .cm-variable-2 {
     color: #2980B9 !important;
 }
@@ -213,8 +208,51 @@
     background: #95A5A6;
 }
 
-/* === PESTAÑAS ACTIVAS - LIGHT (AZUL) === */
-.theme-light .tab-btn.active {
+/* ════════════════════════════════════════════════════════════════
+   UNIFICACIÓN DE BOTONES Y PESTAÑAS - LIGHT
+   ════════════════════════════════════════════════════════════════ */
+
+/* 1. Base para todos los botones del header y paneles */
+.theme-light .tab-btn,
+.theme-light .panel-tab,
+.theme-light .view-btn,
+.theme-light .btn,
+.theme-light .btn-icon,
+.theme-light .props-header {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    color: #34495e !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: none !important;
+    outline: none !important;
+    font-family: inherit !important;
+    position: relative;
+    border-radius: 4px !important;
+}
+
+/* Label de propiedades específico */
+.theme-light .props-header {
+    color: #2980B9 !important;
+    cursor: default;
+}
+
+/* 2. Estado Hover (Efecto Inversión) */
+.theme-light .tab-btn:hover,
+.theme-light .panel-tab:hover,
+.theme-light .view-btn:hover,
+.theme-light .btn:hover,
+.theme-light .btn-icon:hover {
+    background: #2980B9 !important; /* Azul Deep */
+    color: #F5F7FA !important; /* Fondo claro */
+    border-color: #2980B9 !important;
+}
+
+/* 3. Estado Activo (Seleccionado con línea inferior) */
+.theme-light .tab-btn.active,
+.theme-light .panel-tab.active,
+.theme-light .view-btn.active,
+.theme-light .btn-icon.active {
     background: rgba(41, 128, 185, 0.12) !important;
     border-color: #2980B9 !important;
     color: #2980B9 !important;
@@ -222,21 +260,19 @@
     box-shadow: 0 0 12px rgba(41, 128, 185, 0.25) !important;
 }
 
-.theme-light .tab-btn.active::after {
+.theme-light .tab-btn.active::after,
+.theme-light .panel-tab.active::after,
+.theme-light .view-btn.active::after,
+.theme-light .btn-icon.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 3px;
     background: #2980B9 !important;
-}
-
-/* === VIEW BUTTONS ACTIVOS - LIGHT === */
-.theme-light .view-btn.active {
-    background: rgba(41, 128, 185, 0.12) !important;
-    border-color: #2980B9 !important;
-    color: #2980B9 !important;
-    font-weight: bold !important;
-    box-shadow: 0 0 12px rgba(41, 128, 185, 0.25) !important;
-}
-
-.theme-light .view-btn.active::after {
-    background: #2980B9 !important;
+    border-radius: 2px;
 }
 
 /* Visor de archivos - Light */
@@ -246,13 +282,10 @@
 
 .theme-light #visor-view.active {
     background: #F5F7FA !important;
-    display: flex !important;
-    flex-direction: column;
 }
 
 .theme-light #visor-frame {
     background: #FFFFFF !important;
     border: 1px solid #BDC3C7;
-    border-radius: 4px;
     margin: 8px;
 }

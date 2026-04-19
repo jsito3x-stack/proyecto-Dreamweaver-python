@@ -28,7 +28,7 @@ const Tree = {
         container.innerHTML = '';
 
         if (!archivos || archivos.length === 0) {
-            container.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-folder-open" style="font-size:32px;margin-bottom:10px;display:block;"></i>No hay archivos cargados</div>`;
+            container.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-muted);"><img src="/static/icons/files.png" style="height:32px;margin-bottom:10px;display:block;margin-left:auto;margin-right:auto;opacity:0.5;">No hay archivos cargados</div>`;
             return;
         }
 
@@ -276,7 +276,12 @@ const Tree = {
         container.innerHTML = '';
 
         if (!data || !data.name) {
-            container.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-sitemap" style="font-size:32px;margin-bottom:10px;display:block;"></i>Carga un archivo HTML</div>`;
+            container.innerHTML = `
+                <div style="text-align: center; padding: 20px; color: var(--text-muted);">
+                    <img src="/static/icons/documento_vacio.png" style="width: 48px; height: 48px; margin-bottom: 12px; opacity: 0.5; display: block; margin-left: auto; margin-right: auto;">
+                    <p style="margin: 0; font-size: 14px;">Carga un archivo HTML para ver su estructura</p>
+                </div>
+            `;
             return;
         }
         container.appendChild(this.createStructureNode(data, 0));

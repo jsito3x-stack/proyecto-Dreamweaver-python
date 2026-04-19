@@ -1,8 +1,9 @@
-/* ════════════════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════
    TEMA POR DEFECTO - COBALT2 🎨
-   Official Theme by Wes Bos - https://github.com/wesbos/cobalt2-vscode
-   Inspirado en el clásico tema Cobalt para TextMate
-   ════════════════════════════════════════════════════════════════ */
+   Official Theme by Wes Bos
+   https://github.com/wesbos/cobalt2-vscode
+   ══════════════════════════════════════════════════════════════ 
+*/
 
 /*
  * PALETA COBALT2 OFICIAL
@@ -24,6 +25,10 @@
  * Error:         #A22929 (Rojo oscuro)
  */
 
+/* ══════════════════════════════════════════════════════════════
+   1. VARIABLES CSS - COBALT2
+   ══════════════════════════════════════════════════════════════ 
+*/
 .theme-default {
     /* === FONDOS COBALT2 === */
     --bg-primary: #193549;
@@ -34,22 +39,17 @@
     --bg-active: #0d3a58;
 
     /* === TEXTO COBALT2 === */
-    --text-primary: #0081f1;
-    --text-secondary: #0e8feb;
-    --text-muted: #69b9ff;
+    --text-primary: #ffffff;
+    --text-secondary: #e0e0e0;
+    --text-muted: #6b9fff;
 
     /* === ACENTOS COBALT2 === */
     --accent: #0088ff;
-    /* Azul principal */
     --accent-hover: #0099ff;
     --success: #3ad900;
-    /* Verde menta */
     --warning: #ffc600;
-    /* Amarillo/Dorado */
     --error: #ff5630;
-    /* Rojo error */
     --info: #9effff;
-    /* Cyan info */
 
     /* === BORDES COBALT2 === */
     --border: #0d3a58;
@@ -73,7 +73,7 @@
 /* === CODEMIRROR - COBALT2 THEME === */
 .theme-default .CodeMirror {
     background: #193549 !important;
-    color: #FFFFFF !important;
+    color: #ffffff !important;
     font-family: 'Fira Code', Consolas, monospace;
     font-size: 13px;
     line-height: 1.6;
@@ -85,11 +85,11 @@
 }
 
 .theme-default .CodeMirror-linenumber {
-    color: #888888 !important;
+    color: #6b9fff !important;
 }
 
 .theme-default .CodeMirror-cursor {
-    border-left: 2px solid #FFC600 !important;
+    border-left: 2px solid #ffc600 !important;
 }
 
 .theme-default .CodeMirror-selected {
@@ -101,110 +101,7 @@
 }
 
 .theme-default .CodeMirror-activeline-background {
-    background: #1F4662 !important;
-}
-
-/* === SYNTAX HIGHLIGHTING - COBALT2 === */
-.theme-default .cm-keyword {
-    color: #FF9D00 !important;
-    font-weight: 500;
-}
-
-/* Naranja */
-.theme-default .cm-atom {
-    color: #FF68B8 !important;
-}
-
-/* Rosa */
-.theme-default .cm-number {
-    color: #FF68B8 !important;
-}
-
-/* Rosa */
-.theme-default .cm-def {
-    color: #FFD700 !important;
-    font-style: italic;
-}
-
-/* Dorado */
-.theme-default .cm-variable {
-    color: #FFFFFF !important;
-}
-
-/* Blanco */
-.theme-default .cm-variable-2 {
-    color: #9EFFFF !important;
-}
-
-/* Cyan */
-.theme-default .cm-variable-3 {
-    color: #FFC600 !important;
-}
-
-/* Amarillo */
-.theme-default .cm-property {
-    color: #9EFFFF !important;
-}
-
-/* Cyan */
-.theme-default .cm-operator {
-    color: #FF9D00 !important;
-}
-
-/* Naranja */
-.theme-default .cm-comment {
-    color: #888888 !important;
-    font-style: italic;
-}
-
-/* Gris */
-.theme-default .cm-string {
-    color: #3AD900 !important;
-}
-
-/* Verde */
-.theme-default .cm-string-2 {
-    color: #3AD900 !important;
-}
-
-/* Verde */
-.theme-default .cm-tag {
-    color: #FF9D00 !important;
-    font-weight: 500;
-}
-
-/* Naranja */
-.theme-default .cm-attribute {
-    color: #FFC600 !important;
-}
-
-/* Amarillo */
-.theme-default .cm-header {
-    color: #FF68B8 !important;
-}
-
-/* Rosa */
-.theme-default .cm-quote {
-    color: #3AD900 !important;
-}
-
-/* Verde */
-.theme-default .cm-link {
-    color: #0088FF !important;
-    text-decoration: underline;
-}
-
-/* Azul */
-.theme-default .cm-error {
-    color: #A22929 !important;
-    background: rgba(162, 41, 41, 0.2) !important;
-}
-
-/* Match brackets */
-.theme-default .CodeMirror-matchingbracket {
-    background: rgba(255, 198, 0, 0.2) !important;
-    color: #FFC600 !important;
-    outline: 1px solid #FFC600 !important;
+    background: #1f4662 !important;
 }
 
 /* Scrollbar editor */
@@ -216,80 +113,266 @@
     background: #437da3;
 }
 
-/* === PESTAÑAS ACTIVAS - COBALT2 (AZUL) === */
-.theme-default .tab-btn.active {
-    background: rgba(0, 136, 255, 0.15) !important;
-    border-color: #0088ff !important;
-    color: #0088ff !important;
-    box-shadow: 0 0 12px rgba(0, 136, 255, 0.4) !important;
-}
-
-.theme-default .tab-btn.active::after {
-    background: #0088ff !important;
-}
-
-/* === VIEW BUTTONS ACTIVOS - COBALT2 === */
-.theme-default .view-btn.active {
-    background: rgba(0, 136, 255, 0.15) !important;
-    border-color: #0088ff !important;
-    color: #0088ff !important;
-    box-shadow: 0 0 12px rgba(0, 136, 255, 0.4) !important;
-}
-
-.theme-default .view-btn.active::after {
-    background: #0088ff !important;
+/* Match brackets */
+.theme-default .CodeMirror-matchingbracket {
+    background: rgba(255, 198, 0, 0.2) !important;
+    color: #ffc600 !important;
+    outline: 1px solid #ffc600 !important;
 }
 
 /* ════════════════════════════════════════════════════════════════
-   VISOR DE ARCHIVOS - COBALT2 (Igual que visual)
+   3. SYNTAX HIGHLIGHTING - COBALT2 OFICIAL
+   ══════════════════════════════════════════════════════════════ */
+
+/* Keywords - Naranja */
+.theme-default .cm-keyword {
+    color: #ff9d00 !important;
+    font-weight: 500;
+}
+
+.theme-default .cm-atom {
+    color: #ff68b8 !important;
+}
+
+.theme-default .cm-number {
+    color: #ff68b8 !important;
+}
+
+/* Types/Interfaces - Rosa */
+.theme-default .cm-def {
+    color: #ffd700 !important;
+    font-style: italic;
+}
+
+/* Variables - Blanco */
+.theme-default .cm-variable {
+    color: #ffffff !important;
+}
+
+.theme-default .cm-variable-2 {
+    color: #9effff !important;
+}
+
+/* Cyan */
+.theme-default .cm-variable-3 {
+    color: #ffc600 !important;
+}
+
+/* Amarillo */
+
+/* Properties - Cyan claro */
+.theme-default .cm-property {
+    color: #9effff !important;
+}
+
+/* Operators - Naranja */
+.theme-default .cm-operator {
+    color: #ff9d00 !important;
+}
+
+/* Comments - Gris */
+.theme-default .cm-comment {
+    color: #888888 !important;
+    font-style: italic;
+    opacity: 0.85;
+}
+
+/* Strings - Verde menta */
+.theme-default .cm-string,
+.theme-default .cm-string-2 {
+    color: #3ad900 !important;
+}
+
+/* Tags - Naranja */
+.theme-default .cm-tag {
+    color: #ff9d00 !important;
+    font-weight: 500;
+}
+
+/* Attributes - Amarillo/Dorado */
+.theme-default .cm-attribute {
+    color: #ffc600 !important;
+}
+
+/* Headers - Rosa */
+.theme-default .cm-header {
+    color: #ff68b8 !important;
+}
+
+/* Quotes - Verde */
+.theme-default .cm-quote {
+    color: #3ad900 !important;
+}
+
+/* Links - Azul */
+.theme-default .cm-link {
+    color: #0088ff !important;
+    text-decoration: underline;
+}
+
+/* Errors - Rojo */
+.theme-default .cm-error {
+    color: #ff5630 !important;
+    background: rgba(162, 41, 41, 0.2) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   UNIFICACIÓN DE BOTONES Y PESTAÑAS - COBALT2
    ════════════════════════════════════════════════════════════════ */
 
-/* Contenedor principal del visor */
+/* 1. Base para todos los botones del header y paneles */
+.theme-default .tab-btn,
+.theme-default .panel-tab,
+.theme-default .view-btn,
+.theme-default .btn,
+.theme-default .btn-icon,
+.theme-default .props-header {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    color: #ffffff !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: none !important;
+    outline: none !important;
+    font-family: inherit !important;
+    position: relative;
+    border-radius: 4px !important;
+}
+
+/* Label de propiedades específico */
+.theme-default .props-header {
+    color: #0088ff !important;
+    cursor: default;
+}
+
+/* 2. Estado Hover (Efecto Inversión) */
+.theme-default .tab-btn:hover,
+.theme-default .panel-tab:hover,
+.theme-default .view-btn:hover,
+.theme-default .btn:hover,
+.theme-default .btn-icon:hover {
+    background: #0088ff !important;
+    /* Azul Cobalt2 */
+    color: #193549 !important;
+    /* Azul oscuro del fondo */
+    border-color: #0088ff !important;
+}
+
+/* 3. Estado Activo (Seleccionado con línea inferior) */
+.theme-default .tab-btn.active,
+.theme-default .panel-tab.active,
+.theme-default .view-btn.active,
+.theme-default .btn-icon.active {
+    background: rgba(0, 136, 255, 0.15) !important;
+    border-color: #0088ff !important;
+    color: #0088ff !important;
+    box-shadow: 0 0 12px rgba(0, 136, 255, 0.35) !important;
+}
+
+.theme-default .tab-btn.active::after,
+.theme-default .panel-tab.active::after,
+.theme-default .view-btn.active::after,
+.theme-default .btn-icon.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 3px;
+    background: #0088ff !important;
+    border-radius: 2px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   7. PANEL IZQUIERDO - COBALT2
+   ══════════════════════════════════════════════════════════════ 
+*/
+.theme-default .left-panel {
+    background: var(--bg-tertiary);
+    border-right: 1px solid var(--border);
+}
+
+.theme-default .panel-tabs {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+}
+
+.theme-default .panel-tab {
+    flex: 1;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   8. EXPLORADOR DE ARCHIVOS - COBALT2
+   ══════════════════════════════════════════════════════════════ 
+*/
+.theme-default .file-tree {
+    background: var(--bg-tertiary);
+}
+
+.theme-default .file-item {
+    color: var(--text-secondary);
+}
+
+.theme-default .file-item:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.theme-default .file-item.active {
+    background: var(--accent);
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: 0 0 8px rgba(0, 136, 255, 0.3);
+}
+
+/* ════════════════════════════════════════════════════════════
+   9. PANEL CENTRAL - COBALT2
+   ════════════════════════════════════════════════════════════ 
+*/
+.theme-default .center-panel {
+    background: var(--bg-primary);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   11. STATUS BAR - COBALT2
+   ════════════════════════════════════════════════════════════════ 
+*/
+.theme-default .status-bar {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   13. VISTAS - COBALT2
+   ════════════════════════════════════════════════════════════════ 
+*/
+.theme-default #split-view.active,
+.theme-default .split-view.active,
+.theme-default #code-view.active,
+.theme-default .code-view.active,
+.theme-default #visual-view.active,
+.theme-default .visual-view.active,
+.theme-default #visor-view.active,
+.theme-default .visor-view.active {
+    background: #193549 !important;
+}
+
+/* 15. VISOR DE ARCHIVOS - COBALT2 */
 .theme-default #visor-view {
     background: #193549 !important;
-    /* ← Igual que bg-primary Cobalt2 */
 }
 
 .theme-default #visor-view.active {
     background: #193549 !important;
-    display: flex !important;
-    flex-direction: column;
 }
 
-/* Iframe del visor */
 .theme-default #visor-frame {
     background: #193549 !important;
-    /* ← Igual que el editor */
     border: 1px solid #0d3a58;
-    border-radius: 4px;
-    margin: 8px;
 }
-
-/* Asegurar que TODAS las vistas tengan el mismo fondo */
-.theme-default .split-view,
-.theme-default .code-view,
-.theme-default .visual-view,
-.theme-default #split-view,
-.theme-default #code-view,
-.theme-default #visual-view {
-    background: #193549 !important;
-}
-
-.theme-default .split-view.active,
-.theme-default .code-view.active,
-.theme-default .visual-view.active,
-.theme-default #split-view.active,
-.theme-default #code-view.active,
-.theme-default #visual-view.active {
-    background: #193549 !important;
-    display: flex !important;
-    flex-direction: column;
-}
-
-/* Preview frames */
-.theme-default .preview-frame,
-.theme-default #preview-frame,
-.theme-default #visual-only-frame {
-    background: #193549 !important;
-}
-

@@ -137,6 +137,14 @@ const Preview = {
         this.currentViewport = type;
         const frame = document.getElementById('visual-only-frame') || document.getElementById('preview-frame');
         if (!frame) return;
+
+        // Limpiar clase activa de todos los botones de viewport
+        document.querySelectorAll('.view-toggle .btn-icon').forEach(btn => btn.classList.remove('active'));
+        
+        // Marcar el actual como activo
+        const activeBtn = document.querySelector(`.btn-icon[onclick*="${type}"]`);
+        if (activeBtn) activeBtn.classList.add('active');
+
         const widths = { desktop: '100%', tablet: '768px', mobile: '375px' };
         frame.style.maxWidth = widths[type] || '100%';
         frame.style.margin = type === 'desktop' ? '0' : '0 auto';

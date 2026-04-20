@@ -99,7 +99,7 @@ body {
     display: grid;
     /* Las columnas son: Toolbar, Resizer Toolbar, Panel Izq, Resizer Izq, Centro, Resizer Der, Panel Der */
     grid-template-columns: var(--toolbar-width, 48px) 4px 260px 4px 1fr 4px 320px;
-    grid-template-rows: auto auto 1fr; /* Menú, Docs, Contenido Principal */
+    grid-template-rows: auto auto 1fr auto 24px; /* Menú, Docs, Main, Inspector, Status */
     height: 100vh;
     gap: 0;
 }
@@ -553,8 +553,16 @@ body {
     object-fit: contain;
 }
 
+.property-inspector {
+    grid-row: 4;
+    grid-column: 1 / -1;
+    display: none; /* Se activa por tema o dinamicamente */
+}
+
 /* === STATUS BAR === */
 .status-bar {
+    grid-row: 5;
+    grid-column: 1 / -1;
     display: flex;
     align-items: center;
     padding: var(--space-sm) var(--space-lg);

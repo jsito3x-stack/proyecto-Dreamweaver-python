@@ -21,7 +21,12 @@ const Keyboard = {
         'F2': { action: 'rename', description: 'Renombrar elemento' },
         'Ctrl+G': { action: 'goToLine', description: 'Ir a línea' },
         'Ctrl+F': { action: 'find', description: 'Buscar' },
-        'Ctrl+H': { action: 'findReplace', description: 'Buscar y reemplazar' }
+        'Ctrl+H': { action: 'findReplace', description: 'Buscar y reemplazar' },
+        'Ctrl+A': { action: 'selectAll', description: 'Seleccionar todo' },
+        'Ctrl+X': { action: 'cut', description: 'Cortar' },
+        'Ctrl+C': { action: 'copy', description: 'Copiar' },
+        'Ctrl+V': { action: 'paste', description: 'Pegar' },
+        'F11': { action: 'fullScreen', description: 'Pantalla completa' }
     },
     
     /**
@@ -134,6 +139,26 @@ const Keyboard = {
                 
             case 'findReplace':
                 this.showFindReplace();
+                break;
+                
+            case 'selectAll':
+                App.selectAll();
+                break;
+                
+            case 'cut':
+                App.cut();
+                break;
+                
+            case 'copy':
+                App.copy();
+                break;
+                
+            case 'paste':
+                App.paste();
+                break;
+                
+            case 'fullScreen':
+                App.toggleFullScreen();
                 break;
                 
             default:

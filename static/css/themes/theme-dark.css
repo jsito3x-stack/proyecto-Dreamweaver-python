@@ -272,9 +272,9 @@
    SOPORTE ESTRUCTURA PRO - DRACULA
    ════════════════════════════════════════════════════════════════ */
 
-/* Layout unificado */
+/* Layout unificado (hereda de main.css) */
 .theme-dark .app-container {
-    grid-template-rows: auto auto 1fr auto 24px; /* Menú, Docs, Main, Inspector, Status */
+    /* Mantiene las columnas pero usa las filas estandarizadas */
 }
 
 /* Side Toolbar Dracula */
@@ -305,8 +305,6 @@
 /* Property Inspector Dracula */
 .theme-dark .property-inspector {
     display: flex;
-    grid-row: 4;
-    grid-column: 1 / -1;
     background: #21222c;
     border-top: 1px solid #44475a;
     padding: 12px 24px;
@@ -314,8 +312,6 @@
 }
 
 .theme-dark .status-bar {
-    grid-row: 5;
-    grid-column: 1 / -1;
     background: #191a21;
     border-top: 1px solid #44475a;
 }

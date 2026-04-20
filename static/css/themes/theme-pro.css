@@ -32,13 +32,9 @@
 }
 
 /* === REESTRUCTURACIÓN DEL LAYOUT PRO === */
+/* Layout unificado (hereda de main.css) */
 .theme-pro .app-container {
-    display: grid;
-    /* Las columnas son: Toolbar, Resizer Toolbar, Panel Izq, Resizer Izq, Centro, Resizer Der, Panel Der */
     grid-template-columns: var(--toolbar-width, 48px) 4px 260px 4px 1fr 4px 320px;
-    grid-template-rows: auto auto 1fr 120px 24px; /* Menú, Docs, Main, Inspector, Status */
-    gap: 0;
-    background: var(--bg-primary);
 }
 
 /* SIDE TOOLBAR (Vertical) */
@@ -130,10 +126,9 @@
     display: none;
 }
 
+/* PROPERTY INSPECTOR (Bottom Bar Pro) */
 .theme-pro .property-inspector {
     display: flex;
-    grid-row: 4; /* Fila específica en Pro */
-    grid-column: 3 / -1; /* Alineado con el panel central */
     background: #11111b;
     border-top: 1px solid rgba(var(--accent-rgb), 0.2);
     padding: 12px 24px;
@@ -144,8 +139,6 @@
 
 /* STATUS BAR PRO */
 .theme-pro .status-bar {
-    grid-row: 5;
-    grid-column: 1 / -1;
     background: #0a0a0f;
     border-top: 1px solid rgba(255,255,255,0.05);
     z-index: 1000;

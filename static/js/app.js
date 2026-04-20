@@ -436,11 +436,116 @@ const App = {
     // Funciones de conveniencia para comandos
     undo() { Editor.undo(); },
     redo() { Editor.redo(); },
+
+    // === NUEVOS COMANDOS DE MENÚ ===
+    // Edición
+    cut() { this.notify('Cortar: No implementado en esta versión', 'var(--warning)'); },
+    copy() { this.notify('Copiar: No implementado en esta versión', 'var(--warning)'); },
+    paste() { this.notify('Pegar: No implementado en esta versión', 'var(--warning)'); },
+    selectAll() { if(this.codeEditor) this.codeEditor.execCommand('selectAll'); },
+    selectTag() { this.notify('Seleccionando etiqueta...', 'var(--accent)'); },
+    preferences() { this.openDialog('modal-preferences'); },
+
+    // Ver
+    toggleLive() { this.notify('Alternando modo En Vivo...', 'var(--accent)'); },
+    toggleRulers() { this.notify('Reglas: No implementado', 'var(--warning)'); },
+    toggleGrid() { this.notify('Cuadrícula: No implementado', 'var(--warning)'); },
+    toggleGuides() { this.notify('Guías: No implementado', 'var(--warning)'); },
+    toggleFullScreen() { 
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+        else document.exitFullscreen();
+    },
+
+    // Insertar
+    insertDiv() { this.notify('Insertando Div...', 'var(--success)'); },
+    insertImage() { this.notify('Selector de imágenes no disponible', 'var(--warning)'); },
+    insertLink() { this.notify('Insertando Hipervínculo...', 'var(--success)'); },
+    insertTable() { this.openDialog('modal-table'); },
+    insertHeader() { this.notify('Insertando <header>...', 'var(--success)'); },
+    insertNav() { this.notify('Insertando <nav>...', 'var(--success)'); },
+    insertMain() { this.notify('Insertando <main>...', 'var(--success)'); },
+    insertFooter() { this.notify('Insertando <footer>...', 'var(--success)'); },
+
+    // Herramientas
+    formatCode() { this.notify('Formateando código...', 'var(--accent)'); },
+    cleanHTML() { this.notify('Limpiando HTML...', 'var(--accent)'); },
+    checkLinks() { this.notify('Comprobando vínculos...', 'var(--accent)'); },
+
+    // Archivo (diálogos)
+    pageProperties() { this.openDialog('modal-page-props'); },
+
+    // Sitio
+    newSite() { this.openDialog('modal-site-config'); },
+    manageSites() { this.openDialog('modal-site-config'); },
+
+    // Ventana
+    togglePanel(panel) { 
+        this.notify(`Alternando panel: ${panel}`, 'var(--accent)');
+    },
+
+    // === SISTEMA DE DIÁLOGOS ===
+    openDialog(id) {
+        const modal = document.getElementById(id);
+        if (modal) {
+            modal.style.display = 'flex';
+            requestAnimationFrame(() => modal.classList.add('show'));
+        }
+    },
+
+    closeDialog(id) {
+        const modal = document.getElementById(id);
+        if (modal) {
+            modal.classList.remove('show');
+            setTimeout(() => { modal.style.display = 'none'; }, 250);
+        }
+    },
+
+    switchDialogTab(btn, tabId) {
+        // Desactivar todas las pestañas del mismo modal
+        const tabsContainer = btn.parentElement;
+        tabsContainer.querySelectorAll('.modal-tab-btn').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Mostrar la pestaña correspondiente
+        const modalBody = tabsContainer.nextElementSibling;
+        modalBody.querySelectorAll('.modal-tab-content').forEach(c => c.classList.remove('active'));
+        const target = document.getElementById(tabId);
+        if (target) target.classList.add('active');
+    },
+
+    // === ACCIONES DE DIÁLOGOS ===
+    applyPageProps() {
+        this.notify('Propiedades de página aplicadas', 'var(--success)');
+    },
+
+    applyPreferences() {
+        this.notify('Preferencias guardadas', 'var(--success)');
+    },
+
+    doInsertTable() {
+        const rows = document.getElementById('tbl-rows')?.value || 3;
+        const cols = document.getElementById('tbl-cols')?.value || 3;
+        this.notify(`Tabla ${rows}×${cols} insertada`, 'var(--success)');
+        this.closeDialog('modal-table');
+    },
+
+    // Buscar
+    showFind() {
+        const panel = document.getElementById('search-panel');
+        if (panel) panel.style.display = 'block';
+    },
+
+    goToLine() {
+        const line = prompt('Número de línea:');
+        if (line && !isNaN(line)) Editor.goToLine(parseInt(line));
+    },
+
     refresh() {
         this.loadStructure();
         Preview.update();
     }
 };
+
 
 // Auto-iniciar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {

@@ -29,24 +29,20 @@ if __name__ == '__main__':
     DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
     
     print(f"""
-╔════════════════════════════════════════════════════════════╗
-║                                                            ║
-║     🎨 DREAMWEAVER PYTHON - Editor Visual Web Completo     ║
-║                                                            ║
-╠════════════════════════════════════════════════════════════╣
-║                                                            ║
-║  Abre tu navegador en:                                     ║
-║  http://{HOST}:{PORT}                                     ║
-║                                                            ║
-║  Atajos de teclado:                                        ║
-║  Ctrl+S     Guardar                                        ║
-║  Ctrl+Z     Deshacer                                       ║
-║  Ctrl+D     Duplicar elemento                              ║
-║  Delete     Eliminar elemento                              ║
-║                                                            ║
-║  Presiona Ctrl+C para detener el servidor                  ║
-║                                                            ║
-╚════════════════════════════════════════════════════════════╝
+    ----------------------------------------------------------
+    DREAMWEAVER PYTHON - Editor Visual Web Completo
+    ----------------------------------------------------------
+    Abre tu navegador en:
+    http://{HOST}:{PORT}
+
+    Atajos de teclado:
+    Ctrl+S     Guardar
+    Ctrl+Z     Deshacer
+    Ctrl+D     Duplicar elemento
+    Delete     Eliminar elemento
+
+    Presiona Ctrl+C para detener el servidor
+    ----------------------------------------------------------
     """)
     
     app.run(host=HOST, port=PORT, debug=DEBUG, use_reloader=False, threaded=True)

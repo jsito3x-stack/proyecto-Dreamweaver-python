@@ -25,105 +25,217 @@
 
     <!-- ═══ TEMA OSCURO (Dracula) ═══ -->
     <link rel="stylesheet" href="/static/css/themes/theme-dark.css" id="theme-dark" disabled>
+
+    <!-- ═══ TEMA PRO (Inspirado en DW 2021) ═══ -->
+    <link rel="stylesheet" href="/static/css/themes/theme-pro.css" id="theme-pro" disabled>
 </head>
 
 <body class="theme-default">
     <div class="app-container">
         <!-- ════════════════════════════════════════════════════════ -->
-        <!-- HEADER -->
+        <!-- BARRAS DE HERRAMIENTAS (Desacopladas para el Grid) -->
         <!-- ════════════════════════════════════════════════════════ -->
-        <header class="header">
+        
+        <!-- LÍNEA 1: MENÚS Y HERRAMIENTAS GLOBALES -->
+        <div class="menu-bar-container">
             <div class="logo">
-                <img src="/static/icons/Logo.png" style="width: 150px; vertical-align: middle; margin-right: 8px;">
+                <img src="/static/icons/Logo.png" style="width: 100px; vertical-align: middle; margin-right: 15px;">
             </div>
-
-            <div class="tabs-container">
-                <button class="tab-btn active" data-tab="html" onclick="App.switchTab('html')">
-                    <img src="/static/icons/html.png" style="width:20px; vertical-align:middle; margin-right:6px;"> HTML
-                </button>
-                <button class="tab-btn" data-tab="css" onclick="App.switchTab('css')">
-                    <img src="/static/icons/css.png" style="width:20px; vertical-align:middle; margin-right:6px;"> CSS
-                </button>
-                <button class="tab-btn" data-tab="js" onclick="App.switchTab('js')">
-                    <img src="/static/icons/javascript.png"
-                        style="width:20px; vertical-align:middle; margin-right:6px;">
-                    JavaScript
-                </button>
-                <!-- NUEVA PESTAÑA VISOR -->
-                <button class="tab-btn" data-tab="visor" onclick="App.switchTab('visor')">
-                    <img src="/static/icons/visor.png" style="height:20px; vertical-align:middle; margin-right:6px;">
-                    Visor de Archivos
-                </button>
-            </div>
-
-            <div class="header-actions">
-                <!-- Pestañas de vistas -->
-                <div class="view-toggle" style="display: flex; gap: 4px; margin-right: 8px;">
-                    <button class="btn-icon" onclick="Preview.setViewport('desktop')" title="Ordenador">
-                        <img src="/static/icons/desktop.png" style="height:20px;">
-                    </button>
-                    <button class="btn-icon" onclick="Preview.setViewport('tablet')" title="Tablet">
-                        <img src="/static/icons/tablet.png" style="height:20px;">
-                    </button>
-                    <button class="btn-icon" onclick="Preview.setViewport('mobile')" title="Movil">
-                        <img src="/static/icons/mobile.png" style="height:20px;">
-                    </button>
+            <nav class="main-menu">
+                <div class="menu-item">
+                    <span>Archivo</span>
+                    <div class="menu-dropdown">
+                        <div class="dropdown-item" onclick="App.newFile()"><div class="item-main"><i class="fas fa-file-alt"></i> Nuevo...</div><span class="shortcut">Ctrl+N</span></div>
+                        <div class="dropdown-item" onclick="App.openFile()"><div class="item-main"><i class="fas fa-folder-open"></i> Abrir...</div><span class="shortcut">Ctrl+O</span></div>
+                        <div class="dropdown-item" onclick="App.openRecent()"><div class="item-main"><i class="fas fa-history"></i> Abrir reciente</div><i class="fas fa-chevron-right arrow-sub"></i></div>
+                        <div class="divider"></div>
+                        <div class="dropdown-item" onclick="App.closeFile()"><div class="item-main">Cerrar</div><span class="shortcut">Ctrl+W</span></div>
+                        <div class="dropdown-item" onclick="App.closeAllFiles()"><div class="item-main">Cerrar todo</div></div>
+                        <div class="divider"></div>
+                        <div class="dropdown-item" onclick="App.saveFile()"><div class="item-main"><i class="fas fa-save"></i> Guardar</div><span class="shortcut">Ctrl+S</span></div>
+                        <div class="dropdown-item" onclick="App.saveAs()"><div class="item-main">Guardar como...</div></div>
+                        <div class="dropdown-item" onclick="App.saveAll()"><div class="item-main"><i class="fas fa-copy"></i> Guardar todo</div></div>
+                        <div class="dropdown-item" onclick="App.saveRelated()"><div class="item-main">Guardar archivos relacionados</div></div>
+                        <div class="dropdown-item" onclick="App.saveAsTemplate()"><div class="item-main">Guardar como plantilla...</div></div>
+                        <div class="divider"></div>
+                        <div class="dropdown-item" onclick="App.revert()"><div class="item-main">Restituir</div></div>
+                        <div class="divider"></div>
+                        <div class="dropdown-item" onclick="App.attachStylesheet()"><div class="item-main"><i class="fas fa-css3-alt"></i> Adjuntar hoja de estilos...</div></div>
+                        <div class="dropdown-item" onclick="App.importFile()"><div class="item-main">Importar</div><i class="fas fa-chevron-right arrow-sub"></i></div>
+                        <div class="dropdown-item" onclick="App.exportFile()"><div class="item-main">Exportar</div><i class="fas fa-chevron-right arrow-sub"></i></div>
+                        <div class="divider"></div>
+                        <div class="dropdown-item" onclick="App.printCode()"><div class="item-main"><i class="fas fa-print"></i> Imprimir código</div></div>
+                        <div class="divider"></div>
+                        <div class="dropdown-item" onclick="App.livePreview()"><div class="item-main"><i class="fas fa-globe"></i> Vista previa en tiempo real</div><i class="fas fa-chevron-right arrow-sub"></i></div>
+                        <div class="dropdown-item" onclick="App.validate()"><div class="item-main">Validar</div><i class="fas fa-chevron-right arrow-sub"></i></div>
+                        <div class="dropdown-item" onclick="App.compareRemote()"><div class="item-main">Comparar con servidor remoto...</div></div>
+                        <div class="dropdown-item" onclick="App.designNotes()"><div class="item-main">Design Notes...</div></div>
+                        <div class="divider"></div>
+                        <div class="dropdown-item" onclick="App.pageProperties()"><div class="item-main">Propiedades de página...</div><span class="shortcut">Ctrl+J</span></div>
+                        <div class="divider"></div>
+                        <div class="dropdown-item" onclick="App.exit()"><div class="item-main"><i class="fas fa-sign-out-alt"></i> Salir</div></div>
+                    </div>
                 </div>
+                <div class="menu-item"><span>Edición</span></div>
+                <div class="menu-item"><span>Ver</span></div>
+                <div class="menu-item"><span>Insertar</span></div>
+                <div class="menu-item"><span>Herramientas</span></div>
+                <div class="menu-item"><span>Buscar</span></div>
+                <div class="menu-item"><span>Sitio</span></div>
+                <div class="menu-item"><span>Ventana</span></div>
+                <div class="menu-item">
+                    <span>Ayuda</span>
+                    <div class="menu-dropdown">
+                        <div class="dropdown-item" onclick="App.helpMain()"><div class="item-main">Ayuda de Dreamweaver Python</div></div>
+                        <div class="dropdown-item" onclick="App.helpTutorial()"><div class="item-main">Tutoriales</div></div>
+                        <div class="dropdown-item" onclick="App.helpQuickTutorial()"><div class="item-main">Guía rápida</div></div>
+                        <div class="divider"></div>
+                        <div class="dropdown-item" onclick="App.helpResetSuggestions()"><div class="item-main">Restablecer sugerencias contextuales</div></div>
+                        <div class="divider"></div>
+                        <div class="dropdown-item" onclick="App.helpAccount()"><div class="item-main">Administrar mi cuenta...</div></div>
+                        <div class="dropdown-item" onclick="App.helpLogin()"><div class="item-main">Iniciar sesión...</div></div>
+                        <div class="divider"></div>
+                        <div class="dropdown-item" onclick="App.helpUpdates()"><div class="item-main">Buscar actualizaciones...</div></div>
+                        <div class="divider"></div>
+                        <div class="dropdown-item" onclick="App.helpAbout()"><div class="item-main">Acerca de Dreamweaver Python...</div></div>
+                    </div>
+                </div>
+            </nav>
 
-                <!-- Snippets Button -->
-                <button class="btn btn-secondary" onclick="Snippets.toggle()" title="Componentes">
-                    <img src="/static/icons/components.png" style="width:25px; margin-right:6px;"> Componentes
-                </button>
-
-                <!-- Tema Toggle -->
-                <div class="theme-dropdown-container" style="position: relative; display: flex; align-items: center;">
-                    <button class="btn-icon" onclick="Themes.toggleDropdown(event)" title="Cambiar tema">
-                        <img src="/static/icons/theme.png" style="width:20px;" id="theme-icon-img">
-                    </button>
-                    <!-- Menú Desplegable de Temas -->
-                    <div id="theme-dropdown" class="context-menu"
-                        style="width: 140px; min-width: 140px; max-width: 140px; z-index: 3000;">
-                        <div class="context-menu-item" onclick="Themes.setTheme('default')">
-                            <i class="fas fa-paint-brush context-menu-icon" style="color: #89b4fa;"></i> Cobalt2
-                        </div>
-                        <div class="context-menu-item" onclick="Themes.setTheme('light')">
-                            <i class="fas fa-sun context-menu-icon" style="color: #f59e0b;"></i> WLA-DX
-                        </div>
-                        <div class="context-menu-item" onclick="Themes.setTheme('dark')">
-                            <i class="fas fa-moon context-menu-icon" style="color: #bd93f9;"></i> Dracula
-                        </div>
+            <div class="global-tools-group" style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
+                <!-- Workspace Selector -->
+                <div class="menu-item" style="padding: 0 10px;">
+                    <span style="font-size: 11px; font-weight: 600; opacity: 0.8;">
+                        <i class="fas fa-th-large" style="margin-right: 5px;"></i> Espacios de trabajo
+                        <i class="fas fa-chevron-down" style="font-size: 8px; margin-left: 5px; opacity: 0.5;"></i>
+                    </span>
+                    <div class="menu-dropdown" style="right: 0; left: auto;">
+                        <div class="dropdown-item"><div class="item-main">Desarrollador</div></div>
+                        <div class="dropdown-item"><div class="item-main">Estándar</div></div>
+                        <div class="dropdown-item"><div class="item-main">Restablecer Estándar</div></div>
+                        <div class="divider"></div>
+                        <div class="dropdown-item"><div class="item-main">Nuevo espacio de trabajo...</div></div>
+                        <div class="dropdown-item"><div class="item-main">Administrar espacios de trabajo...</div></div>
+                        <div class="dropdown-item"><div class="item-main">Guardar actual</div></div>
                     </div>
                 </div>
 
-                <!-- Atajos de teclado -->
-                <button class="btn-icon" onclick="Keyboard.showHelp()" title="Atajos de teclado">
-                    <img src="/static/icons/keyboard.png" style="height:20px;">
-                </button>
+                <!-- Theme Selector -->
+                <select id="theme-selector-quick" onchange="Themes.setTheme(this.value)" class="prop-input" style="padding: 2px 5px; font-size: 11px; width: 130px; background: rgba(0,0,0,0.2); border: 1px solid var(--border);">
+                    <option value="default">Cobalt2</option>
+                    <option value="light">WLA-DX</option>
+                    <option value="dark">Dracula</option>
+                    <option value="pro" selected>Dreamweaver Pro</option>
+                </select>
+            </div>
+        </div>
 
-                <!-- Deshacer/Rehacer -->
-                <button class="btn btn-secondary" onclick="App.undo()" title="Deshacer (Ctrl+Z)">
-                    <img src="/static/icons/undo.png" style="height:20px; margin-right:6px;"> Deshacer
+        <!-- LÍNEA 2: DOCUMENTOS (A la derecha de la side-toolbar) -->
+        <div class="docs-bar-container">
+            <div class="tabs-container">
+                <button class="tab-btn active" data-tab="html" onclick="App.switchTab('html')">
+                    <img src="/static/icons/html.png" style="width:16px; margin-right:4px;"> HTML
                 </button>
-                <button class="btn btn-secondary" onclick="App.redo()" title="Rehacer (Ctrl+Y)">
-                    <img src="/static/icons/redo.png" style="height:20px; margin-right:6px;"> Rehacer
+                <button class="tab-btn" data-tab="css" onclick="App.switchTab('css')">
+                    <img src="/static/icons/css.png" style="width:16px; margin-right:4px;"> CSS
                 </button>
-
-                <!-- Abrir Archivo -->
-                <button class="btn btn-primary" onclick="App.openFile()" style="background-color: #4f46e5;">
-                    <img src="/static/icons/file.png" style="height:20px; margin-right:6px;"> Archivo
+                <button class="tab-btn" data-tab="js" onclick="App.switchTab('js')">
+                    <img src="/static/icons/javascript.png" style="width:16px; margin-right:4px;"> JS
                 </button>
-
-                <!-- Abrir Carpeta -->
-                <button class="btn btn-primary" onclick="App.openFolder()" style="background-color: #0891b2;">
-                    <img src="/static/icons/open-folder.png" style="height:20px; margin-right:6px;"> Carpeta
-                </button>
-
-                <!-- Guardar -->
-                <button class="btn btn-success" onclick="App.saveFile()">
-                    <img src="/static/icons/save.png" style="height:20px; margin-right:6px;"> Guardar
+                <button class="tab-btn" data-tab="visor" onclick="App.switchTab('visor')">
+                    <img src="/static/icons/visor.png" style="height:16px; margin-right:4px;"> Visor
                 </button>
             </div>
-        </header>
+        </div>
+
+
+        <!-- TOOLBAR LATERAL (Redimensionable) -->
+        <nav class="side-toolbar" id="main-toolbar">
+            <div class="toolbar-scroll-container">
+                <div class="side-icon" title="Abrir documentos" onclick="Toolbar.openFile()">
+                    <i class="fas fa-file-import"></i><span class="icon-label">Abrir documentos</span>
+                </div>
+                <div class="side-icon" title="Administración de archivos" onclick="Toolbar.openFileManagement()">
+                    <i class="fas fa-tasks"></i><span class="icon-label">Gestión Archivos</span>
+                </div>
+                
+                <div class="toolbar-divider"></div>
+
+                <div class="side-icon" title="Código en vivo" onclick="Toolbar.toggleLiveCode()">
+                    <i class="fas fa-bolt"></i><span class="icon-label">Código en vivo</span>
+                </div>
+                <div class="side-icon" title="Opciones de Vista en vivo" onclick="Toolbar.liveViewOptions()">
+                    <i class="fas fa-eye"></i><span class="icon-label">Opciones Vista</span>
+                </div>
+                <div class="side-icon" title="Mostar/ocutar barra de consultas de medios visuales" onclick="Toolbar.toggleMediaQueries()">
+                    <i class="fas fa-desktop"></i><span class="icon-label">Consultas Medios</span>
+                </div>
+                <div class="side-icon" title="Inspeccionar" onclick="Toolbar.inspect()">
+                    <i class="fas fa-mouse-pointer"></i><span class="icon-label">Inspeccionar</span>
+                </div>
+
+                <div class="toolbar-divider"></div>
+
+                <div class="side-icon" title="Contraer etiqueta completa" onclick="Toolbar.foldTag()">
+                    <i class="fas fa-minus-square"></i><span class="icon-label">Contraer Etiqueta</span>
+                </div>
+                <div class="side-icon" title="Contraer selección" onclick="Toolbar.foldSelection()">
+                    <i class="fas fa-compress-arrows-alt"></i><span class="icon-label">Contraer Selecc.</span>
+                </div>
+                <div class="side-icon" title="Expandir todo" onclick="Toolbar.unfoldAll()">
+                    <i class="fas fa-expand-arrows-alt"></i><span class="icon-label">Expandir Todo</span>
+                </div>
+                <div class="side-icon" title="Seleccionar etiqueta padre" onclick="Toolbar.selectParent()">
+                    <i class="fas fa-level-up-alt"></i><span class="icon-label">Seleccionar Padre</span>
+                </div>
+
+                <div class="toolbar-divider"></div>
+
+                <div class="side-icon" title="Formatear código fuente" onclick="Toolbar.formatCode()">
+                    <i class="fas fa-magic"></i><span class="icon-label">Formatear</span>
+                </div>
+                <div class="side-icon" title="Aplicar comentario" onclick="Toolbar.applyComment()">
+                    <i class="fas fa-comment-medical"></i><span class="icon-label">Comentar</span>
+                </div>
+                <div class="side-icon" title="Quitar comentario" onclick="Toolbar.removeComment()">
+                    <i class="fas fa-comment-slash"></i><span class="icon-label">Quitar Coment.</span>
+                </div>
+                <div class="side-icon" title="Equilibar llaves" onclick="Toolbar.balanceBraces()">
+                    <i class="fas fa-code"></i><span class="icon-label">Equilibrar Llaves</span>
+                </div>
+
+                <div class="toolbar-divider"></div>
+
+                <div class="side-icon" title="Aplicar sangría al código" onclick="Toolbar.indent()">
+                    <i class="fas fa-indent"></i><span class="icon-label">Sangría</span>
+                </div>
+                <div class="side-icon" title="Anular sangría al código" onclick="Toolbar.outdent()">
+                    <i class="fas fa-outdent"></i><span class="icon-label">Anular Sangría</span>
+                </div>
+                <div class="side-icon" title="Ajustar texto" onclick="Toolbar.toggleWordWrap()">
+                    <i class="fas fa-align-left"></i><span class="icon-label">Ajustar Texto</span>
+                </div>
+
+                <div class="toolbar-divider"></div>
+
+                <div class="side-icon" title="Mostar navegador de código" onclick="Toolbar.showNavigator()">
+                    <i class="fas fa-compass"></i><span class="icon-label">Navegador</span>
+                </div>
+                <div class="side-icon" title="Fragmentos recientes" onclick="Toolbar.recentSnippets()">
+                    <i class="fas fa-history"></i><span class="icon-label">Fragmentos</span>
+                </div>
+                <div class="side-icon" title="Mover o convertir CSS" onclick="Toolbar.moveCSS()">
+                    <i class="fas fa-exchange-alt"></i><span class="icon-label">Mover CSS</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- RESIZER TOOLBAR -->
+        <div class="resizer toolbar-resizer" id="resizer-toolbar">
+            <div class="resizer-handle">⋮</div>
+        </div>
+
+
 
         <!-- ════════════════════════════════════════════════════════ -->
         <!-- PANEL IZQUIERDO -->
@@ -198,17 +310,31 @@
      ════════════════════════════════════════════════════════════════ -->
             <div class="editor-container">
 
-                <!-- ═══ VIEW TOGGLE (Botones Dividido/Código/Visual) ═══ -->
+                <!-- ═══ VIEW TOGGLE (Dispositivos a la izq / Modos al centro) ═══ -->
                 <div class="view-toggle">
-                    <button class="view-btn active" data-view="split" onclick="App.setView('split')">
-                        <img src="/static/icons/split.png" style="height:20px;"> Dividido
-                    </button>
-                    <button class="view-btn" data-view="code" onclick="App.setCodeOnly()">
-                        <img src="/static/icons/code.png" style="height:20px;"> Código
-                    </button>
-                    <button class="view-btn" data-view="visual" onclick="App.setVisualOnly()">
-                        <img src="/static/icons/visual.png" style="height:20px;"> Visual
-                    </button>
+                    <div class="view-group-left">
+                        <button class="btn-icon active" onclick="Preview.setViewport('desktop')" title="Ordenador">
+                            <img src="/static/icons/desktop.png" style="height:18px;">
+                        </button>
+                        <button class="btn-icon" onclick="Preview.setViewport('tablet')" title="Tablet">
+                            <img src="/static/icons/tablet.png" style="height:18px;">
+                        </button>
+                        <button class="btn-icon" onclick="Preview.setViewport('mobile')" title="Móvil">
+                            <img src="/static/icons/mobile.png" style="height:18px;">
+                        </button>
+                    </div>
+
+                    <div class="view-group-center">
+                        <button class="view-btn" data-view="code" onclick="App.setCodeOnly()">
+                            <img src="/static/icons/code.png" style="height:20px;"> Código
+                        </button>
+                        <button class="view-btn active" data-view="split" onclick="App.setView('split')">
+                            <img src="/static/icons/split.png" style="height:20px;"> Dividido
+                        </button>
+                        <button class="view-btn" data-view="visual" onclick="App.setVisualOnly()">
+                            <img src="/static/icons/visual.png" style="height:20px;"> Diseño
+                        </button>
+                    </div>
                 </div>
 
                 <!-- ═══ VISTA DIVIDIDA (50% código + 50% preview) ═══ -->
@@ -242,6 +368,45 @@
                 </div>
 
             </div>
+
+            <!-- ════════════════════════════════════════════════════════ -->
+            <!-- INSPECTOR DE PROPIEDADES INFERIOR (Solo modo Pro) -->
+            <!-- ════════════════════════════════════════════════════════ -->
+            <footer class="property-inspector" id="pro-inspector">
+                <div style="display: flex; align-items: center; gap: 10px; border-right: 1px solid var(--border); padding-right: 20px;">
+                    <img src="/static/icons/html.png" style="height: 24px;">
+                    <span style="font-weight: bold; font-size: 14px; color: var(--accent);" id="ins-tag">DIV</span>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Identificadores</span>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" class="prop-input" style="width: 100px;" placeholder="ID" id="ins-id">
+                        <input type="text" class="prop-input" style="width: 200px;" placeholder="Clases" id="ins-classes">
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Texto y Formato</span>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button class="btn-icon" title="Negrita"><i class="fas fa-bold"></i></button>
+                        <button class="btn-icon" title="Itálica"><i class="fas fa-italic"></i></button>
+                        <button class="btn-icon" title="Enlace"><i class="fas fa-link"></i></button>
+                        <input type="color" class="color-preview" id="ins-color" style="height: 24px; width: 24px;">
+                        <select class="prop-input" style="width: 80px; padding: 2px;">
+                            <option>14px</option>
+                            <option>16px</option>
+                            <option>18px</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
+                    <button class="btn btn-primary" style="padding: 4px 12px; font-size: 11px;" onclick="Pro.applyInspectorChanges()">
+                        Aplicar
+                    </button>
+                </div>
+            </footer>
         </main>
 
         <!-- RESIZER DERECHO -->
@@ -527,6 +692,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/xml-fold.min.js"></script>
 
     <!-- App Scripts -->
+    <script src="/static/js/toolbar.js"></script>
     <script src="/static/js/app.js"></script>
     <script src="/static/js/editor.js"></script>
     <script src="/static/js/tree.js"></script>
@@ -536,6 +702,7 @@
     <script src="/static/js/snippets.js"></script>
     <script src="/static/js/themes.js"></script>
     <script src="/static/js/layout.js"></script>
+    <script src="/static/js/pro.js"></script>
 
     <script>
         // Funciones globales para compatibilidad con onclick

@@ -97,22 +97,44 @@ body {
 /* === LAYOUT PRINCIPAL (Modificado para ser redimensionable) === */
 .app-container {
     display: grid;
-    /* Las columnas son: Panel Izq, Resizer Izq, Centro, Resizer Der, Panel Der */
-    grid-template-columns: 260px 4px 1fr 4px 320px;
-    grid-template-rows: 45px 1fr;
+    /* Las columnas son: Toolbar, Resizer Toolbar, Panel Izq, Resizer Izq, Centro, Resizer Der, Panel Der */
+    grid-template-columns: var(--toolbar-width, 48px) 4px 260px 4px 1fr 4px 320px;
+    grid-template-rows: auto auto 1fr; /* Menú, Docs, Contenido Principal */
     height: 100vh;
     gap: 0;
 }
 
-/* === HEADER === */
-.header {
+/* === BARRAS DEL CABECERO (Grid Items) === */
+.menu-bar-container {
+    grid-row: 1;
     grid-column: 1 / -1;
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
     padding: 0 16px;
-    gap: 12px;
+    height: 32px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    z-index: 1000;
+}
+
+.docs-bar-container {
+    grid-row: 2;
+    grid-column: 3 / -1; /* Empieza después de la toolbar lateral */
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    height: 34px;
+    background: linear-gradient(to bottom, var(--bg-tertiary), var(--bg-secondary));
+    border-bottom: 1px solid var(--border);
+    box-shadow: inset 0 -1px 0 rgba(255,255,255,0.05);
+}
+
+
+/* Estilos compartidos para las filas */
+.header-row {
+    display: flex;
+    align-items: center;
+    flex: 1;
 }
 
 .logo {
@@ -124,6 +146,109 @@ body {
     width: 150px;
     vertical-align: middle;
     margin-right: 8px;
+}
+
+/* === BARRA DE MENÚ SUPERIOR === */
+.main-menu {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-right: 20px;
+    height: 100%;
+}
+
+.menu-item {
+    position: relative;
+    padding: 0 10px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text-secondary);
+    transition: var(--transition-fast);
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+}
+
+.menu-item:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.menu-item span {
+    padding: 4px 0;
+}
+
+/* Dropdowns Menú */
+.menu-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--bg-secondary);
+    min-width: 250px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    box-shadow: var(--shadow-lg);
+    z-index: 2000;
+    padding: 6px 0;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+}
+
+.menu-item:hover .menu-dropdown {
+    display: block;
+}
+
+.dropdown-item {
+    padding: 6px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    transition: var(--transition-fast);
+}
+
+.dropdown-item .item-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dropdown-item .shortcut {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: normal;
+}
+
+.dropdown-item i {
+    width: 16px;
+    text-align: center;
+    opacity: 0.7;
+}
+
+.dropdown-item:hover {
+    background: var(--accent);
+    color: var(--bg-primary);
+}
+
+.dropdown-item:hover i {
+    opacity: 1;
+}
+
+.menu-dropdown .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 4px 0;
+}
+
+.arrow-sub {
+    font-size: 8px;
+    opacity: 0.5;
+    margin-left: auto;
 }
 
 /* === CONTENEDOR DE PESTAÑAS === */
@@ -210,16 +335,30 @@ body {
 /* === VIEW TOGGLE (Dividido/Código/Visual) === */
 .view-toggle {
     display: flex;
-    gap: 4px;
-    background: var(--bg-tertiary);
-    padding: 4px;
-    /* ← Volver a 4px */
+    align-items: center;
+    min-height: 42px; /* Aumentado para mejor look */
+    padding: 0 12px;
+    background: var(--bg-secondary);
     border-bottom: 1px solid var(--border);
+    position: relative;
+    z-index: 10;
+}
+
+.view-group-left {
+    display: flex;
+    gap: 6px;
+}
+
+.view-group-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
 }
 
 .view-btn {
     padding: 8px 16px;
-    /* ← Original */
     background: transparent;
     border: 1px solid transparent;
     color: var(--text-secondary);
@@ -407,6 +546,11 @@ body {
 .btn-icon:hover {
     background: var(--bg-hover);
     color: var(--text-primary);
+}
+
+.btn-icon img {
+    display: block;
+    object-fit: contain;
 }
 
 /* === STATUS BAR === */
@@ -706,6 +850,102 @@ body {
     flex-direction: column;
     align-items: center;
     gap: var(--space-sm);
+}
+
+/* === SIDE TOOLBAR STYLES === */
+.side-toolbar {
+    grid-row: 2 / -1; /* Empieza debajo del menú y llega hasta el final */
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border);
+    overflow: hidden; /* Importante para que las etiquetas no fuercen ancho */
+    z-index: 1001;
+    width: 48px; /* Valor por defecto que se sobreescribe por JS */
+    min-width: 0; /* Asegura que no se quede "a medias" si el contenido empuja */
+}
+
+.toolbar-scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Cambio a flex-start para cuando hay etiquetas */
+    padding: 10px 0;
+    gap: 8px;
+}
+
+/* Ocultar scrollbar de la toolbar */
+.toolbar-scroll-container::-webkit-scrollbar {
+    width: 0px;
+}
+
+.side-icon {
+    width: 100%;
+    min-height: 32px; /* Reducido de 40px */
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    gap: 10px;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.side-icon i {
+    font-size: 15px; /* Reducido de 18px */
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.icon-label {
+    font-size: 11px;
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    pointer-events: none;
+    color: var(--text-secondary);
+}
+
+/* Mostrar etiquetas cuando la barra es ancha */
+.side-toolbar.wide .icon-label,
+.side-toolbar.expanded .icon-label {
+    opacity: 1;
+    width: auto;
+    margin-left: 10px;
+}
+
+.side-icon:hover {
+    background: var(--bg-hover);
+    color: var(--accent);
+}
+
+.side-icon.active {
+    background: var(--bg-active);
+    color: var(--accent);
+    border-left: 2px solid var(--accent);
+}
+
+.toolbar-divider {
+    width: 70%;
+    height: 1px;
+    background: var(--border);
+    margin: 4px auto;
+    flex-shrink: 0;
+}
+
+.side-toolbar.wide .toolbar-divider {
+    width: 90%;
+    margin: 4px 10px;
+}
+
+.toolbar-resizer {
+    grid-row: 2 / -1; /* Se extiende igual que la toolbar lateral */
 }
 
 /* Tarjetas de grupos de propiedades */

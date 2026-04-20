@@ -242,6 +242,48 @@ const App = {
     },
 
     /**
+     * STUBS PARA NUEVAS FUNCIONES DE MENÚ
+     */
+    newFile() { this.showInfo('Función "Nuevo" próximamente'); },
+    openRecent() { this.showInfo('Función "Abrir reciente" próximamente'); },
+    closeFile() { this.showInfo('Función "Cerrar" próximamente'); },
+    closeAllFiles() { this.showInfo('Función "Cerrar todos" próximamente'); },
+    saveAs() { this.showInfo('Función "Guardar como" próximamente'); },
+    saveAll() { this.showInfo('Función "Guardar todo" próximamente'); },
+    saveRelated() { this.showInfo('Función "Guardar archivos relacionados" próximamente'); },
+    saveAsTemplate() { this.showInfo('Función "Guardar como plantilla" próximamente'); },
+    revert() { this.showInfo('Función "Restituir" próximamente'); },
+    attachStylesheet() { this.showInfo('Función "Adjuntar hoja de estilos" próximamente'); },
+    importFile() { this.showInfo('Función "Importar" próximamente'); },
+    exportFile() { this.showInfo('Función "Exportar" próximamente'); },
+    printCode() { this.showInfo('Función "Imprimir código" próximamente'); },
+    livePreview() { this.showInfo('Iniciando "Vista previa en tiempo real"...'); Preview.update(); },
+    validate() { this.showInfo('Función "Validar" próximamente'); },
+    compareRemote() { this.showInfo('Función "Comparar con servidor remoto" próximamente'); },
+    designNotes() { this.showInfo('Función "Design Notes" próximamente'); },
+    pageProperties() { this.showInfo('Función "Propiedades de página" próximamente'); },
+    exit() { 
+        if (confirm('¿Estás seguro de que quieres salir?')) {
+            window.close();
+            this.showInfo('Saliendo...'); 
+        }
+    },
+
+    /**
+     * AYUDA STUBS
+     */
+    helpTutorial() { this.showInfo('Iniciando Tutorial de Dreamweaver Python...'); },
+    helpQuickTutorial() { this.showInfo('Iniciando Tutorial rápido...'); },
+    helpResetSuggestions() { this.showInfo('Sugerencias contextuales restablecidas'); },
+    helpMain() { this.showInfo('Abriendo Ayuda de Dreamweaver Python...'); },
+    helpAccount() { this.showInfo('Accediendo a Administrar mi cuenta...'); },
+    helpLogin() { this.showInfo('Iniciando sesión...'); },
+    helpUpdates() { this.showInfo('Buscando actualizaciones...'); },
+    helpAbout() { this.showConfirm('Acerca de', 'Dreamweaver Python v2.0 Pro\nInspirado en el flujo de trabajo profesional.', () => {}); },
+
+    showInfo(msg) { this.notify(msg, 'var(--info)'); },
+
+    /**
      * Gestión de vistas
      */
     setView(view) {

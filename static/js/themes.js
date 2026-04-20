@@ -7,7 +7,7 @@
 
 const Themes = {
     // Lista de temas disponibles
-    availableThemes: ['default', 'light', 'dark'],
+    availableThemes: ['default', 'light', 'dark', 'pro'],
 
     // Tema actual
     currentTheme: 'default',
@@ -32,13 +32,13 @@ const Themes = {
 
     /**
      * Cambiar a un tema específico
-     * @param {string} themeName - Nombre del tema ('default', 'light', 'dark')
+     * @param {string} themeName - Nombre del tema ('default', 'light', 'dark', 'pro')
      * @param {boolean} save - Si guardar en localStorage
      */
     setTheme(themeName, save = true) {
         // Validar que el tema existe
         if (!this.availableThemes.includes(themeName)) {
-            console.error(`[THEMES] Temo no válido: ${themeName}`);
+            console.error(`[THEMES] Tema no válido: ${themeName}`);
             return false;
         }
 
@@ -118,7 +118,8 @@ const Themes = {
         const names = {
             'default': 'Cobalt2 🔵',
             'light': 'WLA-DX Claro ☀️',
-            'dark': 'Dracula 🧛‍♂️'
+            'dark': 'Dracula 🧛‍♂️',
+            'pro': 'Dreamweaver Pro 👑'
         };
         return names[this.currentTheme] || this.currentTheme;
     },

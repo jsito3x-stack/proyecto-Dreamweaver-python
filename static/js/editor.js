@@ -46,6 +46,9 @@ const Editor = {
             this.instances.main.on('cursorActivity', () => {
                 this.onCursorChange();
             });
+
+            // Vincular con App
+            App.codeEditor = this.instances.main;
         }
         
         // Editor solo código
@@ -62,6 +65,9 @@ const Editor = {
             this.instances.codeOnly.on('change', () => {
                 this.onCodeChange();
             });
+
+            // Vincular con App
+            App.codeOnlyEditor = this.instances.codeOnly;
         }
         
         console.log('✅ Editores inicializados');

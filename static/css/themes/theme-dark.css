@@ -267,3 +267,102 @@
     background: #bd93f9 !important;
     border-radius: 2px;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   SOPORTE ESTRUCTURA PRO - DRACULA
+   ════════════════════════════════════════════════════════════════ */
+
+/* Layout unificado */
+.theme-dark .app-container {
+    grid-template-rows: auto auto 1fr auto 24px; /* Menú, Docs, Main, Inspector, Status */
+}
+
+/* Side Toolbar Dracula */
+.theme-dark .side-toolbar {
+    grid-row: 2 / -1; 
+    display: flex;
+    flex-direction: column;
+    background: #191a21;
+    border-right: 1px solid #44475a;
+    gap: 16px;
+    z-index: 1000;
+}
+
+.theme-dark .side-icon {
+    color: #6272a4;
+}
+
+.theme-dark .side-icon:hover {
+    background: #44475a;
+    color: #50fa7b;
+}
+
+.theme-dark .side-icon.active {
+    background: rgba(189, 147, 249, 0.1);
+    color: #bd93f9;
+}
+
+/* Property Inspector Dracula */
+.theme-dark .property-inspector {
+    display: flex;
+    grid-row: 4;
+    grid-column: 1 / -1;
+    background: #21222c;
+    border-top: 1px solid #44475a;
+    padding: 12px 24px;
+    gap: 24px;
+}
+
+.theme-dark .status-bar {
+    grid-row: 5;
+    grid-column: 1 / -1;
+    background: #191a21;
+    border-top: 1px solid #44475a;
+}
+
+.theme-dark .property-inspector .prop-input {
+    background: #282a36;
+    border-color: #44475a;
+    color: #f8f8f2;
+}
+
+/* Glassmorphism Dracula */
+.theme-dark .prop-group {
+    background: rgba(33, 34, 44, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(189, 147, 249, 0.1);
+}
+
+.theme-dark .prop-group-title {
+    color: #bd93f9;
+    border-bottom-color: rgba(189, 147, 249, 0.2);
+}
+
+/* MENÚ DRACULA */
+.theme-dark .menu-item {
+    color: #f8f8f2;
+}
+
+.theme-dark .menu-item:hover {
+    background: #44475a;
+    color: #50fa7b;
+}
+
+.theme-dark .menu-dropdown {
+    background: #21222c;
+    border: 1px solid #44475a;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.theme-dark .dropdown-item {
+    color: #f8f8f2;
+}
+
+.theme-dark .dropdown-item:hover {
+    background: #bd93f9;
+    color: #282a36;
+}
+
+.theme-dark .menu-dropdown .divider {
+    background: #44475a;
+}

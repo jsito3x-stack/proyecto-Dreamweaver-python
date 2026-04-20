@@ -70,6 +70,9 @@ const Properties = {
         document.getElementById('prop-padding').value = estilos['padding'] || '';
         document.getElementById('prop-margin').value = estilos['margin'] || '';
         document.getElementById('prop-border').value = estilos['border'] || '';
+
+        // Sincronizar con el Inspector Pro si existe
+        if (typeof Pro !== 'undefined') Pro.updateInspector(data);
     },
 
     /**

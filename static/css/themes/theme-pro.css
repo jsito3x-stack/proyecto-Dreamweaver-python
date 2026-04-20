@@ -1,0 +1,254 @@
+/* ════════════════════════════════════════════════════════════════
+   DREAMWEAVER PRO - High Fidelity Premium Theme
+   Estética de nivel profesional con efectos modernos.
+   ════════════════════════════════════════════════════════════════ */
+
+.theme-pro {
+    /* Paleta de Colores Pro (Deep Indigo / Carbon) */
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #12121e;
+    --bg-tertiary: #161625;
+    --bg-input: #1c1c2e;
+    --bg-hover: #2d2d44;
+    --bg-active: #3e3e5c;
+
+    --text-primary: #e0e0f0;
+    --text-secondary: #b0b0cc;
+    --text-muted: #6e6e8c;
+
+    --accent: #bb86fc; /* Violeta Eléctrico */
+    --accent-rgb: 187, 134, 252;
+    --accent-hover: #d1b3ff;
+    --success: #03dac6; /* Turquesa Pro */
+    --warning: #ffb74d;
+    --error: #cf6679;
+    --info: #2196f3;
+
+    --border: #2c2c3e;
+    --border-light: #3e3e5c;
+
+    --shadow-pro: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --glass: rgba(18, 18, 30, 0.7);
+}
+
+/* === REESTRUCTURACIÓN DEL LAYOUT PRO === */
+.theme-pro .app-container {
+    display: grid;
+    /* Las columnas son: Toolbar, Resizer Toolbar, Panel Izq, Resizer Izq, Centro, Resizer Der, Panel Der */
+    grid-template-columns: var(--toolbar-width, 48px) 4px 260px 4px 1fr 4px 320px;
+    grid-template-rows: auto auto 1fr 120px 24px; /* Menú, Docs, Main, Inspector, Status */
+    gap: 0;
+    background: var(--bg-primary);
+}
+
+/* SIDE TOOLBAR (Vertical) */
+.theme-pro .side-toolbar {
+    grid-row: 2 / span 3; /* Abarca Docs, Contenido Principal e Inspector */
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(180deg, #1e1e2e 0%, #161622 100%);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
+    min-width: 0;
+}
+
+.theme-pro .toolbar-resizer {
+    grid-row: 2 / span 3;
+    background: #11111b;
+    border-right: 1px solid var(--accent);
+}
+
+.theme-pro .side-icon {
+    color: var(--text-secondary);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-pro .side-icon:hover {
+    background: rgba(var(--accent-rgb), 0.1);
+    color: var(--accent);
+    transform: none; /* Quitamos el translate para no romper el layout de etiquetas */
+}
+
+/* Colores específicos para iconos (Fidelidad Dreamweaver) */
+.theme-pro .side-icon i {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.theme-pro .side-icon[title*="vivo"] i { color: #f1c40f; } /* Amarillo para Live Code */
+.theme-pro .side-icon[title*="etiqueta"] i { color: #3498db; } /* Azul para folding */
+.theme-pro .side-icon[title*="comentario"] i { color: #2ecc71; } /* Verde para comentarios */
+.theme-pro .side-icon[title*="sangría"] i { color: #9b59b6; } /* Púrpura para indent */
+.theme-pro .side-icon[title*="Formatear"] i { color: #e67e22; } /* Naranja para format */
+
+.theme-pro .side-icon.active {
+    background: rgba(var(--accent-rgb), 0.2);
+    color: var(--accent);
+}
+
+.theme-pro .side-icon.active::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 15%;
+    height: 70%;
+    width: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+}
+
+.theme-pro .icon-label {
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    color: var(--text-primary);
+    font-size: 10.5px;
+}
+
+/* RESIZER PRO */
+.theme-pro .toolbar-resizer {
+    background: transparent;
+    border-right: 1px solid var(--border);
+    transition: background 0.3s;
+}
+
+.theme-pro .toolbar-resizer:hover {
+    background: rgba(var(--accent-rgb), 0.1);
+}
+
+.theme-pro .toolbar-resizer .resizer-handle {
+    color: var(--accent);
+    opacity: 0.3;
+}
+
+.theme-pro .toolbar-resizer:hover .resizer-handle {
+    opacity: 1;
+}
+
+/* PROPERTY INSPECTOR (Bottom Bar Pro) */
+.property-inspector {
+    display: none;
+}
+
+.theme-pro .property-inspector {
+    display: flex;
+    grid-row: 4; /* Fila específica en Pro */
+    grid-column: 3 / -1; /* Alineado con el panel central */
+    background: #11111b;
+    border-top: 1px solid rgba(var(--accent-rgb), 0.2);
+    padding: 12px 24px;
+    gap: 24px;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.3);
+    z-index: 500;
+}
+
+/* STATUS BAR PRO */
+.theme-pro .status-bar {
+    grid-row: 5;
+    grid-column: 1 / -1;
+    background: #0a0a0f;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    z-index: 1000;
+}
+
+/* ESTILOS DE BARRAS PRO */
+.theme-pro .menu-bar-container {
+    background: #0a0a0f;
+    border-bottom: 1px solid #1c1c2e;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.theme-pro .docs-bar-container {
+    background: #11111b;
+    border-bottom: 1px solid #1c1c2e;
+    box-shadow: inset 0 -1px 0 rgba(255,255,255,0.02);
+}
+
+.theme-pro .views-bar-container {
+    background: #12121e;
+    border-bottom: 1px solid #1c1c2e;
+}
+
+/* PESTAÑAS PRO */
+.theme-pro .tabs-container {
+    background: transparent;
+    border: none;
+    gap: 8px;
+}
+
+.theme-pro .tab-btn {
+    background: transparent;
+    border-radius: 6px;
+    padding: 6px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.theme-pro .tab-btn.active {
+    background: rgba(var(--accent-rgb), 0.1);
+    color: var(--accent);
+    box-shadow: none;
+}
+
+/* CODE EDITOR EN MODO PRO */
+.theme-pro .CodeMirror {
+    font-family: 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* SCROLLBAR PRO */
+.theme-pro ::-webkit-scrollbar-thumb {
+    background: var(--border-light);
+    border: 2px solid var(--bg-primary);
+    border-radius: 10px;
+}
+
+.theme-pro ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+}
+
+/* EFECTOS DE GLASSMORPHISM */
+.theme-pro .prop-group {
+    background: rgba(26, 26, 37, 0.4);
+    backdrop-filter: blur(8px);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* MOCK CSS DESIGNER TITLES */
+.theme-pro .css-designer-section {
+    margin-bottom: 12px;
+}
+
+.theme-pro .css-section-header {
+    background: var(--bg-active);
+    padding: 4px 8px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* MENÚ PRO */
+.theme-pro .menu-item:hover {
+    background: rgba(var(--accent-rgb), 0.1);
+    color: var(--accent);
+}
+
+.theme-pro .menu-dropdown {
+    background: rgba(18, 18, 30, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(var(--accent-rgb), 0.2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+.theme-pro .dropdown-item:hover {
+    background: var(--accent);
+    color: #000;
+}
+

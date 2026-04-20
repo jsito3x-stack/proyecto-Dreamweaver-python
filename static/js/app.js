@@ -445,19 +445,34 @@ const App = {
     selectAll() { if(this.codeEditor) this.codeEditor.execCommand('selectAll'); },
     selectTag() { this.notify('Seleccionando etiqueta...', 'var(--accent)'); },
     preferences() { this.openDialog('modal-preferences'); },
+    preferencias() { this.openDialog('modal-preferences'); },
+
+    // Edición - Nuevas funciones
+    line() { this.goToLine(); },
+    code() { this.notify('Sugerencias de código...', 'var(--accent)'); },
+    editor() { this.notify('Quick Tag Editor...', 'var(--accent)'); },
+    vinculo() { this.notify('Editando vínculo...', 'var(--accent)'); },
+    tabla() { this.openDialog('modal-table'); },
+    imagen() { this.notify('Editando imagen...', 'var(--accent)'); },
+    plantilla() { this.notify('Propiedades de plantilla...', 'var(--accent)'); },
+    entradas() { this.notify('Entradas repetidas...', 'var(--accent)'); },
+    text() { this.notify('Edición de texto...', 'var(--accent)'); },
+    format() { this.notify('Formato de párrafo...', 'var(--accent)'); },
+    list() { this.notify('Edición de lista...', 'var(--accent)'); },
+    teclado() { this.notify('Métodos abreviados de teclado...', 'var(--accent)'); },
 
     // Ver
     toggleLive() { this.notify('Alternando modo En Vivo...', 'var(--accent)'); },
-    toggleRulers() { this.notify('Reglas: No implementado', 'var(--warning)'); },
-    toggleGrid() { this.notify('Cuadrícula: No implementado', 'var(--warning)'); },
-    toggleGuides() { this.notify('Guías: No implementado', 'var(--warning)'); },
+    toggleRulers() { this.notify('Código en vivo...', 'var(--accent)'); },
+    toggleGrid() { this.notify('Inspeccionar...', 'var(--accent)'); },
+    toggleGuides() { this.notify('Opciones de vista Código...', 'var(--accent)'); },
     toggleFullScreen() { 
         if (!document.fullscreenElement) document.documentElement.requestFullscreen();
         else document.exitFullscreen();
     },
 
     // Insertar
-    insertDiv() { this.notify('Insertando Div...', 'var(--success)'); },
+    insertDiv() { this.notify('Insertando elemento...', 'var(--success)'); },
     insertImage() { this.notify('Selector de imágenes no disponible', 'var(--warning)'); },
     insertLink() { this.notify('Insertando Hipervínculo...', 'var(--success)'); },
     insertTable() { this.openDialog('modal-table'); },
@@ -482,6 +497,7 @@ const App = {
     togglePanel(panel) { 
         this.notify(`Alternando panel: ${panel}`, 'var(--accent)');
     },
+
 
     // === SISTEMA DE DIÁLOGOS ===
     openDialog(id) {

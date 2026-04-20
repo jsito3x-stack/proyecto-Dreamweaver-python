@@ -9,7 +9,6 @@
 
     <!-- CodeMirror BASE -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
-
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -18,16 +17,16 @@
     <link rel="stylesheet" href="/static/css/components.css">
 
     <!-- ═══ TEMA POR DEFECTO (Cobalt2) ═══ -->
-    <link rel="stylesheet" href="/static/css/themes/theme-default.css" id="theme-default">
-
+    <link rel="stylesheet" href="/static/css/themes/theme-default.css" id="theme-default" disabled>
     <!-- ═══ TEMA CLARO (WLA-DX Azulado) ═══ -->
     <link rel="stylesheet" href="/static/css/themes/theme-light.css" id="theme-light" disabled>
-
     <!-- ═══ TEMA OSCURO (Dracula) ═══ -->
     <link rel="stylesheet" href="/static/css/themes/theme-dark.css" id="theme-dark" disabled>
-
     <!-- ═══ TEMA PRO (Inspirado en DW 2021) ═══ -->
-    <link rel="stylesheet" href="/static/css/themes/theme-pro.css" id="theme-pro" disabled>
+    <link rel="stylesheet" href="/static/css/themes/theme-pro.css" id="theme-pro">
+
+    <!-- Sistema de Paneles (Este archivo ya contiene el layout) -->
+    <link rel="stylesheet" href="/static/css/panels.css">
 </head>
 
 <body class="theme-default">
@@ -658,9 +657,7 @@
                 <div class="side-icon" title="Administración de archivos" onclick="Toolbar.openFileManagement()">
                     <i class="fas fa-tasks"></i><span class="icon-label">Gestión Archivos</span>
                 </div>
-
                 <div class="toolbar-divider"></div>
-
                 <div class="side-icon" title="Código en vivo" onclick="Toolbar.toggleLiveCode()">
                     <i class="fas fa-bolt"></i><span class="icon-label">Código en vivo</span>
                 </div>
@@ -674,9 +671,7 @@
                 <div class="side-icon" title="Inspeccionar" onclick="Toolbar.inspect()">
                     <i class="fas fa-mouse-pointer"></i><span class="icon-label">Inspeccionar</span>
                 </div>
-
                 <div class="toolbar-divider"></div>
-
                 <div class="side-icon" title="Contraer etiqueta completa" onclick="Toolbar.foldTag()">
                     <i class="fas fa-minus-square"></i><span class="icon-label">Contraer Etiqueta</span>
                 </div>
@@ -689,9 +684,7 @@
                 <div class="side-icon" title="Seleccionar etiqueta padre" onclick="Toolbar.selectParent()">
                     <i class="fas fa-level-up-alt"></i><span class="icon-label">Seleccionar Padre</span>
                 </div>
-
                 <div class="toolbar-divider"></div>
-
                 <div class="side-icon" title="Formatear código fuente" onclick="Toolbar.formatCode()">
                     <i class="fas fa-magic"></i><span class="icon-label">Formatear</span>
                 </div>
@@ -704,9 +697,7 @@
                 <div class="side-icon" title="Equilibar llaves" onclick="Toolbar.balanceBraces()">
                     <i class="fas fa-code"></i><span class="icon-label">Equilibrar Llaves</span>
                 </div>
-
                 <div class="toolbar-divider"></div>
-
                 <div class="side-icon" title="Aplicar sangría al código" onclick="Toolbar.indent()">
                     <i class="fas fa-indent"></i><span class="icon-label">Sangría</span>
                 </div>
@@ -716,9 +707,7 @@
                 <div class="side-icon" title="Ajustar texto" onclick="Toolbar.toggleWordWrap()">
                     <i class="fas fa-align-left"></i><span class="icon-label">Ajustar Texto</span>
                 </div>
-
                 <div class="toolbar-divider"></div>
-
                 <div class="side-icon" title="Mostar navegador de código" onclick="Toolbar.showNavigator()">
                     <i class="fas fa-compass"></i><span class="icon-label">Navegador</span>
                 </div>
@@ -731,76 +720,7 @@
             </div>
         </nav>
 
-        <!-- RESIZER TOOLBAR -->
-        <div class="resizer toolbar-resizer" id="resizer-toolbar">
-            <div class="resizer-handle">⋮</div>
-        </div>
 
-
-
-        <!-- ════════════════════════════════════════════════════════ -->
-        <!-- PANEL IZQUIERDO -->
-        <!-- ════════════════════════════════════════════════════════ -->
-        <aside class="left-panel">
-            <div class="panel-tabs">
-                <button class="panel-tab active" data-panel="files" onclick="switchPanel('files')">
-                    <img src="/static/icons/files.png" style="height:20px; vertical-align:middle; margin-right:6px;">
-                    Archivos
-                </button>
-                <button class="panel-tab" data-panel="structure" onclick="switchPanel('structure')">
-                    <img src="/static/icons/structure.png"
-                        style="height:20px; vertical-align:middle; margin-right:6px;">
-                    Estructura
-                </button>
-                <!-- Botón ocultar (opcional, pero ayuda) -->
-                <button class="btn-icon" onclick="Layout.toggleLeft()" title="Encoger panel"
-                    style="margin-left:auto; margin-right:5px; opacity:0.6;">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-            </div>
-
-            <div class="panel-content">
-                <!-- ARCHIVOS -->
-                <div class="panel-section active" id="panel-files">
-                    <div class="file-tree" id="file-tree">
-                        <div style="text-align: center; padding: 20px; color: var(--text-muted);">
-                            <i class="fas fa-folder-open"
-                                style="font-size: 32px; margin-bottom: 10px; display: block;"></i>
-                            No hay archivos cargados<br>
-                            <small>Abre un archivo HTML para comenzar</small>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ESTRUCTURA -->
-                <div class="panel-section" id="panel-structure">
-                    <div class="tree-container" id="structure-tree">
-                        <div style="text-align: center; padding: 20px; color: var(--text-muted);">
-                            <img src="/static/icons/documento_vacio.png"
-                                style="width: 48px; margin-bottom: 12px; opacity: 0.6;">
-                            <br>
-                            Carga un archivo HTML<br>
-                            <small>para ver la estructura</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tree Controls -->
-            <div style="padding: 8px; border-top: 1px solid var(--border); display: flex; gap: 8px;">
-                <button class="btn-icon" onclick="Tree.expandAll()" title="Expandir todo">
-                    <i class="fas fa-expand-alt"></i>
-                </button>
-                <button class="btn-icon" onclick="Tree.collapseAll()" title="Colapsar todo">
-                    <i class="fas fa-compress-alt"></i>
-                </button>
-            </div>
-        </aside>
-
-        <!-- RESIZER IZQUIERDO -->
-        <div class="resizer" id="resizer-left" onclick="if(this.classList.contains('collapsed')) Layout.toggleLeft()">
-            <div class="resizer-handle">⋮</div>
-        </div>
 
         <!-- ════════════════════════════════════════════════════════ -->
         <!-- PANEL CENTRAL -->
@@ -870,665 +790,480 @@
 
             </div>
 
-            <!-- ════════════════════════════════════════════════════════ -->
-            <!-- INSPECTOR DE PROPIEDADES INFERIOR (Solo modo Pro) -->
-            <!-- ════════════════════════════════════════════════════════ -->
-            <footer class="property-inspector" id="pro-inspector">
-                <div
-                    style="display: flex; align-items: center; gap: 10px; border-right: 1px solid var(--border); padding-right: 20px;">
-                    <img src="/static/icons/html.png" style="height: 24px;">
-                    <span style="font-weight: bold; font-size: 14px; color: var(--accent);" id="ins-tag">DIV</span>
-                </div>
-
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <span
-                        style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Identificadores</span>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" class="prop-input" style="width: 100px;" placeholder="ID" id="ins-id">
-                        <input type="text" class="prop-input" style="width: 200px;" placeholder="Clases"
-                            id="ins-classes">
-                    </div>
-                </div>
-
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Texto y
-                        Formato</span>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <button class="btn-icon" title="Negrita"><i class="fas fa-bold"></i></button>
-                        <button class="btn-icon" title="Itálica"><i class="fas fa-italic"></i></button>
-                        <button class="btn-icon" title="Enlace"><i class="fas fa-link"></i></button>
-                        <input type="color" class="color-preview" id="ins-color" style="height: 24px; width: 24px;">
-                        <select class="prop-input" style="width: 80px; padding: 2px;">
-                            <option>14px</option>
-                            <option>16px</option>
-                            <option>18px</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
-                    <button class="btn btn-primary" style="padding: 4px 12px; font-size: 11px;"
-                        onclick="Pro.applyInspectorChanges()">
-                        Aplicar
-                    </button>
-                </div>
-            </footer>
+            <footer class="property-inspector" id="pro-inspector" style="display: none;">
         </main>
-
         <!-- RESIZER DERECHO -->
         <div class="resizer" id="resizer-right" onclick="if(this.classList.contains('collapsed')) Layout.toggleRight()">
             <div class="resizer-handle">⋮</div>
         </div>
 
         <!-- ════════════════════════════════════════════════════════ -->
-        <!-- PANEL DERECHO - PROPIEDADES -->
+        <!-- PANEL DERECHO - AQUÍ SE INYECTAN LOS PANELES DINÁMICOS -->
         <!-- ════════════════════════════════════════════════════════ -->
-        <aside class="right-panel">
-            <div class="props-header">
-                <i class="fas fa-sliders-h"></i> Propiedades
-                <button class="btn-icon" onclick="Layout.toggleRight()" title="Encoger panel"
-                    style="margin-left:auto; opacity:0.6;">
-                    <i class="fas fa-chevron-right"></i>
+        <!-- Usamos ambas clases para mantener compatibilidad de estilos -->
+        <aside class="right-panel right-panel-container"></aside>
+
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- STATUS BAR -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <div class="status-bar">
+            <div class="status-item">
+                <i class="fas fa-file-code status-icon"></i>
+                <span id="status-file">Sin archivo</span>
+            </div>
+            <div class="status-item">
+                <i class="fas fa-code status-icon"></i>
+                <span id="status-elements">0 elementos</span>
+            </div>
+            <div class="status-item" style="flex: 1;">
+                <span id="status-message">Listo</span>
+            </div>
+            <div class="status-item">
+                <i class="fas fa-mouse-pointer status-icon"></i>
+                <span id="status-cursor">Línea 1, Col 1</span>
+            </div>
+            <div class="status-item">
+                <i class="fas fa-keyboard status-icon"></i>
+                <span>Ctrl+? Atajos</span>
+            </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- MODAL -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <div class="modal-overlay" id="modal">
+            <div class="modal-box">
+                <div class="modal-title" id="modal-title">Confirmar acción</div>
+                <div class="modal-content" id="modal-content"></div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="App.hideModal()">Cancelar</button>
+                    <button class="btn btn-danger" id="modal-confirm">Confirmar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- SNIPPETS PANEL -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <div id="snippets-panel" style="display: none;">
+            <!-- Se crea dinámicamente -->
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- SEARCH PANEL -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <div class="search-panel" id="search-panel" style="display: none;">
+            <div class="search-header">
+                <span class="search-title"><i class="fas fa-search"></i> Buscar y Reemplazar</span>
+                <button class="btn-icon" onclick="this.parentElement.parentElement.style.display='none'">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
-
-            <div class="props-content" id="props-content">
-                <!-- Sin selección -->
-                <div id="no-selection">
-                    <p style="color: var(--text-muted); text-align: center; padding: 40px 20px;">
-                        <i class="fas fa-mouse-pointer"
-                            style="font-size: 32px; margin-bottom: 15px; display: block;"></i>
-                        Selecciona un elemento<br>
-                        <small>en la estructura o en la vista previa</small>
-                    </p>
+            <div class="search-inputs">
+                <div class="search-input-group">
+                    <input type="text" class="prop-input" id="search-find" placeholder="Buscar...">
                 </div>
-
-                <!-- Con selección -->
-                <div id="element-props" style="display: none;">
-                    <!-- Información del elemento -->
-                    <div class="prop-group">
-                        <div class="prop-group-title">
-                            <i class="fas fa-info-circle"></i> Elemento
-                        </div>
-
-                        <div class="prop-row">
-                            <div class="prop-label">Etiqueta</div>
-                            <input type="text" class="prop-input" id="prop-tag" readonly
-                                style="background: var(--bg-hover);">
-                        </div>
-
-                        <div class="prop-row">
-                            <div class="prop-label">ID</div>
-                            <input type="text" class="prop-input" id="prop-id" placeholder="Sin ID">
-                        </div>
-
-                        <div class="prop-row">
-                            <div class="prop-label">Clases CSS</div>
-                            <input type="text" class="prop-input" id="prop-classes" placeholder="clase1 clase2">
-                        </div>
-                    </div>
-
-                    <!-- Atributos -->
-                    <div class="prop-group">
-                        <div class="prop-group-title">
-                            <i class="fas fa-cog"></i> Atributos
-                        </div>
-                        <div id="attributes-list">
-                            <!-- Se llena dinámicamente -->
-                        </div>
-                        <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;"
-                            onclick="Properties.addAttribute()">
-                            <i class="fas fa-plus"></i> Agregar atributo
-                        </button>
-                    </div>
-
-                    <!-- Contenido -->
-                    <div class="prop-group" id="content-group">
-                        <div class="prop-group-title">
-                            <i class="fas fa-align-left"></i> Contenido
-                        </div>
-                        <textarea class="prop-input prop-textarea" id="prop-content"
-                            placeholder="Texto o contenido del elemento"></textarea>
-                    </div>
-
-                    <!-- Estilos -->
-                    <div class="prop-group">
-                        <div class="prop-group-title">
-                            <i class="fas fa-paint-brush"></i> Estilos Inline
-                        </div>
-
-                        <div class="prop-row">
-                            <div class="prop-label">Color de texto</div>
-                            <div class="color-input-wrapper">
-                                <input type="color" class="color-preview" id="prop-color-preview">
-                                <input type="text" class="prop-input color-input" id="prop-color" placeholder="#000000">
-                            </div>
-                        </div>
-
-                        <div class="prop-row">
-                            <div class="prop-label">Color de fondo</div>
-                            <div class="color-input-wrapper">
-                                <input type="color" class="color-preview" id="prop-bgcolor-preview">
-                                <input type="text" class="prop-input color-input" id="prop-bgcolor"
-                                    placeholder="transparent">
-                            </div>
-                        </div>
-
-                        <div class="prop-row">
-                            <div class="prop-label">Tamaño de fuente</div>
-                            <input type="text" class="prop-input" id="prop-fontsize" placeholder="16px">
-                        </div>
-
-                        <div class="prop-row">
-                            <div class="prop-label">Padding</div>
-                            <input type="text" class="prop-input" id="prop-padding" placeholder="10px">
-                        </div>
-
-                        <div class="prop-row">
-                            <div class="prop-label">Margin</div>
-                            <input type="text" class="prop-input" id="prop-margin" placeholder="10px">
-                        </div>
-
-                        <div class="prop-row">
-                            <div class="prop-label">Borde</div>
-                            <input type="text" class="prop-input" id="prop-border" placeholder="1px solid #ccc">
-                        </div>
-                    </div>
-
-                    <!-- Acciones -->
-                    <div class="prop-group">
-                        <div class="prop-group-title">
-                            <i class="fas fa-bolt"></i> Acciones
-                        </div>
-
-                        <div class="quick-actions">
-                            <button class="quick-btn" onclick="Properties.duplicateElement()">
-                                <i class="fas fa-copy"></i> Duplicar
-                            </button>
-                            <button class="quick-btn danger" onclick="Properties.deleteElement()">
-                                <i class="fas fa-trash"></i> Eliminar
-                            </button>
-                            <button class="quick-btn" onclick="Properties.moveUp()">
-                                <i class="fas fa-arrow-up"></i> Subir
-                            </button>
-                            <button class="quick-btn" onclick="Properties.moveDown()">
-                                <i class="fas fa-arrow-down"></i> Bajar
-                            </button>
-                        </div>
-
-                        <button class="btn btn-success" style="width: 100%; margin-top: 10px;"
-                            onclick="Properties.applyChanges()">
-                            <i class="fas fa-check"></i> Aplicar Cambios
-                        </button>
-                    </div>
-
-                    <!-- Insertar elementos -->
-                    <div class="insert-section">
-                        <div class="prop-group-title">
-                            <i class="fas fa-plus-circle"></i> Insertar Dentro
-                        </div>
-
-                        <div class="insert-grid">
-                            <button class="insert-btn" onclick="Properties.insertElement('div')">div</button>
-                            <button class="insert-btn" onclick="Properties.insertElement('p')">p</button>
-                            <button class="insert-btn" onclick="Properties.insertElement('h1')">h1</button>
-                            <button class="insert-btn" onclick="Properties.insertElement('h2')">h2</button>
-                            <button class="insert-btn" onclick="Properties.insertElement('h3')">h3</button>
-                            <button class="insert-btn" onclick="Properties.insertElement('span')">span</button>
-                            <button class="insert-btn" onclick="Properties.insertElement('a')">a</button>
-                            <button class="insert-btn" onclick="Properties.insertElement('img')">img</button>
-                            <button class="insert-btn" onclick="Properties.insertElement('ul')">ul</button>
-                            <button class="insert-btn" onclick="Properties.insertElement('li')">li</button>
-                            <button class="insert-btn" onclick="Properties.insertElement('button')">btn</button>
-                            <button class="insert-btn" onclick="Properties.insertElement('section')">sec</button>
-                            <button class="insert-btn" onclick="Properties.insertElement('article')">art</button>
-                            <button class="insert-btn" onclick="Properties.insertElement('nav')">nav</button>
-                            <button class="insert-btn" onclick="Properties.insertElement('footer')">foot</button>
-                        </div>
-                    </div>
+                <div class="search-input-group">
+                    <input type="text" class="prop-input" id="search-replace" placeholder="Reemplazar con...">
                 </div>
             </div>
-        </aside>
-    </div>
-
-    <!-- ════════════════════════════════════════════════════════ -->
-    <!-- STATUS BAR -->
-    <!-- ════════════════════════════════════════════════════════ -->
-    <div class="status-bar">
-        <div class="status-item">
-            <i class="fas fa-file-code status-icon"></i>
-            <span id="status-file">Sin archivo</span>
-        </div>
-        <div class="status-item">
-            <i class="fas fa-code status-icon"></i>
-            <span id="status-elements">0 elementos</span>
-        </div>
-        <div class="status-item" style="flex: 1;">
-            <span id="status-message">Listo</span>
-        </div>
-        <div class="status-item">
-            <i class="fas fa-mouse-pointer status-icon"></i>
-            <span id="status-cursor">Línea 1, Col 1</span>
-        </div>
-        <div class="status-item">
-            <i class="fas fa-keyboard status-icon"></i>
-            <span>Ctrl+? Atajos</span>
-        </div>
-    </div>
-
-    <!-- ════════════════════════════════════════════════════════ -->
-    <!-- MODAL -->
-    <!-- ════════════════════════════════════════════════════════ -->
-    <div class="modal-overlay" id="modal">
-        <div class="modal-box">
-            <div class="modal-title" id="modal-title">Confirmar acción</div>
-            <div class="modal-content" id="modal-content"></div>
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="App.hideModal()">Cancelar</button>
-                <button class="btn btn-danger" id="modal-confirm">Confirmar</button>
+            <div class="search-options">
+                <label class="search-option">
+                    <input type="checkbox" id="search-case"> Distinguir mayúsculas
+                </label>
+                <label class="search-option">
+                    <input type="checkbox" id="search-whole"> Palabra completa
+                </label>
+                <label class="search-option">
+                    <input type="checkbox" id="search-regex"> Expresión regular
+                </label>
             </div>
-        </div>
-    </div>
-
-    <!-- ════════════════════════════════════════════════════════ -->
-    <!-- SNIPPETS PANEL -->
-    <!-- ════════════════════════════════════════════════════════ -->
-    <div id="snippets-panel" style="display: none;">
-        <!-- Se crea dinámicamente -->
-    </div>
-
-    <!-- ════════════════════════════════════════════════════════ -->
-    <!-- SEARCH PANEL -->
-    <!-- ════════════════════════════════════════════════════════ -->
-    <div class="search-panel" id="search-panel" style="display: none;">
-        <div class="search-header">
-            <span class="search-title"><i class="fas fa-search"></i> Buscar y Reemplazar</span>
-            <button class="btn-icon" onclick="this.parentElement.parentElement.style.display='none'">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="search-inputs">
-            <div class="search-input-group">
-                <input type="text" class="prop-input" id="search-find" placeholder="Buscar...">
-            </div>
-            <div class="search-input-group">
-                <input type="text" class="prop-input" id="search-replace" placeholder="Reemplazar con...">
-            </div>
-        </div>
-        <div class="search-options">
-            <label class="search-option">
-                <input type="checkbox" id="search-case"> Distinguir mayúsculas
-            </label>
-            <label class="search-option">
-                <input type="checkbox" id="search-whole"> Palabra completa
-            </label>
-            <label class="search-option">
-                <input type="checkbox" id="search-regex"> Expresión regular
-            </label>
-        </div>
-        <div class="search-buttons">
-            <button class="btn btn-secondary" onclick="Editor.findAndReplace(
+            <div class="search-buttons">
+                <button class="btn btn-secondary" onclick="Editor.findAndReplace(
                 document.getElementById('search-find').value,
                 document.getElementById('search-replace').value,
                 false
             )">Buscar siguiente</button>
-            <button class="btn btn-primary" onclick="Editor.findAndReplace(
+                <button class="btn btn-primary" onclick="Editor.findAndReplace(
                 document.getElementById('search-find').value,
                 document.getElementById('search-replace').value,
                 true
             )">Reemplazar todo</button>
+            </div>
         </div>
-    </div>
 
-    <!-- ════════════════════════════════════════════════════════ -->
-    <!-- DIÁLOGO: PROPIEDADES DE PÁGINA                         -->
-    <!-- ════════════════════════════════════════════════════════ -->
-    <div class="modal-overlay" id="modal-page-props">
-        <div class="modal-box modal-md">
-            <div class="modal-header">
-                <div class="modal-title"><i class="fas fa-file-alt"></i> Propiedades de página</div>
-                <button class="modal-close-btn" onclick="App.closeDialog('modal-page-props')"><i
-                        class="fas fa-times"></i></button>
-            </div>
-            <div class="modal-tabs">
-                <button class="modal-tab-btn active"
-                    onclick="App.switchDialogTab(this, 'pp-apariencia')">Apariencia</button>
-                <button class="modal-tab-btn" onclick="App.switchDialogTab(this, 'pp-enlaces')">Vínculos</button>
-                <button class="modal-tab-btn" onclick="App.switchDialogTab(this, 'pp-encabezados')">Encabezados</button>
-                <button class="modal-tab-btn"
-                    onclick="App.switchDialogTab(this, 'pp-codificacion')">Codificación</button>
-            </div>
-            <div class="modal-body">
-                <div class="modal-tab-content active" id="pp-apariencia">
-                    <div class="modal-form-grid">
-                        <span class="modal-form-label">Título:</span>
-                        <input type="text" class="prop-input" id="pp-title" placeholder="Mi página web">
-                        <span class="modal-form-label">Color de fondo:</span>
-                        <div class="color-input-wrapper">
-                            <input type="color" class="color-preview" id="pp-bg-color" value="#ffffff">
-                            <input type="text" class="prop-input color-input" id="pp-bg-hex" value="#ffffff">
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- DIÁLOGO: PROPIEDADES DE PÁGINA                         -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <div class="modal-overlay" id="modal-page-props">
+            <div class="modal-box modal-md">
+                <div class="modal-header">
+                    <div class="modal-title"><i class="fas fa-file-alt"></i> Propiedades de página</div>
+                    <button class="modal-close-btn" onclick="App.closeDialog('modal-page-props')"><i
+                            class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-tabs">
+                    <button class="modal-tab-btn active"
+                        onclick="App.switchDialogTab(this, 'pp-apariencia')">Apariencia</button>
+                    <button class="modal-tab-btn" onclick="App.switchDialogTab(this, 'pp-enlaces')">Vínculos</button>
+                    <button class="modal-tab-btn"
+                        onclick="App.switchDialogTab(this, 'pp-encabezados')">Encabezados</button>
+                    <button class="modal-tab-btn"
+                        onclick="App.switchDialogTab(this, 'pp-codificacion')">Codificación</button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-tab-content active" id="pp-apariencia">
+                        <div class="modal-form-grid">
+                            <span class="modal-form-label">Título:</span>
+                            <input type="text" class="prop-input" id="pp-title" placeholder="Mi página web">
+                            <span class="modal-form-label">Color de fondo:</span>
+                            <div class="color-input-wrapper">
+                                <input type="color" class="color-preview" id="pp-bg-color" value="#ffffff">
+                                <input type="text" class="prop-input color-input" id="pp-bg-hex" value="#ffffff">
+                            </div>
+                            <span class="modal-form-label">Imagen de fondo:</span>
+                            <div class="modal-form-row">
+                                <input type="text" class="prop-input" id="pp-bg-image" placeholder="URL de la imagen..."
+                                    style="flex:1;">
+                                <button class="btn btn-secondary" style="white-space:nowrap;">Examinar...</button>
+                            </div>
+                            <span class="modal-form-label">Color de texto:</span>
+                            <div class="color-input-wrapper">
+                                <input type="color" class="color-preview" id="pp-text-color" value="#333333">
+                                <input type="text" class="prop-input color-input" id="pp-text-hex" value="#333333">
+                            </div>
+                            <span class="modal-form-label">Fuente:</span>
+                            <select class="prop-input" id="pp-font">
+                                <option>Predeterminada</option>
+                                <option>Arial, Helvetica, sans-serif</option>
+                                <option>Georgia, serif</option>
+                                <option>'Courier New', monospace</option>
+                                <option>Verdana, Geneva, sans-serif</option>
+                            </select>
+                            <span class="modal-form-label">Tamaño:</span>
+                            <input type="text" class="prop-input" id="pp-font-size" placeholder="16px">
                         </div>
-                        <span class="modal-form-label">Imagen de fondo:</span>
+                    </div>
+                    <div class="modal-tab-content" id="pp-enlaces">
+                        <div class="modal-form-grid">
+                            <span class="modal-form-label">Color de vínculo:</span>
+                            <div class="color-input-wrapper">
+                                <input type="color" class="color-preview" value="#0066cc">
+                                <input type="text" class="prop-input color-input" value="#0066cc">
+                            </div>
+                            <span class="modal-form-label">Visitado:</span>
+                            <div class="color-input-wrapper">
+                                <input type="color" class="color-preview" value="#551a8b">
+                                <input type="text" class="prop-input color-input" value="#551a8b">
+                            </div>
+                            <span class="modal-form-label">Activo:</span>
+                            <div class="color-input-wrapper">
+                                <input type="color" class="color-preview" value="#ee0000">
+                                <input type="text" class="prop-input color-input" value="#ee0000">
+                            </div>
+                            <span class="modal-form-label">Subrayar:</span>
+                            <select class="prop-input">
+                                <option>Siempre subrayado</option>
+                                <option>Solo al pasar el ratón</option>
+                                <option>Nunca subrayado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-tab-content" id="pp-encabezados">
+                        <div class="modal-form-grid">
+                            <span class="modal-form-label">Meta description:</span>
+                            <textarea class="prop-input prop-textarea" rows="3"
+                                placeholder="Descripción de la página para buscadores..."></textarea>
+                            <span class="modal-form-label">Meta keywords:</span>
+                            <input type="text" class="prop-input" placeholder="palabra1, palabra2, palabra3">
+                            <span class="modal-form-label">Autor:</span>
+                            <input type="text" class="prop-input" placeholder="Nombre del autor">
+                        </div>
+                    </div>
+                    <div class="modal-tab-content" id="pp-codificacion">
+                        <div class="modal-form-grid">
+                            <span class="modal-form-label">Codificación:</span>
+                            <select class="prop-input">
+                                <option>UTF-8 (Predeterminada)</option>
+                                <option>ISO-8859-1</option>
+                                <option>Windows-1252</option>
+                            </select>
+                            <span class="modal-form-label">Tipo de documento:</span>
+                            <select class="prop-input">
+                                <option>HTML5</option>
+                                <option>XHTML 1.0 Transitional</option>
+                                <option>HTML 4.01</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="App.closeDialog('modal-page-props')">Cancelar</button>
+                    <button class="btn btn-primary" onclick="App.applyPageProps()">Aplicar</button>
+                    <button class="btn btn-primary"
+                        onclick="App.applyPageProps(); App.closeDialog('modal-page-props')">Aceptar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- DIÁLOGO: CONFIGURACIÓN DE SITIO                        -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <div class="modal-overlay" id="modal-site-config">
+            <div class="modal-box modal-lg">
+                <div class="modal-header">
+                    <div class="modal-title"><i class="fas fa-sitemap"></i> Configuración del sitio</div>
+                    <button class="modal-close-btn" onclick="App.closeDialog('modal-site-config')"><i
+                            class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-tabs">
+                    <button class="modal-tab-btn active" onclick="App.switchDialogTab(this, 'sc-sitio')">Sitio</button>
+                    <button class="modal-tab-btn" onclick="App.switchDialogTab(this, 'sc-servidor')">Servidores</button>
+                    <button class="modal-tab-btn" onclick="App.switchDialogTab(this, 'sc-avanzado')">Avanzado</button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-tab-content active" id="sc-sitio">
+                        <div class="modal-form-grid">
+                            <span class="modal-form-label">Nombre del sitio:</span>
+                            <input type="text" class="prop-input" placeholder="Mi sitio web">
+                            <span class="modal-form-label">Carpeta local:</span>
+                            <div class="modal-form-row">
+                                <input type="text" class="prop-input" placeholder="/ruta/al/proyecto" style="flex:1;">
+                                <button class="btn btn-secondary" style="white-space:nowrap;">Examinar...</button>
+                            </div>
+                            <span class="modal-form-label">URL del sitio:</span>
+                            <input type="text" class="prop-input" placeholder="http://localhost:5000">
+                        </div>
+                    </div>
+                    <div class="modal-tab-content" id="sc-servidor">
+                        <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                            <i class="fas fa-server"
+                                style="font-size: 32px; margin-bottom: 12px; display: block; opacity: 0.4;"></i>
+                            <p>No hay servidores configurados.</p>
+                            <button class="btn btn-primary" style="margin-top: 12px;"><i class="fas fa-plus"></i> Añadir
+                                servidor</button>
+                        </div>
+                    </div>
+                    <div class="modal-tab-content" id="sc-avanzado">
+                        <div class="modal-form-grid">
+                            <span class="modal-form-label">Carpeta de imágenes:</span>
+                            <input type="text" class="prop-input" placeholder="images/">
+                            <span class="modal-form-label">Vínculos relativos:</span>
+                            <select class="prop-input">
+                                <option>Relativos al documento</option>
+                                <option>Relativos a la raíz del sitio</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="App.closeDialog('modal-site-config')">Cancelar</button>
+                    <button class="btn btn-primary" onclick="App.closeDialog('modal-site-config')">Guardar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- DIÁLOGO: INSERTAR TABLA                                -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <div class="modal-overlay" id="modal-table">
+            <div class="modal-box modal-sm">
+                <div class="modal-header">
+                    <div class="modal-title"><i class="fas fa-table"></i> Insertar tabla</div>
+                    <button class="modal-close-btn" onclick="App.closeDialog('modal-table')"><i
+                            class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-form-grid">
+                        <span class="modal-form-label">Filas:</span>
+                        <input type="number" class="prop-input" id="tbl-rows" value="3" min="1" max="100">
+                        <span class="modal-form-label">Columnas:</span>
+                        <input type="number" class="prop-input" id="tbl-cols" value="3" min="1" max="50">
+                        <span class="modal-form-label">Ancho:</span>
                         <div class="modal-form-row">
-                            <input type="text" class="prop-input" id="pp-bg-image" placeholder="URL de la imagen..."
-                                style="flex:1;">
-                            <button class="btn btn-secondary" style="white-space:nowrap;">Examinar...</button>
+                            <input type="number" class="prop-input" id="tbl-width" value="100" style="flex:1;">
+                            <select class="prop-input" id="tbl-width-unit" style="width:70px;">
+                                <option>%</option>
+                                <option>px</option>
+                            </select>
                         </div>
-                        <span class="modal-form-label">Color de texto:</span>
-                        <div class="color-input-wrapper">
-                            <input type="color" class="color-preview" id="pp-text-color" value="#333333">
-                            <input type="text" class="prop-input color-input" id="pp-text-hex" value="#333333">
-                        </div>
-                        <span class="modal-form-label">Fuente:</span>
-                        <select class="prop-input" id="pp-font">
-                            <option>Predeterminada</option>
-                            <option>Arial, Helvetica, sans-serif</option>
-                            <option>Georgia, serif</option>
-                            <option>'Courier New', monospace</option>
-                            <option>Verdana, Geneva, sans-serif</option>
-                        </select>
-                        <span class="modal-form-label">Tamaño:</span>
-                        <input type="text" class="prop-input" id="pp-font-size" placeholder="16px">
-                    </div>
-                </div>
-                <div class="modal-tab-content" id="pp-enlaces">
-                    <div class="modal-form-grid">
-                        <span class="modal-form-label">Color de vínculo:</span>
-                        <div class="color-input-wrapper">
-                            <input type="color" class="color-preview" value="#0066cc">
-                            <input type="text" class="prop-input color-input" value="#0066cc">
-                        </div>
-                        <span class="modal-form-label">Visitado:</span>
-                        <div class="color-input-wrapper">
-                            <input type="color" class="color-preview" value="#551a8b">
-                            <input type="text" class="prop-input color-input" value="#551a8b">
-                        </div>
-                        <span class="modal-form-label">Activo:</span>
-                        <div class="color-input-wrapper">
-                            <input type="color" class="color-preview" value="#ee0000">
-                            <input type="text" class="prop-input color-input" value="#ee0000">
-                        </div>
-                        <span class="modal-form-label">Subrayar:</span>
-                        <select class="prop-input">
-                            <option>Siempre subrayado</option>
-                            <option>Solo al pasar el ratón</option>
-                            <option>Nunca subrayado</option>
+                        <span class="modal-form-label">Borde:</span>
+                        <input type="number" class="prop-input" id="tbl-border" value="1" min="0" max="20">
+                        <span class="modal-form-label">Relleno:</span>
+                        <input type="number" class="prop-input" id="tbl-cellpadding" value="4" min="0">
+                        <span class="modal-form-label">Espaciado:</span>
+                        <input type="number" class="prop-input" id="tbl-cellspacing" value="0" min="0">
+                        <span class="modal-form-label">Fila de cabecera:</span>
+                        <select class="prop-input" id="tbl-header">
+                            <option value="none">Ninguna</option>
+                            <option value="top" selected>Superior</option>
+                            <option value="left">Izquierda</option>
+                            <option value="both">Ambas</option>
                         </select>
                     </div>
                 </div>
-                <div class="modal-tab-content" id="pp-encabezados">
-                    <div class="modal-form-grid">
-                        <span class="modal-form-label">Meta description:</span>
-                        <textarea class="prop-input prop-textarea" rows="3"
-                            placeholder="Descripción de la página para buscadores..."></textarea>
-                        <span class="modal-form-label">Meta keywords:</span>
-                        <input type="text" class="prop-input" placeholder="palabra1, palabra2, palabra3">
-                        <span class="modal-form-label">Autor:</span>
-                        <input type="text" class="prop-input" placeholder="Nombre del autor">
-                    </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="App.closeDialog('modal-table')">Cancelar</button>
+                    <button class="btn btn-primary" onclick="App.doInsertTable()">Insertar</button>
                 </div>
-                <div class="modal-tab-content" id="pp-codificacion">
-                    <div class="modal-form-grid">
-                        <span class="modal-form-label">Codificación:</span>
-                        <select class="prop-input">
-                            <option>UTF-8 (Predeterminada)</option>
-                            <option>ISO-8859-1</option>
-                            <option>Windows-1252</option>
-                        </select>
-                        <span class="modal-form-label">Tipo de documento:</span>
-                        <select class="prop-input">
-                            <option>HTML5</option>
-                            <option>XHTML 1.0 Transitional</option>
-                            <option>HTML 4.01</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="App.closeDialog('modal-page-props')">Cancelar</button>
-                <button class="btn btn-primary" onclick="App.applyPageProps()">Aplicar</button>
-                <button class="btn btn-primary"
-                    onclick="App.applyPageProps(); App.closeDialog('modal-page-props')">Aceptar</button>
             </div>
         </div>
-    </div>
 
-    <!-- ════════════════════════════════════════════════════════ -->
-    <!-- DIÁLOGO: CONFIGURACIÓN DE SITIO                        -->
-    <!-- ════════════════════════════════════════════════════════ -->
-    <div class="modal-overlay" id="modal-site-config">
-        <div class="modal-box modal-lg">
-            <div class="modal-header">
-                <div class="modal-title"><i class="fas fa-sitemap"></i> Configuración del sitio</div>
-                <button class="modal-close-btn" onclick="App.closeDialog('modal-site-config')"><i
-                        class="fas fa-times"></i></button>
-            </div>
-            <div class="modal-tabs">
-                <button class="modal-tab-btn active" onclick="App.switchDialogTab(this, 'sc-sitio')">Sitio</button>
-                <button class="modal-tab-btn" onclick="App.switchDialogTab(this, 'sc-servidor')">Servidores</button>
-                <button class="modal-tab-btn" onclick="App.switchDialogTab(this, 'sc-avanzado')">Avanzado</button>
-            </div>
-            <div class="modal-body">
-                <div class="modal-tab-content active" id="sc-sitio">
-                    <div class="modal-form-grid">
-                        <span class="modal-form-label">Nombre del sitio:</span>
-                        <input type="text" class="prop-input" placeholder="Mi sitio web">
-                        <span class="modal-form-label">Carpeta local:</span>
-                        <div class="modal-form-row">
-                            <input type="text" class="prop-input" placeholder="/ruta/al/proyecto" style="flex:1;">
-                            <button class="btn btn-secondary" style="white-space:nowrap;">Examinar...</button>
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- DIÁLOGO: PREFERENCIAS DEL EDITOR                       -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <div class="modal-overlay" id="modal-preferences">
+            <div class="modal-box modal-md">
+                <div class="modal-header">
+                    <div class="modal-title"><i class="fas fa-cog"></i> Preferencias</div>
+                    <button class="modal-close-btn" onclick="App.closeDialog('modal-preferences')"><i
+                            class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-tabs">
+                    <button class="modal-tab-btn active"
+                        onclick="App.switchDialogTab(this, 'pref-general')">General</button>
+                    <button class="modal-tab-btn" onclick="App.switchDialogTab(this, 'pref-editor')">Editor</button>
+                    <button class="modal-tab-btn"
+                        onclick="App.switchDialogTab(this, 'pref-apariencia')">Apariencia</button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-tab-content active" id="pref-general">
+                        <div class="modal-form-grid">
+                            <span class="modal-form-label">Auto-guardado:</span>
+                            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                                <input type="checkbox" id="pref-autosave" checked style="accent-color: var(--accent);">
+                                <span style="font-size:12px; color:var(--text-secondary);">Guardar automáticamente cada
+                                    30s</span>
+                            </label>
+                            <span class="modal-form-label">Al abrir:</span>
+                            <select class="prop-input">
+                                <option>Restaurar último proyecto</option>
+                                <option>Pantalla de bienvenida</option>
+                                <option>Nada</option>
+                            </select>
                         </div>
-                        <span class="modal-form-label">URL del sitio:</span>
-                        <input type="text" class="prop-input" placeholder="http://localhost:5000">
                     </div>
-                </div>
-                <div class="modal-tab-content" id="sc-servidor">
-                    <div style="text-align: center; padding: 40px; color: var(--text-muted);">
-                        <i class="fas fa-server"
-                            style="font-size: 32px; margin-bottom: 12px; display: block; opacity: 0.4;"></i>
-                        <p>No hay servidores configurados.</p>
-                        <button class="btn btn-primary" style="margin-top: 12px;"><i class="fas fa-plus"></i> Añadir
-                            servidor</button>
-                    </div>
-                </div>
-                <div class="modal-tab-content" id="sc-avanzado">
-                    <div class="modal-form-grid">
-                        <span class="modal-form-label">Carpeta de imágenes:</span>
-                        <input type="text" class="prop-input" placeholder="images/">
-                        <span class="modal-form-label">Vínculos relativos:</span>
-                        <select class="prop-input">
-                            <option>Relativos al documento</option>
-                            <option>Relativos a la raíz del sitio</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="App.closeDialog('modal-site-config')">Cancelar</button>
-                <button class="btn btn-primary" onclick="App.closeDialog('modal-site-config')">Guardar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ════════════════════════════════════════════════════════ -->
-    <!-- DIÁLOGO: INSERTAR TABLA                                -->
-    <!-- ════════════════════════════════════════════════════════ -->
-    <div class="modal-overlay" id="modal-table">
-        <div class="modal-box modal-sm">
-            <div class="modal-header">
-                <div class="modal-title"><i class="fas fa-table"></i> Insertar tabla</div>
-                <button class="modal-close-btn" onclick="App.closeDialog('modal-table')"><i
-                        class="fas fa-times"></i></button>
-            </div>
-            <div class="modal-body">
-                <div class="modal-form-grid">
-                    <span class="modal-form-label">Filas:</span>
-                    <input type="number" class="prop-input" id="tbl-rows" value="3" min="1" max="100">
-                    <span class="modal-form-label">Columnas:</span>
-                    <input type="number" class="prop-input" id="tbl-cols" value="3" min="1" max="50">
-                    <span class="modal-form-label">Ancho:</span>
-                    <div class="modal-form-row">
-                        <input type="number" class="prop-input" id="tbl-width" value="100" style="flex:1;">
-                        <select class="prop-input" id="tbl-width-unit" style="width:70px;">
-                            <option>%</option>
-                            <option>px</option>
-                        </select>
-                    </div>
-                    <span class="modal-form-label">Borde:</span>
-                    <input type="number" class="prop-input" id="tbl-border" value="1" min="0" max="20">
-                    <span class="modal-form-label">Relleno:</span>
-                    <input type="number" class="prop-input" id="tbl-cellpadding" value="4" min="0">
-                    <span class="modal-form-label">Espaciado:</span>
-                    <input type="number" class="prop-input" id="tbl-cellspacing" value="0" min="0">
-                    <span class="modal-form-label">Fila de cabecera:</span>
-                    <select class="prop-input" id="tbl-header">
-                        <option value="none">Ninguna</option>
-                        <option value="top" selected>Superior</option>
-                        <option value="left">Izquierda</option>
-                        <option value="both">Ambas</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="App.closeDialog('modal-table')">Cancelar</button>
-                <button class="btn btn-primary" onclick="App.doInsertTable()">Insertar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ════════════════════════════════════════════════════════ -->
-    <!-- DIÁLOGO: PREFERENCIAS DEL EDITOR                       -->
-    <!-- ════════════════════════════════════════════════════════ -->
-    <div class="modal-overlay" id="modal-preferences">
-        <div class="modal-box modal-md">
-            <div class="modal-header">
-                <div class="modal-title"><i class="fas fa-cog"></i> Preferencias</div>
-                <button class="modal-close-btn" onclick="App.closeDialog('modal-preferences')"><i
-                        class="fas fa-times"></i></button>
-            </div>
-            <div class="modal-tabs">
-                <button class="modal-tab-btn active"
-                    onclick="App.switchDialogTab(this, 'pref-general')">General</button>
-                <button class="modal-tab-btn" onclick="App.switchDialogTab(this, 'pref-editor')">Editor</button>
-                <button class="modal-tab-btn" onclick="App.switchDialogTab(this, 'pref-apariencia')">Apariencia</button>
-            </div>
-            <div class="modal-body">
-                <div class="modal-tab-content active" id="pref-general">
-                    <div class="modal-form-grid">
-                        <span class="modal-form-label">Auto-guardado:</span>
-                        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                            <input type="checkbox" id="pref-autosave" checked style="accent-color: var(--accent);">
-                            <span style="font-size:12px; color:var(--text-secondary);">Guardar automáticamente cada
-                                30s</span>
-                        </label>
-                        <span class="modal-form-label">Al abrir:</span>
-                        <select class="prop-input">
-                            <option>Restaurar último proyecto</option>
-                            <option>Pantalla de bienvenida</option>
-                            <option>Nada</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-tab-content" id="pref-editor">
-                    <div class="modal-form-grid">
-                        <span class="modal-form-label">Fuente del código:</span>
-                        <select class="prop-input" id="pref-code-font">
-                            <option>Consolas</option>
-                            <option>Fira Code</option>
-                            <option>Cascadia Code</option>
-                            <option>JetBrains Mono</option>
-                            <option>Source Code Pro</option>
-                        </select>
-                        <span class="modal-form-label">Tamaño fuente:</span>
-                        <input type="number" class="prop-input" id="pref-font-size" value="13" min="8" max="28">
-                        <span class="modal-form-label">Tabulación:</span>
-                        <div class="modal-form-row">
-                            <input type="number" class="prop-input" id="pref-tab-size" value="2" min="1" max="8"
-                                style="width:60px;">
-                            <span style="font-size:12px; color:var(--text-muted);">espacios</span>
+                    <div class="modal-tab-content" id="pref-editor">
+                        <div class="modal-form-grid">
+                            <span class="modal-form-label">Fuente del código:</span>
+                            <select class="prop-input" id="pref-code-font">
+                                <option>Consolas</option>
+                                <option>Fira Code</option>
+                                <option>Cascadia Code</option>
+                                <option>JetBrains Mono</option>
+                                <option>Source Code Pro</option>
+                            </select>
+                            <span class="modal-form-label">Tamaño fuente:</span>
+                            <input type="number" class="prop-input" id="pref-font-size" value="13" min="8" max="28">
+                            <span class="modal-form-label">Tabulación:</span>
+                            <div class="modal-form-row">
+                                <input type="number" class="prop-input" id="pref-tab-size" value="2" min="1" max="8"
+                                    style="width:60px;">
+                                <span style="font-size:12px; color:var(--text-muted);">espacios</span>
+                            </div>
+                            <span class="modal-form-label">Números de línea:</span>
+                            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                                <input type="checkbox" checked style="accent-color: var(--accent);">
+                                <span style="font-size:12px; color:var(--text-secondary);">Mostrar números de
+                                    línea</span>
+                            </label>
+                            <span class="modal-form-label">Ajuste de línea:</span>
+                            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                                <input type="checkbox" checked style="accent-color: var(--accent);">
+                                <span style="font-size:12px; color:var(--text-secondary);">Ajustar líneas largas</span>
+                            </label>
+                            <span class="modal-form-label">Cerrar etiquetas:</span>
+                            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                                <input type="checkbox" checked style="accent-color: var(--accent);">
+                                <span style="font-size:12px; color:var(--text-secondary);">Cerrar automáticamente</span>
+                            </label>
                         </div>
-                        <span class="modal-form-label">Números de línea:</span>
-                        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                            <input type="checkbox" checked style="accent-color: var(--accent);">
-                            <span style="font-size:12px; color:var(--text-secondary);">Mostrar números de línea</span>
-                        </label>
-                        <span class="modal-form-label">Ajuste de línea:</span>
-                        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                            <input type="checkbox" checked style="accent-color: var(--accent);">
-                            <span style="font-size:12px; color:var(--text-secondary);">Ajustar líneas largas</span>
-                        </label>
-                        <span class="modal-form-label">Cerrar etiquetas:</span>
-                        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                            <input type="checkbox" checked style="accent-color: var(--accent);">
-                            <span style="font-size:12px; color:var(--text-secondary);">Cerrar automáticamente</span>
-                        </label>
+                    </div>
+                    <div class="modal-tab-content" id="pref-apariencia">
+                        <div class="modal-form-grid">
+                            <span class="modal-form-label">Tema:</span>
+                            <select class="prop-input" id="pref-theme">
+                                <option value="default">Cobalt2</option>
+                                <option value="light">WLA-DX</option>
+                                <option value="dark">Dracula</option>
+                                <option value="pro">Dreamweaver Pro</option>
+                            </select>
+                            <span class="modal-form-label">Workspace:</span>
+                            <select class="prop-input">
+                                <option>Desarrollador</option>
+                                <option>Estándar</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-tab-content" id="pref-apariencia">
-                    <div class="modal-form-grid">
-                        <span class="modal-form-label">Tema:</span>
-                        <select class="prop-input" id="pref-theme">
-                            <option value="default">Cobalt2</option>
-                            <option value="light">WLA-DX</option>
-                            <option value="dark">Dracula</option>
-                            <option value="pro">Dreamweaver Pro</option>
-                        </select>
-                        <span class="modal-form-label">Workspace:</span>
-                        <select class="prop-input">
-                            <option>Desarrollador</option>
-                            <option>Estándar</option>
-                        </select>
-                    </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="App.closeDialog('modal-preferences')">Cancelar</button>
+                    <button class="btn btn-primary"
+                        onclick="App.applyPreferences(); App.closeDialog('modal-preferences')">Aceptar</button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="App.closeDialog('modal-preferences')">Cancelar</button>
-                <button class="btn btn-primary"
-                    onclick="App.applyPreferences(); App.closeDialog('modal-preferences')">Aceptar</button>
             </div>
         </div>
-    </div>
 
-    <!-- ════════════════════════════════════════════════════════ -->
-    <!-- SCRIPTS -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- SCRIPTS -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- CodeMirror -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closetag.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldcode.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldgutter.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/brace-fold.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/xml-fold.min.js"></script>
 
-    <!-- ════════════════════════════════════════════════════════ -->
-    <!-- CodeMirror -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closetag.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldgutter.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/brace-fold.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/xml-fold.min.js"></script>
+        <!-- App Scripts -->
+        <script src="/static/js/toolbar.js"></script>
+        <script src="/static/js/app.js"></script>
+        <script src="/static/js/editor.js"></script>
+        <script src="/static/js/tree.js"></script>
+        <script src="/static/js/properties.js"></script>
+        <script src="/static/js/preview.js"></script>
+        <script src="/static/js/keyboard.js"></script>
+        <script src="/static/js/snippets.js"></script>
+        <script src="/static/js/themes.js"></script>
+        <script src="/static/js/layout.js"></script>
+        <script src="/static/js/pro.js"></script>
 
-    <!-- App Scripts -->
-    <script src="/static/js/toolbar.js"></script>
-    <script src="/static/js/app.js"></script>
-    <script src="/static/js/editor.js"></script>
-    <script src="/static/js/tree.js"></script>
-    <script src="/static/js/properties.js"></script>
-    <script src="/static/js/preview.js"></script>
-    <script src="/static/js/keyboard.js"></script>
-    <script src="/static/js/snippets.js"></script>
-    <script src="/static/js/themes.js"></script>
-    <script src="/static/js/layout.js"></script>
-    <script src="/static/js/pro.js"></script>
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- SISTEMA DE PANELES (Pon esto al final de todo)          -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <script src="/static/js/panels.js"></script>
 
-    <script>
-        // Funciones globales para compatibilidad con onclick
-        function switchPanel(panel) {
-            document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.panel-section').forEach(s => s.classList.remove('active'));
-            document.querySelector(`.panel-tab[data-panel="${panel}"]`).classList.add('active');
-            document.getElementById(`panel-${panel}`).classList.add('active');
-        }
-    </script>
+        <script>
+            // Inicializar los paneles una vez cargada la página
+            document.addEventListener('DOMContentLoaded', () => {
+                if (typeof Panels !== 'undefined') {
+                    Panels.init();
+                    console.log("Sistema de Paneles Iniciado Correctamente");
+                } else {
+                    console.error("Error: No se encontró el objeto Panels. ¿Se cargó panels.js?");
+                }
+            });
+        </script>
+
+        <script>
+            // Funciones globales para compatibilidad con onclick
+            function switchPanel(panel) {
+                document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.panel-section').forEach(s => s.classList.remove('active'));
+                document.querySelector(`.panel-tab[data-panel="${panel}"]`).classList.add('active');
+                document.getElementById(`panel-${panel}`).classList.add('active');
+            }
+        </script>
 </body>
 
 </html>

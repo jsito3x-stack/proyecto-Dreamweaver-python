@@ -39,6 +39,18 @@ const App = {
     recentFiles: [],
 
     /**
+     * Marcar el archivo actual como modificado
+     */
+    markDirty() {
+        if (!this.isDirty) {
+            this.isDirty = true;
+            console.log("📝 Cambios detectados sin guardar");
+            // Aquí podrías cambiar el título de la ventana o mostrar un asterisco
+            this.updateStatusBar('Archivo modificado (sin guardar)');
+        }
+    },
+
+    /**
      * Inicializar aplicación
      */
     async init() {
@@ -262,10 +274,10 @@ const App = {
     compareRemote() { this.showInfo('Función "Comparar con servidor remoto" próximamente'); },
     designNotes() { this.showInfo('Función "Design Notes" próximamente'); },
     pageProperties() { this.showInfo('Función "Propiedades de página" próximamente'); },
-    exit() { 
+    exit() {
         if (confirm('¿Estás seguro de que quieres salir?')) {
             window.close();
-            this.showInfo('Saliendo...'); 
+            this.showInfo('Saliendo...');
         }
     },
 
@@ -279,7 +291,7 @@ const App = {
     helpAccount() { this.showInfo('Accediendo a Administrar mi cuenta...'); },
     helpLogin() { this.showInfo('Iniciando sesión...'); },
     helpUpdates() { this.showInfo('Buscando actualizaciones...'); },
-    helpAbout() { this.showConfirm('Acerca de', 'Dreamweaver Python v2.0 Pro\nInspirado en el flujo de trabajo profesional.', () => {}); },
+    helpAbout() { this.showConfirm('Acerca de', 'Dreamweaver Python v2.0 Pro\nInspirado en el flujo de trabajo profesional.', () => { }); },
 
     showInfo(msg) { this.notify(msg, 'var(--info)'); },
 
@@ -442,7 +454,7 @@ const App = {
     cut() { this.notify('Cortar: No implementado en esta versión', 'var(--warning)'); },
     copy() { this.notify('Copiar: No implementado en esta versión', 'var(--warning)'); },
     paste() { this.notify('Pegar: No implementado en esta versión', 'var(--warning)'); },
-    selectAll() { if(this.codeEditor) this.codeEditor.execCommand('selectAll'); },
+    selectAll() { if (this.codeEditor) this.codeEditor.execCommand('selectAll'); },
     selectTag() { this.notify('Seleccionando etiqueta...', 'var(--accent)'); },
     preferences() { this.openDialog('modal-preferences'); },
     preferencias() { this.openDialog('modal-preferences'); },
@@ -466,7 +478,7 @@ const App = {
     toggleRulers() { this.notify('Código en vivo...', 'var(--accent)'); },
     toggleGrid() { this.notify('Inspeccionar...', 'var(--accent)'); },
     toggleGuides() { this.notify('Opciones de vista Código...', 'var(--accent)'); },
-    toggleFullScreen() { 
+    toggleFullScreen() {
         if (!document.fullscreenElement) document.documentElement.requestFullscreen();
         else document.exitFullscreen();
     },
@@ -494,7 +506,7 @@ const App = {
     manageSites() { this.openDialog('modal-site-config'); },
 
     // Ventana
-    togglePanel(panel) { 
+    togglePanel(panel) {
         this.notify(`Alternando panel: ${panel}`, 'var(--accent)');
     },
 

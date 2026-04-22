@@ -1226,8 +1226,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/xml-fold.min.js"></script>
 
         <!-- App Scripts -->
-        <script src="/static/js/toolbar.js"></script>
-        <script src="/static/js/app.js"></script>
         <script src="/static/js/editor.js"></script>
         <script src="/static/js/tree.js"></script>
         <script src="/static/js/properties.js"></script>
@@ -1235,7 +1233,9 @@
         <script src="/static/js/keyboard.js"></script>
         <script src="/static/js/snippets.js"></script>
         <script src="/static/js/themes.js"></script>
+        <script src="/static/js/toolbar.js"></script>
         <script src="/static/js/pro.js"></script>
+        <script src="/static/js/app.js"></script>
 
         <!-- ════════════════════════════════════════════════════════ -->
         <!-- SISTEMA DE PANELES (Pon esto al final de todo)          -->
@@ -1255,77 +1255,77 @@
         </script>
 
         <script>
-        // ═════════════════════════════════════════════════════════════
-        // GESTIÓN DEL RESIZER (Sustituye al antiguo Layout.js)
-        // ═══════════════════════════════════════════════════════════════
+            // ═════════════════════════════════════════════════════════════
+            // GESTIÓN DEL RESIZER (Sustituye al antiguo Layout.js)
+            // ═══════════════════════════════════════════════════════════════
 
-        const Resizer = {
-            init() {
-                this.setupRightResizer();
-            },
+            const Resizer = {
+                init() {
+                    this.setupRightResizer();
+                },
 
-            setupRightResizer() {
-                // Referencias DOM
-                const resizer = document.getElementById('resizer-right');
-                const container = document.querySelector('.app-container');
-                const leftElement = document.querySelector('.center-panel');    // Panel Central (Editor)
-                const rightElement = document.querySelector('.right-panel-container'); // Panel Derecho
+                setupRightResizer() {
+                    // Referencias DOM
+                    const resizer = document.getElementById('resizer-right');
+                    const container = document.querySelector('.app-container');
+                    const leftElement = document.querySelector('.center-panel');    // Panel Central (Editor)
+                    const rightElement = document.querySelector('.right-panel-container'); // Panel Derecho
 
-                if (!resizer || !container || !leftElement || !rightElement) {
-                    console.warn("No se encontraron elementos para redimensionar.");
-                    return;
+                    if (!resizer || !container || !leftElement || !rightElement) {
+                        console.warn("No se encontraron elementos para redimensionar.");
+                        return;
+                    }
+
+                    let startX, startWidthRight, startWidthLeft;
+
+                    // --- Evento MouseDown (Iniciar arrastre) ---
+                    resizer.addEventListener('mousedown', (e) => {
+                        e.preventDefault(); // Evitar selección de texto
+                        e.stopPropagation(); // Evitar que se abran menús
+
+                        startX = e.clientX;
+                        startWidthRight = rightElement.offsetWidth;
+                        startWidthLeft = leftElement.offsetWidth;
+
+                        document.body.style.cursor = 'col-resize';
+
+                        const onMouseMove = (e) => {
+                            const dx = e.clientX - startX;
+
+                            const newWidthRight = startWidthRight - dx; // Mover a la derecha -> Panel derecho se hace más pequeño, el centro se hace grande.
+                            const newWidthLeft = startWidthLeft + dx;
+
+                            // Restricciones básicas para que no romper el diseño
+                            if (newWidthRight >= 200 && newWidthLeft >= 200) {
+                                rightElement.style.width = `${newWidthRight}px`;
+                                leftElement.style.flex = `1 1 ${newWidthLeft}px`; // El centro se adapta
+
+                                // Opcional: Actualizar variable CSS si usas el método de CSS Variable
+                                document.documentElement.style.setProperty('--right-panel-width', `${newWidth}px`);
+                            }
+                        };
+
+                        const onMouseUp = () => {
+                            document.removeEventListener('mousemove', onMouseMove);
+                            document.removeEventListener('mouseup', onMouseUp);
+                            document.body.style.cursor = 'default';
+
+                            // Guardar el ancho para que se quede guardado al recargar la página
+                            const finalWidth = rightElement.offsetWidth;
+                            localStorage.setItem('dw-right-panel-width', finalWidth);
+                        };
+
+                        document.addEventListener('mousemove', onMouseMove);
+                        document.addEventListener('mouseup', onMouseUp);
+                    });
                 }
+            };
 
-                let startX, startWidthRight, startWidthLeft;
-
-                // --- Evento MouseDown (Iniciar arrastre) ---
-                resizer.addEventListener('mousedown', (e) => {
-                    e.preventDefault(); // Evitar selección de texto
-                    e.stopPropagation(); // Evitar que se abran menús
-
-                    startX = e.clientX;
-                    startWidthRight = rightElement.offsetWidth;
-                    startWidthLeft = leftElement.offsetWidth;
-
-                    document.body.style.cursor = 'col-resize';
-
-                    const onMouseMove = (e) => {
-                        const dx = e.clientX - startX;
-
-                        const newWidthRight = startWidthRight - dx; // Mover a la derecha -> Panel derecho se hace más pequeño, el centro se hace grande.
-                        const newWidthLeft = startWidthLeft + dx;
-
-                        // Restricciones básicas para que no romper el diseño
-                        if (newWidthRight >= 200 && newWidthLeft >= 200) {
-                            rightElement.style.width = `${newWidthRight}px`;
-                            leftElement.style.flex = `1 1 ${newWidthLeft}px`; // El centro se adapta
-                            
-                            // Opcional: Actualizar variable CSS si usas el método de CSS Variable
-                            document.documentElement.style.setProperty('--right-panel-width', `${newWidth}px`);
-                        }
-                    };
-
-                    const onMouseUp = () => {
-                        document.removeEventListener('mousemove', onMouseMove);
-                        document.removeEventListener('mouseup', onMouseUp);
-                        document.body.style.cursor = 'default';
-                        
-                        // Guardar el ancho para que se quede guardado al recargar la página
-                        const finalWidth = rightElement.offsetWidth;
-                        localStorage.setItem('dw-right-panel-width', finalWidth);
-                    };
-
-                    document.addEventListener('mousemove', onMouseMove);
-                    document.addEventListener('mouseup', onMouseUp);
-                });
-            }
-        };
-
-        // Inicializar el Resizer
-        document.addEventListener('DOMContentLoaded', () => {
-            Resizer.init();
-        });
-    </script>
+            // Inicializar el Resizer
+            document.addEventListener('DOMContentLoaded', () => {
+                Resizer.init();
+            });
+        </script>
 
 
 </body>

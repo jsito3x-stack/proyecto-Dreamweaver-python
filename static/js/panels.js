@@ -338,28 +338,61 @@ const Panels = {
      * Acoplar a una zona (Izquierda, Derecha, Abajo)
      */
     dockToZone(panelId, zone) {
-        // 1. Sacar de flotantes
-        this.floatingPanels = this.floatingPanels.filter(fp => fp.id !== panelId);
-        const win = document.getElementById(`float-${panelId}`);
+        const winId = `float-${panelId}`;
+        const win = document.getElementById(winId);
         if (win) win.remove();
 
+        // Limpiar clases de zona
         document.querySelectorAll('.dock-zone').forEach(el => el.classList.remove('active'));
 
-        // 2. Quitar de ocultos (si se restauró desde menu)
+        // Quitar de ocultos (si lo restauramos)
         this.hiddenPanels = this.hiddenPanels.filter(id => id !== panelId);
 
-        // 3. Lógica por zona
+        // Lógica por zona
         if (zone === 'right') {
             this.addPanelToRight(panelId);
+            console.log(`Panel '${panelId}' acoplado a la DERECHA.`);
         }
         else if (zone === 'left') {
-            this.dockToLeft(panelId);
+            // --- ACOPLAR A LA IZQUIERDA (REAL) ---
+            const leftPanel = document.querySelector('.left-panel');
+            const toolbar = document.querySelector('.side-toolbar');
+            const resizer = document.getElementById('resizer-left'); // Asegúrate que este elemento existe en tu HTML
+
+            // Mostrar barra lateral izquierda si estaba oculta
+            if (leftPanel) leftPanel.style.display = 'flex';
+            if (resizer) resizer.style.display = 'block'; // Mostrar resizer izquierdo si existe
+
+            // Limpiar contenido viejo de la izquierda
+            if (leftPanel) {
+                // NOTA: En este sistema, el panel izquierdo no usa "Grupos" ni "Pestañas" como el derecho. 
+                // Si quieres que tenga una pestaña propia, tendrías que añadir lógica similar a la derecha.
+                // Para que sea idéntico, le vamos a poner el título
+                if (leftPanel.innerHTML.trim() === '') {
+                    leftPanel.innerHTML = `<div class="panel-group" style="height:100%; display:flex; flex-direction:column; border-bottom:1px solid var(--border);">
+                        <div class="panel-tab-bar">
+                            <div class="panel-tab active" title="${this.registry[panelId].title}">
+                                <i class="${this.registry[panelId].icon}"></i> ${this.registry[panelId].title}
+                            </div>
+                        </div>
+                        <div class="panel-content-area" style="flex:1; overflow:auto; padding:10px;">
+                            <div style="text-align:center; color:var(--text-muted); padding-top:20px;">
+                                <i class="fas fa-sitemap" style="font-size: 32px; margin-bottom: 10px; opacity:0.3;"></i><br>
+                                Árbol de archivos (Panel ${this.registry[panelId].title})
+                            </div>
+                        </div>
+                    </div>`;
+                }
+            }
+
+            console.log(`Panel '${panelId}' acoplado a la IZQUIERDA.`);
         }
         else if (zone === 'bottom') {
             this.dockToBottom(panelId);
         }
 
         this.saveLayout();
+        console.log(`Panel '${panelId}' guardado.`);
     },
 
     /**
@@ -397,15 +430,16 @@ const Panels = {
 
     /**
      * Acoplar ABAJO (Footer)
-     * Crea un panel temporal en la parte inferior del editor
+     * Crea un panel temporal en la parte inferior
      */
     dockToBottom(panelId) {
         const footer = document.querySelector('.status-bar');
         if (!footer) { this.addPanelToRight(panelId); return; }
 
-        // Buscar si ya existe un bottom-panel
+        // Buscar si ya existe un bottom-dock-container
         let bottomContainer = document.getElementById('bottom-dock-container');
         if (!bottomContainer) {
+            // Crear el contenedor si no existe
             bottomContainer = document.createElement('div');
             bottomContainer.id = 'bottom-dock-container';
             bottomContainer.style.height = '200px';
@@ -413,12 +447,14 @@ const Panels = {
             bottomContainer.style.background = 'var(--bg-secondary)';
             bottomContainer.style.borderTop = '1px solid var(--border)';
 
-            // Insertar antes de la barra de estado
+            // Insertar justo encima de la barra de estado
             footer.parentNode.insertBefore(bottomContainer, footer);
         }
 
-        bottomContainer.innerHTML = ''; // Limpiar
+        // Limpiar contenido viejo del fondo
+        bottomContainer.innerHTML = '';
 
+        // Crear estructura de grupo simple para el fondo
         const group = document.createElement('div');
         group.className = 'panel-group';
         group.style.height = '100%';
@@ -431,6 +467,9 @@ const Panels = {
         const content = document.createElement('div');
         content.className = 'panel-content-area';
         content.style.height = '100%';
+        content.id = `bottom-content-${panelId}`; // ID único para el contenido
+
+        // Rellenar contenido (Si no existe función específica, usamos el genérico)
         this.renderPanelContent(content, panelId);
 
         group.appendChild(header);
@@ -439,42 +478,47 @@ const Panels = {
     },
 
     /**
-     * Alternar Visibilidad (Menú Ventana)
+     * Alternar Visibilidad desde el Menú Ventana
      * Lógica: Si está oculto -> Mostrar (donde estaba). Si está flotando -> Ocultar. Si está en Grid -> Ocultar.
      */
     togglePanel(panelId) {
-        // 1. Si está oculto -> Restaurar
-        if (this.hiddenPanels.includes(panelId)) {
-            this.hiddenPanels = this.hiddenPanels.filter(id => id !== panelId);
-            // Lo movemos a flotantes para que se vuelva a crear en su posición guardada
-            this.floatingPanels.push({
-                id: panelId,
-                x: 100, y: 100, width: 300, height: 400
-            });
-            this.saveLayout();
-            this.renderFloatingPanels();
-            return;
-        }
-
-        // 2. Si está flotando -> Ocultar (Guardar posición)
-        const isFloating = this.floatingPanels.find(fp => fp.id === panelId);
-        if (isFloating) {
+        // 1. Si está flotando -> Ocultar (Guardar posición)
+        const winId = `float-${panelId}`;
+        if (document.getElementById(winId)) {
             this.hidePanel(panelId);
+            // Notificación de estado
+            console.log(`Panel '${panelId}' ocultado.`);
             return;
         }
 
-        // 3. Si está en Grid -> Ocultar (Se pierde del grid, se guarda memoria como flotante inactiva si quisieras, pero aquí lo mandamos a ocultos directo)
+        // 2. Si está en Grid -> Ocultar (Moverse a ocultos)
         const inGrid = this.groups.find(g => g.panels.includes(panelId));
         if (inGrid) {
-            // Lo quitamos del grid
-            inGrid.panels = inGrid.panels.filter(id => id !== panelId);
-            if (inGrid.activePanel === panelId) inGrid.activePanel = inGrid.panels[0] || null;
-
-            // Lo ocultamos
-            this.hiddenPanels.push(panelId);
-            this.saveLayout();
-            this.render();
+            this.closePanel(panelId);
+            console.log(`Panel '${panelId}' ocultado (Grid).`);
             return;
+        }
+
+        // 3. Si está Oculto -> Mostrar (Si estaba flotante -> Flota. Si estaba en Grid -> Grid)
+        if (this.hiddenPanels.includes(panelId)) {
+            this.hiddenPanels = this.hiddenPanels.filter(id => id !== panelId);
+
+            // Buscamos si estaba guardado como flotante
+            const savedFloats = localStorage.getItem('dw-panels-floating');
+            const floatingData = savedFloats ? JSON.parse(savedFloats) : { floating: [], hidden: [] };
+
+            const fp = floatingData.floating.find(f => f.id === panelId);
+
+            if (fp) {
+                // Si estaba guardado como flotante, restauramos ese panel flotante
+                this.floatingPanels.push(fp);
+                this.renderFloatingPanels(); // Esto hace que vuelva a aparecer donde lo dejaste
+                console.log(`Panel '${panelId}' restaurado (Flotante).`);
+            } else {
+                // Si solo estaba oculto del grid, devolverlo al Grid
+                this.addPanelToRight(panelId);
+                console.log(`Panel '${panelId}' restaurado (Grid).`);
+            }
         }
     },
 
@@ -609,20 +653,190 @@ const Panels = {
         });
     },
 
-    // Helpers de contenido HTML (igual que antes, abreviado)
+    /**
+     * Actualiza el contenido del panel Resultados (Salida, Buscar, etc.)
+     * Se llama cada vez que se renderiza el panel "Resultados"
+     */
+    updateResultsContent(container) {
+        const body = container.querySelector('#res-content-body');
+        if (!body) return;
+
+        const tab = this.resultsState.activeTab;
+        let contentHtml = '';
+
+        // Lógica según la pestaña activa
+        if (tab === 'salida') {
+            contentHtml = `
+                <div class="log-entry">> Servidor iniciado...</div>
+                <div class="log-entry success">> Conectado al localhost:5000</div>
+                <div class="log-entry">> Esperando comandos...</div>
+            `;
+        } else if (tab === 'buscar') {
+            contentHtml = `
+                <div style="padding:5px;">
+                    <input type="text" placeholder="Buscar en archivos..." style="width:100%; border:1px solid var(--border); background: var(--bg-input); color: var(--text-primary); padding:4px;">
+                    <div style="margin-top:10px; font-size: 12px; color: var(--text-secondary);">0 resultados encontrados.</div>
+                </div>
+            `;
+        } else if (tab === 'validacion') {
+            contentHtml = `
+                <div style="padding:5px;">
+                    <button style="font-size:10px;">Validar documento actual</button>
+                    <div style="margin-top:10px; color: var(--success);">Sin errores de marcado HTML5.</div>
+                </div>
+            `;
+        } else if (tab === 'vinculos') {
+            contentHtml = `
+                <div style="padding:5px;">
+                    <div style="margin-bottom:5px;"><strong>Enlace roto:</strong> index.html</div>
+                    <div style="margin-bottom:5px;"><strong>Enlace roto:</strong> contacto.html</div>
+                    <div style="margin-bottom:5px;"><strong>Enlace roto:</strong> sobre-nosotros.html</div>
+                </div>
+            `;
+        } else {
+            contentHtml = `<div style="padding:10px; text-align: center; opacity:0.5;">Vista ${tab} no implementada aún.</div>`;
+        }
+
+        body.innerHTML = contentHtml;
+    },
+
+    // ════════════════════════════════════════════════════════════════
+    // GENERADORES DE HTML (Helper Methods)
+    // ════════════════════════════════════════════════════════════════
+    getResultsPanelHTML() {
+        // Estructura de pestañas para Resultados (Salida, Buscar, etc.)
+        const subTabs = [
+            { id: 'salida', label: 'Salida' },
+            { id: 'buscar', label: 'Buscar' },
+            { id: 'validacion', label: 'Validación' },
+            { id: 'informes', label: 'Informes' },
+            { id: 'ftp', label: 'Registro FTP' }
+        ];
+
+        let tabsHtml = subTabs.map(t =>
+            `<button class="res-sub-tab ${this.resultsState.activeTab === t.id ? 'active' : ''}" 
+                    data-tab="${t.id}">${t.label}</button>`
+        ).join('');
+
+        return `
+            <div style="display:flex; flex-direction:column; height:100%;">
+                <div class="res-tabs-header">
+                    ${tabsHtml}
+                </div>
+                <div id="res-content-body" class="res-content-body">
+                    <!-- El contenido dinámico se carga aquí -->
+                </div>
+            </div>
+        `;
+    },
+
+    getFilesPanelHTML() {
+        return `
+            <div class="panel-widget-title">
+                <i class="fas fa-folder"></i> Archivos
+                <div style="float:right; font-size:10px; cursor:pointer;" title="Actualizar"><i class="fas fa-sync-alt"></i></div>
+            </div>
+            <div id="panel-file-tree-container" style="overflow:auto; flex:1;">
+                <div style="padding:10px; text-align:center; color:var(--text-muted);">
+                    <i class="fas fa-folder-open" style="font-size: 24px; display:block; margin-bottom:8px; opacity:0.3;"></i>
+                    <p>Sitio Local</p>
+                </div>
+            </div>
+        `;
+    },
+
+    getPropertiesPanelHTML() {
+        return `
+            <div class="panel-widget-title">
+                <i class="fas fa-sliders-h"></i> Propiedades
+            </div>
+            <div style="padding: 5px;">
+                <div class="prop-row">
+                    <div class="prop-label">ID</div>
+                    <input type="text" class="prop-input" placeholder="mi_element">
+                </div>
+                <div class="prop-row">
+                    <div class="prop-label">Clase</div>
+                    <input type="text" class="prop-input" placeholder="clase1 clase2">
+                </div>
+            </div>
+        `;
+    },
+
+    getjQueryMobilePanelHTML() {
+        return `
+            <div class="panel-widget-title">
+                <i class="fas fa-mobile-alt"></i> jQuery Mobile
+            </div>
+            <div style="padding: 10px; color: var(--text-muted); text-align: center;">
+                <i class="fas fa-mobile-alt" style="font-size: 32px; display:block; margin-bottom:8px; opacity:0.3;"></i>
+                <p>Componentes jQuery Mobile</p>
+            </div>
+        `;
+    },
+
+    getGitPanelHTML() {
+        return `
+            <div class="panel-widget-title">
+                <i class="fas fa-code-branch"></i> Git
+            </div>
+            <div style="padding:10px; color: var(--text-muted); text-align: center;">
+                <i class="fas fa-code-branch" style="font-size: 24px; display:block; margin-bottom:8px; opacity:0.3;"></i>
+                <p>Control de versiones</p>
+            </div>
+        `;
+    },
+
+    // ═══════════════════════════════════════════════════════════
+    // RENDERIZAR CONTENIDO DE PANELES
+    // ═════════════════════════════════════════════════════════════
     renderPanelContent(container, panelId) {
+        let html = '';
         if (!panelId) { container.innerHTML = ''; return; }
+
         const p = this.registry[panelId];
         if (!p) { container.innerHTML = ''; return; }
 
+        // Lógica específica para paneles complejos
         if (panelId === 'resultados') {
-            container.innerHTML = `<div class="res-tabs-header"><button class="res-sub-tab active">Salida</button><button class="res-sub-tab">Buscar</button></div><div class="res-content-body">Log...</div>`;
+            html = this.getResultsPanelHTML();
         } else if (panelId === 'archivos') {
-            container.innerHTML = `<div class="panel-widget-title">Archivos</div><div style="padding:10px; color:#666;">Árbol de archivos...</div>`;
+            html = this.getFilesPanelHTML();
         } else if (panelId === 'propiedades') {
-            container.innerHTML = `<div class="panel-widget-title">Propiedades</div><div style="padding:5px;"><div class="prop-row"><div class="prop-label">ID</div><input type="text" class="prop-input"></div></div>`;
+            html = this.getPropertiesPanelHTML();
+        } else if (panelId === 'jquery-mobile') {
+            html = this.getjQueryMobilePanelHTML();
+        } else if (panelId === 'git') {
+            html = this.getGitPanelHTML();
         } else {
-            container.innerHTML = `<div class="dw-pro-empty"><i class="${p.icon}"></i><br>${p.title}</div>`;
+            // Placeholder genérico para el resto
+            html = `
+                <div class="panel-widget-title">
+                    <i class="${p.icon}"></i> ${p.title}
+                </div>
+                <div class="dw-pro-empty">
+                    <p>Contenido del panel <strong>${p.title}</strong>.</p>
+                    <small style="opacity:0.5">Funcionalidad en desarrollo.</small>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+
+        // --- POST-RENDER LOGIC (Vincular eventos a sub-pestañas) ---
+        if (panelId === 'resultados') {
+            const tabs = container.querySelectorAll('.res-sub-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    e.target.classList.add('active');
+                    const tabName = e.target.dataset.tab;
+                    // Actualizar estado lógico y re-renderizar solo el contenido interno
+                    this.resultsState.activeTab = tabName;
+                    this.updateResultsContent(container);
+                });
+            });
+            // Cargar contenido inicial de la sub-pestaña activa
+            this.updateResultsContent(container);
         }
     },
 

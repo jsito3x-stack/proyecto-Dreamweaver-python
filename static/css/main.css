@@ -111,13 +111,14 @@ body {
 .menu-bar-container {
     grid-row: 1;
     grid-column: 1 / -1;
+    position: relative;
     display: flex;
     align-items: center;
     padding: 0 16px;
     height: 32px;
     background: var(--bg-secondary);
     border-bottom: 1px solid var(--border);
-    z-index: 1000;
+    z-index: 300000;
 }
 
 .docs-bar-container {
@@ -195,7 +196,7 @@ body {
     border: 1px solid var(--border);
     border-radius: 4px;
     box-shadow: var(--shadow-lg);
-    z-index: 2000;
+    z-index: 300001;
     padding: 4px 0;
     max-height: calc(100vh - 60px);
     overflow-y: auto;

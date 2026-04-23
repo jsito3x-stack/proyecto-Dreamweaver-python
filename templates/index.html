@@ -488,7 +488,7 @@
                         <div class="dropdown-item" onclick="App.notify('Mostar paneles','var(--accent)')">
                             <div class="item-main">Mostar paneles</div><span class="shortcut">F4</span>
                         </div>
-                        <div class="dropdown-item" onclick="App.notify('Barras de herramientas','var(--accent)')">
+                        <div class="dropdown-item" onclick="Panels.toggleToolbar()">
                             <div class="item-main">Barras de herramientas</div>
                         </div>
                         <div class="dropdown-item" onclick="App.notify('Organizar','var(--accent)')">
@@ -720,7 +720,13 @@
             </div>
         </nav>
 
-
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- DOCK IZQUIERDO - Paneles acoplables al lado izquierdo -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <div id="left-dock-container" class="left-dock-container"></div>
+        <div id="resizer-left-dock" class="resizer resizer-left-dock">
+            <div class="resizer-handle">⋮</div>
+        </div>
 
         <!-- ════════════════════════════════════════════════════════ -->
         <!-- PANEL CENTRAL -->
@@ -802,6 +808,11 @@
         <!-- ════════════════════════════════════════════════════════ -->
         <!-- Usamos ambas clases para mantener compatibilidad de estilos -->
         <aside class="right-panel right-panel-container"></aside>
+
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- DOCK INFERIOR - Paneles acoplables en la parte inferior -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <div id="bottom-dock-container" class="bottom-dock-container"></div>
 
         <!-- ════════════════════════════════════════════════════════ -->
         <!-- STATUS BAR -->
@@ -1227,7 +1238,6 @@
 
         <!-- App Scripts -->
         <script src="/static/js/editor.js"></script>
-        <script src="/static/js/tree.js"></script>
         <script src="/static/js/properties.js"></script>
         <script src="/static/js/preview.js"></script>
         <script src="/static/js/keyboard.js"></script>

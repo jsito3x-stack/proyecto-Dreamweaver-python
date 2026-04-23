@@ -63,8 +63,10 @@ const App = {
         // Inicializar editores CodeMirror
         await Editor.init();
 
-        // Inicializar árbol de estructura
-        Tree.init();
+        // Inicializar árbol de estructura (opcional)
+        if (window.Tree && typeof Tree.init === 'function') {
+            Tree.init();
+        }
 
         // Inicializar panel de propiedades
         Properties.init();
@@ -157,7 +159,9 @@ const App = {
             const response = await fetch('/api/project');
             const data = await response.json();
             if (data.success) {
-                Tree.renderFileTree(data.archivos, data.nombre_proyecto || 'Proyecto');
+                if (window.Tree && typeof Tree.renderFileTree === 'function') {
+                    Tree.renderFileTree(data.archivos, data.nombre_proyecto || 'Proyecto');
+                }
             }
         } catch (error) {
             this.showError('No se pudo cargar el proyecto');
@@ -172,12 +176,18 @@ const App = {
             const response = await fetch('/api/structure');
             const data = await response.json();
             if (data.success) {
-                Tree.renderStructure(data.structure);
+                if (window.Tree && typeof Tree.renderStructure === 'function') {
+                    Tree.renderStructure(data.structure);
+                }
             } else {
-                Tree.renderStructure(null);
+                if (window.Tree && typeof Tree.renderStructure === 'function') {
+                    Tree.renderStructure(null);
+                }
             }
         } catch (error) {
-            Tree.renderStructure(null);
+            if (window.Tree && typeof Tree.renderStructure === 'function') {
+                Tree.renderStructure(null);
+            }
         }
     },
 
@@ -440,7 +450,9 @@ const App = {
         // Detectar clics en la vista previa
         window.addEventListener('preview-click', (e) => {
             if (e.detail && e.detail.xpath) {
-                Tree.selectStructureNode(e.detail.xpath);
+                if (window.Tree && typeof Tree.selectStructureNode === 'function') {
+                    Tree.selectStructureNode(e.detail.xpath);
+                }
             }
         });
     },

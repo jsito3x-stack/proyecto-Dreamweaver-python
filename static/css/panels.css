@@ -518,6 +518,11 @@
     border-color: var(--accent);
 }
 
+/* Para el panel Archivos flotante, se oculta la cabecera generica para evitar doble header */
+#float-archivos .floating-header {
+    display: none;
+}
+
 /* ═══════════════════════════════════════════════════════════
    5. ZONAS DE ACOPLAMIENTO (LÍNEAS AZULES)
    IMPORTANTE: NO usar 'display: none' o el JS no detectará la zona.
@@ -554,6 +559,401 @@
     left: 0;
     width: 50px;
     border-right: 4px solid var(--accent);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PANEL DE ARCHIVOS - MENÚS Y SELECTORES
+   ═══════════════════════════════════════════════════════════ */
+
+.files-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    position: relative;
+}
+
+.files-panel-toolbar {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+/* Trigger del menú hamburguesa */
+.files-menu-trigger {
+    position: relative;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 3px;
+    transition: background 0.2s;
+}
+
+.files-menu-trigger:hover {
+    background: var(--bg-hover);
+}
+
+.files-menu-trigger i {
+    transition: transform 0.2s;
+}
+
+.files-menu-trigger:hover i {
+    transform: scale(1.1);
+}
+
+/* Menú contextual del panel de archivos */
+.files-context-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--bg-files-area, #162c3e);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    min-width: 220px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 10001;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.files-menu-trigger:hover .files-context-menu,
+.files-menu-trigger.active .files-context-menu {
+    display: flex;
+}
+
+/* Items del menú contextual */
+.files-context-menu .dropdown-item {
+    position: relative;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--text-primary);
+    transition: background 0.15s, color 0.15s;
+    cursor: pointer;
+    white-space: nowrap;
+    text-transform: none !important;
+}
+
+.files-context-menu .dropdown-item:hover {
+    background: var(--bg-hover);
+    color: var(--accent);
+}
+
+.files-context-menu .dropdown-item .item-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.files-context-menu .dropdown-item .shortcut {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: 8px;
+    opacity: 0.7;
+    white-space: nowrap;
+}
+
+.files-context-menu .dropdown-item .arrow-sub {
+    font-size: 10px;
+    margin-left: 8px;
+    opacity: 0.5;
+}
+
+/* Submenús */
+.files-context-menu .dropdown-item .submenu {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background: var(--bg-files-area, #162c3e);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    min-width: 220px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: none;
+    flex-direction: column;
+    margin-left: 2px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.files-context-menu .dropdown-item:hover .submenu {
+    display: flex;
+}
+
+.files-context-menu .submenu .dropdown-item {
+    font-weight: normal;
+}
+
+/* Divisores en menús */
+.files-context-menu .divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 4px 0;
+    opacity: 0.5;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PANEL DE ARCHIVOS - Estructura Dreamweaver
+   ═══════════════════════════════════════════════════════════ */
+
+.files-window-shell {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    background: var(--bg-secondary);
+}
+
+#float-archivos {
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* Barra superior de ventana */
+.files-panel-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 6px;
+    height: 18px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+    flex-shrink: 0;
+}
+
+.files-topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.files-collapse-btn,
+.files-close-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 0 2px;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: lowercase;
+}
+
+.files-collapse-btn:hover,
+.files-close-btn:hover {
+    color: var(--accent);
+}
+
+/* Barra de titulo */
+.files-panel-title-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 24px;
+    padding: 0 6px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    flex-shrink: 0;
+}
+
+.files-title {
+    color: var(--text-primary);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Fila selector + administrar */
+.files-location-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 6px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    flex-shrink: 0;
+}
+
+.files-site-selector {
+    display: flex;
+    align-items: center;
+}
+
+.files-dropdown {
+    width: 100%;
+    height: 22px;
+    padding: 1px 6px;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 2px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.files-dropdown:hover {
+    border-color: var(--accent);
+}
+
+.files-dropdown:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.files-manage-link {
+    background: transparent;
+    border: none;
+    color: var(--accent);
+    font-size: 11px;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.files-manage-link:hover {
+    color: var(--text-primary);
+}
+
+/* Cabecera de columnas */
+.files-columns-header {
+    display: grid;
+    grid-template-columns: 1fr 86px;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    font-size: 12px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.files-col-name i {
+    font-size: 10px;
+    margin-left: 4px;
+}
+
+.files-col-size {
+    text-align: left;
+}
+
+/* Arbol */
+.files-tree-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: var(--bg-files-area, #162c3e);
+}
+
+.files-tree-item {
+    border-bottom: none;
+}
+
+.files-tree-header {
+    display: grid;
+    grid-template-columns: 14px 16px 1fr 86px;
+    align-items: center;
+    column-gap: 5px;
+    padding: 3px 8px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 12px;
+}
+
+.files-tree-header:hover,
+.files-leaf-row:hover {
+    background: var(--bg-hover);
+}
+
+.files-tree-arrow {
+    width: 14px;
+    text-align: center;
+    font-size: 9px;
+    transition: transform 0.2s;
+    color: var(--text-muted);
+}
+
+.files-tree-arrow.rotated {
+    transform: rotate(90deg);
+}
+
+.files-node-icon {
+    width: 16px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--accent);
+}
+
+.files-node-name,
+.files-leaf-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.files-node-size,
+.files-leaf-size {
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+.files-tree-children {
+    margin-left: 12px;
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.files-leaf-row {
+    display: grid;
+    grid-template-columns: 35px 1fr 86px;
+    align-items: center;
+    padding: 2px 8px;
+    font-size: 12px;
+}
+
+.files-leaf-row .files-node-icon {
+    grid-column: 1;
+    justify-self: center;
+}
+
+.files-leaf-name {
+    grid-column: 2;
+}
+
+.files-leaf-size {
+    grid-column: 3;
+}
+
+/* Footer */
+.files-panel-footer {
+    height: 26px;
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 8px;
+    flex-shrink: 0;
+}
+
+.files-footer-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 15px;
+    padding: 0;
+}
+
+.files-footer-btn:hover {
+    color: var(--accent);
 }
 
 .dock-zone.bottom {

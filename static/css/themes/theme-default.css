@@ -37,6 +37,8 @@
     --bg-input: #193549;
     --bg-hover: #1F4662;
     --bg-active: #0d3a58;
+    /* Fondo intermedio para zona de archivos y menús */
+    --bg-files-area: #162c3e;
 
     /* === TEXTO COBALT2 === */
     --text-primary: #ffffff;

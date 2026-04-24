@@ -1453,14 +1453,226 @@ const Panels = {
 
     getFilesPanelHTML() {
         return `
-            <div class="panel-widget-title">
-                <i class="fas fa-folder"></i> Archivos
-                <div style="float:right; font-size:10px; cursor:pointer;" title="Actualizar"><i class="fas fa-sync-alt"></i></div>
-            </div>
-            <div id="panel-file-tree-container" style="overflow:auto; flex:1;">
-                <div style="padding:10px; text-align:center; color:var(--text-muted);">
-                    <i class="fas fa-folder-open" style="font-size: 24px; display:block; margin-bottom:8px; opacity:0.3;"></i>
-                    <p>Sitio Local</p>
+            <div class="files-window-shell">
+                <!-- Barra superior de ventana: controles a la derecha -->
+                <div class="files-panel-topbar">
+                    <div class="files-topbar-actions">
+                        <button class="files-collapse-btn" onclick="FilePanel.collapsePanel()" title="Minimizar a icono">&lt;&lt;</button>
+                        <button class="files-close-btn" onclick="FilePanel.close()" title="Cerrar">x</button>
+                    </div>
+                </div>
+
+                <!-- Barra de titulo: nombre del panel + menu -->
+                <div class="files-panel-title-bar">
+                    <div class="files-title">Archivos</div>
+                    <div class="files-menu-trigger" title="Menu y submenus de la ventana">
+                        <i class="fas fa-bars"></i>
+                        <div class="files-context-menu">
+                        <!-- Archivo -->
+                        <div class="dropdown-item" style="font-weight:600; cursor:pointer;">
+                            <div class="item-main"><i class="fas fa-file"></i>Archivo</div>
+                            <i class="fas fa-chevron-right arrow-sub"></i>
+                            <div class="submenu">
+                                <div class="dropdown-item" onclick="FilePanel.newFile()">
+                                    <div class="item-main"><i class="fas fa-file-alt"></i>Nuevo archivo</div>
+                                    <span class="shortcut">Ctrl+Mayús+N</span>
+                                </div>
+                                <div class="dropdown-item" onclick="FilePanel.newFolder()">
+                                    <div class="item-main"><i class="fas fa-folder-plus"></i>Nueva carpeta</div>
+                                    <span class="shortcut">Ctrl+Alt+Mayús+N</span>
+                                </div>
+                                <div class="dropdown-item" onclick="FilePanel.open()">
+                                    <div class="item-main"><i class="fas fa-folder-open"></i>Abrir</div>
+                                </div>
+                                <div class="divider"></div>
+                                <div class="dropdown-item" onclick="FilePanel.rename()">
+                                    <div class="item-main"><i class="fas fa-i-cursor"></i>Cambiar nombre</div>
+                                    <span class="shortcut">F2</span>
+                                </div>
+                                <div class="dropdown-item" onclick="FilePanel.delete()">
+                                    <div class="item-main"><i class="fas fa-trash"></i>Eliminar</div>
+                                    <span class="shortcut">Supr</span>
+                                </div>
+                                <div class="dropdown-item" onclick="FilePanel.unlock()">
+                                    <div class="item-main"><i class="fas fa-lock-open"></i>Desbloquear</div>
+                                </div>
+                                <div class="divider"></div>
+                                <div class="dropdown-item" onclick="FilePanel.checkFiles()">
+                                    <div class="item-main"><i class="fas fa-check-circle"></i>Comprobar archivos</div>
+                                </div>
+                                <div class="dropdown-item" style="cursor:pointer;">
+                                    <div class="item-main"><i class="fas fa-eye"></i>Vista previa en tiempo real</div>
+                                    <i class="fas fa-chevron-right arrow-sub"></i>
+                                    <div class="submenu">
+                                        <div class="dropdown-item" onclick="FilePanel.previewChrome()">
+                                            <div class="item-main"><i class="fab fa-chrome"></i>Google Chrome</div>
+                                        </div>
+                                        <div class="dropdown-item" onclick="FilePanel.previewIE()">
+                                            <div class="item-main"><i class="fab fa-internet-explorer"></i>Internet Explorer</div>
+                                        </div>
+                                        <div class="dropdown-item" onclick="FilePanel.previewEdge()">
+                                            <div class="item-main"><i class="fab fa-edge"></i>Microsoft Edge</div>
+                                        </div>
+                                        <div class="divider"></div>
+                                        <div class="dropdown-item" onclick="FilePanel.editBrowsersList()">
+                                            <div class="item-main"><i class="fas fa-edit"></i>Editar lista de navegadores...</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Edición -->
+                        <div class="dropdown-item" style="font-weight:600; cursor:pointer;">
+                            <div class="item-main"><i class="fas fa-pen"></i>Edición</div>
+                            <i class="fas fa-chevron-right arrow-sub"></i>
+                            <div class="submenu">
+                                <div class="dropdown-item" onclick="FilePanel.cut()">
+                                    <div class="item-main"><i class="fas fa-cut"></i>Cortar</div>
+                                    <span class="shortcut">Ctrl+X</span>
+                                </div>
+                                <div class="dropdown-item" onclick="FilePanel.copy()">
+                                    <div class="item-main"><i class="fas fa-copy"></i>Copiar</div>
+                                    <span class="shortcut">Ctrl+C</span>
+                                </div>
+                                <div class="dropdown-item" onclick="FilePanel.paste()">
+                                    <div class="item-main"><i class="fas fa-paste"></i>Pegar</div>
+                                    <span class="shortcut">Ctrl+V</span>
+                                </div>
+                                <div class="dropdown-item" onclick="FilePanel.duplicate()">
+                                    <div class="item-main"><i class="fas fa-copy"></i>Duplicar</div>
+                                    <span class="shortcut">Ctrl+D</span>
+                                </div>
+                                <div class="divider"></div>
+                                <div class="dropdown-item" onclick="FilePanel.selectAll()">
+                                    <div class="item-main">Seleccionar todo</div>
+                                    <span class="shortcut">Ctrl+A</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Administrar sitio -->
+                        <div class="dropdown-item" onclick="FilePanel.manageSite()">
+                            <div class="item-main"><i class="fas fa-cogs"></i>Administrar sitio...</div>
+                        </div>
+                        <!-- Expandir panel -->
+                        <div class="dropdown-item" onclick="FilePanel.expandPanel()">
+                            <div class="item-main"><i class="fas fa-expand"></i>Expandir panel de archivos</div>
+                        </div>
+                        <!-- Actualizar -->
+                        <div class="dropdown-item" onclick="FilePanel.refresh()">
+                            <div class="item-main"><i class="fas fa-sync-alt"></i>Actualizar</div>
+                            <span class="shortcut">F5</span>
+                        </div>
+                        <div class="divider"></div>
+                        <!-- Ayuda -->
+                        <div class="dropdown-item" onclick="FilePanel.help()">
+                            <div class="item-main"><i class="fas fa-question-circle"></i>Ayuda</div>
+                        </div>
+                        <div class="divider"></div>
+                        <!-- Cerrar grupo de fichas -->
+                        <div class="dropdown-item" onclick="FilePanel.closeTabGroup()">
+                            <div class="item-main"><i class="fas fa-times-circle"></i>Cerrar grupo de fichas</div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selector y administrar sitios en la misma fila -->
+                <div class="files-location-row">
+                    <div class="files-site-selector">
+                        <select id="site-dropdown" class="files-dropdown" onchange="FilePanel.changeSite(this.value)">
+                            <option value="root">Escritorio</option>
+                            <option value="a">Unidad de disquete (A:)</option>
+                            <option value="c">Disco local (C:)</option>
+                            <option value="d">Unidad de CD (D:)</option>
+                        </select>
+                    </div>
+                    <button class="files-manage-link" onclick="FilePanel.manageSite()">Administrar sitios</button>
+                </div>
+
+                <!-- Cabecera de columnas -->
+                <div class="files-columns-header">
+                    <div class="files-col-name">Archivos locales <i class="fas fa-arrow-down"></i></div>
+                    <div class="files-col-size">Tamaño</div>
+                </div>
+
+                <!-- Arbol de carpetas y discos -->
+                <div id="panel-file-tree-container" class="files-tree-scroll">
+                    <div class="files-tree-item">
+                        <div class="files-tree-header" onclick="FilePanel.toggleTree('desktop', event)">
+                            <i class="fas fa-chevron-down files-tree-arrow rotated" id="arrow-desktop"></i>
+                            <i class="fas fa-desktop files-node-icon"></i>
+                            <span class="files-node-name">Escritorio</span>
+                            <span class="files-node-size"></span>
+                        </div>
+                        <div class="files-tree-children" id="tree-desktop" style="display: block;">
+                            <div class="files-tree-item">
+                                <div class="files-tree-header" onclick="FilePanel.toggleTree('this-pc', event)">
+                                    <i class="fas fa-chevron-down files-tree-arrow rotated" id="arrow-this-pc"></i>
+                                    <i class="fas fa-desktop files-node-icon"></i>
+                                    <span class="files-node-name">Este equipo</span>
+                                    <span class="files-node-size"></span>
+                                </div>
+                                <div class="files-tree-children" id="tree-this-pc" style="display: block;">
+                                    <div class="files-leaf-row">
+                                        <span class="files-leaf-name"><i class="fas fa-compact-disc files-node-icon"></i>Unidad de DVD (D:)</span>
+                                        <span class="files-leaf-size"></span>
+                                    </div>
+                                    <div class="files-leaf-row">
+                                        <span class="files-leaf-name"><i class="fas fa-hdd files-node-icon"></i>Disco local (C:)</span>
+                                        <span class="files-leaf-size">98.40GB</span>
+                                    </div>
+                                    <div class="files-leaf-row">
+                                        <span class="files-leaf-name"><i class="fas fa-floppy-disk files-node-icon"></i>Unidad de disquete (A:)</span>
+                                        <span class="files-leaf-size"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="files-tree-item">
+                                <div class="files-tree-header" onclick="FilePanel.toggleTree('network', event)">
+                                    <i class="fas fa-chevron-down files-tree-arrow rotated" id="arrow-network"></i>
+                                    <i class="fas fa-network-wired files-node-icon"></i>
+                                    <span class="files-node-name">Red</span>
+                                    <span class="files-node-size"></span>
+                                </div>
+                                <div class="files-tree-children" id="tree-network" style="display: block;">
+                                    <div class="files-leaf-row">
+                                        <span class="files-leaf-name"><i class="fas fa-folder files-node-icon"></i>DESKTOP-9HU8...</span>
+                                        <span class="files-leaf-size"></span>
+                                    </div>
+                                    <div class="files-leaf-row">
+                                        <span class="files-leaf-name"><i class="fas fa-folder files-node-icon"></i>tsclient</span>
+                                        <span class="files-leaf-size"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="files-tree-item">
+                                <div class="files-tree-header" onclick="FilePanel.toggleTree('desktop-items', event)">
+                                    <i class="fas fa-chevron-right files-tree-arrow" id="arrow-desktop-items"></i>
+                                    <i class="fas fa-folder files-node-icon"></i>
+                                    <span class="files-node-name">Elementos de escritorio</span>
+                                    <span class="files-node-size"></span>
+                                </div>
+                                <div class="files-tree-children" id="tree-desktop-items" style="display: none;">
+                                    <div class="files-leaf-row">
+                                        <span class="files-leaf-name"><i class="fas fa-file files-node-icon"></i>Vacio</span>
+                                        <span class="files-leaf-size"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer del panel -->
+                <div class="files-panel-footer">
+                    <button class="files-footer-btn" onclick="FilePanel.refresh()" title="Actualizar">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                    <button class="files-footer-btn" onclick="FilePanel.refresh()" title="Sincronizar">
+                        <i class="fas fa-sync"></i>
+                    </button>
                 </div>
             </div>
         `;
@@ -1530,14 +1742,20 @@ const Panels = {
         } else if (panelId === 'git') {
             html = this.getGitPanelHTML();
         } else {
-            // Placeholder genérico para el resto
+            // Marco visual base para todos los paneles
             html = `
-                <div class="panel-widget-title">
-                    <i class="${p.icon}"></i> ${p.title}
-                </div>
-                <div class="dw-pro-empty">
-                    <p>Contenido del panel <strong>${p.title}</strong>.</p>
-                    <small style="opacity:0.5">Funcionalidad en desarrollo.</small>
+                <div class="files-window-shell">
+                    <div class="files-panel-topbar">
+                        <div class="files-topbar-actions">
+                            <button class="files-collapse-btn" onclick="Panels.hidePanel('${panelId}')" title="Minimizar a icono">&lt;&lt;</button>
+                            <button class="files-close-btn" onclick="Panels.hidePanel('${panelId}')" title="Cerrar">x</button>
+                        </div>
+                    </div>
+                    <div class="files-panel-title-bar">
+                        <div class="files-title">${p.title}</div>
+                    </div>
+                    <div class="files-panel-content-area" style="flex:1;min-height:120px;"></div>
+                    <div class="files-panel-footer"></div>
                 </div>
             `;
         }
@@ -1549,31 +1767,33 @@ const Panels = {
             tabs.forEach(tab => {
                 tab.addEventListener('click', (e) => {
                     tabs.forEach(t => t.classList.remove('active'));
-                    e.target.classList.add('active');
-                    const tabName = e.target.dataset.tab;
-                    // Actualizar estado lógico y re-renderizar solo el contenido interno
-                    this.resultsState.activeTab = tabName;
-                    this.updateResultsContent(container);
+                    tab.classList.add('active');
+                    this.renderPanelContent(container, panelId);
                 });
             });
+        }
+        // Inicializar eventos del panel de archivos si corresponde
+        if (panelId === 'archivos' && typeof FilePanel !== 'undefined' && FilePanel.init) {
+            FilePanel.init();
+        }
             // Cargar contenido inicial de la sub-pestaña activa
             this.updateResultsContent(container);
-        }
-    },
+    }
+};
 
     // ════════════════════════════════════════════════════════════════
     // GESTIÓN DEL REDIMENSIONADOR DERECHO (Reemplaza a Layout.js)
     // ════════════════════════════════════════════════════════════════
-};
+
 
 // Autoconfiguración Menú Ventana (Igual que antes)
 const menuMap = {
-    'activos': 'activos', 'comportamientos': 'comportamientos', 'bibliotecas cc': 'bibliotecas',
-    'inspector de código': 'inspector-codigo', 'diseñador de css': 'disenador-css',
-    'transiciones css': 'transiciones-css', 'dom': 'dom', 'archivos': 'archivos',
-    'insertar': 'insertar', 'muestras de jquery mobile': 'jquery-mobile', 'git': 'git',
-    'propiedades': 'propiedades', 'resultados': 'resultados', 'fragmentos': 'fragmentos', 'extensiones': 'extensiones'
-};
+        'activos': 'activos', 'comportamientos': 'comportamientos', 'bibliotecas cc': 'bibliotecas',
+        'inspector de código': 'inspector-codigo', 'diseñador de css': 'disenador-css',
+        'transiciones css': 'transiciones-css', 'dom': 'dom', 'archivos': 'archivos',
+        'insertar': 'insertar', 'muestras de jquery mobile': 'jquery-mobile', 'git': 'git',
+        'propiedades': 'propiedades', 'resultados': 'resultados', 'fragmentos': 'fragmentos', 'extensiones': 'extensiones'
+    };
 document.addEventListener('DOMContentLoaded', () => {
     const ventanaMenu = Array.from(document.querySelectorAll('.menu-item')).find(item => item.querySelector('span').innerText.trim() === 'Ventana');
     if (ventanaMenu) {

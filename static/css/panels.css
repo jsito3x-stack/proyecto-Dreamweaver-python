@@ -452,37 +452,76 @@
     overflow: hidden;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   CABECERA FLOTANTE ACTUAL (Adaptada a Estilo Dreamweaver)
+   Sin tocar HTML ni JS, solo CSS.
+   ═══════════════════════════════════════════════════════════ */
+
 .floating-header {
-    background: var(--bg-tertiary);
-    padding: 8px 12px;
-    cursor: move;
-    border-bottom: 1px solid var(--border);
+    /* 1. Le decimos que se apile en columna en lugar de fila */
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column; 
+    
+    padding: 0;
+    height: auto; /* Altura automática según el contenido */
+    background: transparent; /* El fondo lo darán las filas internas */
+    cursor: default; /* Opcional: move si quieres que toda la cabecera arrastre */
     user-select: none;
 }
 
-.floating-title {
-    font-size: 12px;
-    font-weight: bold;
-    color: var(--text-primary);
-}
-
+/* --- FILA SUPERIOR: Botones de ventana (Minimizar/Cerrar) --- */
 .floating-actions {
+    /* Heredamos lo que tenías, pero aseguramos que esté arriba */
     display: flex;
-    gap: 8px;
+    justify-content: flex-end; /* Botones a la derecha */
+    align-items: center;
+    height: 18px; /* Altura fija de la fila de botones */
+    background: var(--bg-tertiary);
+    padding: 0 6px;
+    border-bottom: 1px solid var(--border-color);
 }
 
+/* Aseguramos que los botones mantengan su estilo */
 .floating-btn {
     background: transparent;
     border: none;
-    color: var(--text-muted);
+    color: var(--text-primary);
     cursor: pointer;
-    font-size: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 0 4px;
+}
+.floating-btn:hover {
+    color: var(--accent);
 }
 
-.floating-btn:hover {
+/* --- FILA INFERIOR: Barra de Título y Menú --- */
+.floating-title {
+    display: flex;
+    justify-content: space-between; /* Título a izquierda, Menú a derecha */
+    align-items: center;
+    height: 24px; /* Altura fija de la fila de título */
+    background: var(--bg-primary);
+    padding: 0 6px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: move; /* Esta es la "manija" de arrastre principal */
+}
+
+/* Generar las "Tres Rallas" (Menú) con CSS puro sin tocar HTML */
+.floating-title::after {
+    content: '≡'; /* Carácter unicode de las tres rallas */
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-left: 10px;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+.floating-title::after:hover {
+    background: var(--bg-hover);
     color: var(--text-primary);
 }
 
@@ -518,10 +557,7 @@
     border-color: var(--accent);
 }
 
-/* Para el panel Archivos flotante, se oculta la cabecera generica para evitar doble header */
-#float-archivos .floating-header {
-    display: none;
-}
+
 
 /* ═══════════════════════════════════════════════════════════
    5. ZONAS DE ACOPLAMIENTO (LÍNEAS AZULES)
@@ -714,6 +750,8 @@
     border-radius: 0;
     box-shadow: none;
 }
+
+
 
 /* Barra superior de ventana */
 .files-panel-topbar {
@@ -1032,3 +1070,4 @@
     border-color: var(--accent);
     background: rgba(0, 122, 204, 0.18);
 }
+

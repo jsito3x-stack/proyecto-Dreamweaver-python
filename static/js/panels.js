@@ -396,17 +396,23 @@ const Panels = {
                 win.onmousedown = () => this.bringToFront(win.id);
 
                 win.innerHTML = `
-                    <div class="floating-header" onmousedown="Panels.startDrag(event, '${win.id}')">
-                        <span class="floating-title"><i class="${p.icon}"></i> ${p.title}</span>
+                 <div class="floating-header" onmousedown="Panels.startDrag(event, '${win.id}')">
                         <div class="floating-actions">
-                            <button class="floating-btn" title="Acoplar Izq"  onclick="Panels.dockToZone('${fp.id}', 'left')"><i class="fas fa-arrow-left"></i></button>
-                            <button class="floating-btn" title="Acoplar Der"  onclick="Panels.dockToZone('${fp.id}', 'right')"><i class="fas fa-arrow-right"></i></button>
-                            <button class="floating-btn" title="Acoplar Abajo" onclick="Panels.dockToZone('${fp.id}', 'bottom')"><i class="fas fa-arrow-down"></i></button>
-                            <button class="floating-btn" title="Cerrar"       onclick="Panels.hidePanel('${fp.id}')"><i class="fas fa-times"></i></button>
+                            <div onclick="Panels.dockToZone('${fp.id}', 'left')"></div>
+                            <div onclick="Panels.dockToZone('${fp.id}', 'right')"></div>
+                            <div onclick="Panels.dockToZone('${fp.id}', 'bottom')"></div>
+                        
+                            <button class="files-collapse-btn" onclick="FilePanel.collapsePanel()" title="Minimizar a icono">&lt;&lt;</button>
+                            <button class="floating-btn" title="Cerrar" onclick="Panels.hidePanel('${fp.id}')"><i class="fas fa-times"></i></button>
                         </div>
-                    </div>
-                    <div class="floating-content" id="${win.id}-content"></div>
-                    <div class="floating-resize-handle" onmousedown="Panels.startResize(event, '${win.id}')"></div>
+                        <span class="floating-title"></i> ${p.title}</span>
+                        <div class="files-menu-trigger" title="Menu y submenus de la ventana">
+                        
+                        
+                        </div>
+                        <div class="floating-content" id="${win.id}-content"></div>
+                        <div class="floating-resize-handle" onmousedown="Panels.startResize(event, '${win.id}')"></div>
+                        
                 `;
                 document.body.appendChild(win);
                 this.renderPanelContent(document.getElementById(`${win.id}-content`), fp.id);
@@ -1454,14 +1460,7 @@ const Panels = {
     getFilesPanelHTML() {
         return `
             <div class="files-window-shell">
-                <!-- Barra superior de ventana: controles a la derecha -->
-                <div class="files-panel-topbar">
-                    <div class="files-topbar-actions">
-                        <button class="files-collapse-btn" onclick="FilePanel.collapsePanel()" title="Minimizar a icono">&lt;&lt;</button>
-                        <button class="files-close-btn" onclick="FilePanel.close()" title="Cerrar">x</button>
-                    </div>
-                </div>
-
+                
                 <!-- Barra de titulo: nombre del panel + menu -->
                 <div class="files-panel-title-bar">
                     <div class="files-title">Archivos</div>
@@ -1745,16 +1744,12 @@ const Panels = {
             // Marco visual base para todos los paneles
             html = `
                 <div class="files-window-shell">
-                    <div class="files-panel-topbar">
-                        <div class="files-topbar-actions">
-                            <button class="files-collapse-btn" onclick="Panels.hidePanel('${panelId}')" title="Minimizar a icono">&lt;&lt;</button>
-                            <button class="files-close-btn" onclick="Panels.hidePanel('${panelId}')" title="Cerrar">x</button>
-                        </div>
-                    </div>
-                    <div class="files-panel-title-bar">
-                        <div class="files-title">${p.title}</div>
-                    </div>
+                    
+                    
+                    <!-- Contenido genérico -->
                     <div class="files-panel-content-area" style="flex:1;min-height:120px;"></div>
+                    
+                    <!-- Footer genérico -->
                     <div class="files-panel-footer"></div>
                 </div>
             `;

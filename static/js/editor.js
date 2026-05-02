@@ -114,6 +114,13 @@ const Editor = {
     },
 
     /**
+     * Obtener modo del editor
+     */
+    getMode() {
+        return this.currentMode;
+    },
+
+    /**
      * Establecer modo del editor
      */
     setMode(mode) {

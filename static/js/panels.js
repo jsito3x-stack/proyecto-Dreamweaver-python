@@ -13,7 +13,7 @@ const Panels = {
     panelLastLocation: {}, // { [panelId]: 'right' | 'left' | 'bottom' | 'floating' }
     currentWorkspace: 'default', // Para guardar por workspace/proyecto
     zIndexCounter: 10000,
-    resultsState: { activeTab: 'salida' },
+    isDragging: false,
 
     init() {
         console.log("Initializing Panel System v6 (Full Docking)...");
@@ -44,6 +44,13 @@ const Panels = {
                 el.className = `dock-zone ${z}`;
                 document.body.appendChild(el);
             });
+        }
+        // Crear contenedor de iconos minimizados
+        if (!document.getElementById('minimized-panels')) {
+            const minCont = document.createElement('div');
+            minCont.id = 'minimized-panels';
+            minCont.className = 'minimized-panels-container';
+            document.body.appendChild(minCont);
         }
 
         // Recuperar ancho guardado del panel derecho (por workspace)
@@ -263,7 +270,13 @@ const Panels = {
     },
 
     render() {
-        this.container.innerHTML = '';
+        if (this.isDragging) return;
+        this.renderMinimizedIcons();
+        this.renderFloatingPanels();
+        this.renderDockedPanels();
+        if (this.container) {
+            this.container.innerHTML = '';
+        }
         // Limpiar grupos vacíos
         this.groups = this.groups.filter(g => g.panels.length > 0);
 
@@ -372,6 +385,120 @@ const Panels = {
         });
     },
 
+    _getPanelMenuHTML(panelId) {
+        if (panelId === 'archivos' && typeof FilePanel !== 'undefined' && FilePanel.getMenuHTML) {
+            return FilePanel.getMenuHTML();
+        }
+        if (panelId === 'propiedades' && typeof PropertiesPanel !== 'undefined' && PropertiesPanel.getMenuHTML) {
+            return PropertiesPanel.getMenuHTML();
+        }
+        if (panelId === 'git' && typeof GitPanel !== 'undefined' && GitPanel.getMenuHTML) {
+            return GitPanel.getMenuHTML();
+        }
+        if (panelId === 'resultados' && typeof ResultsPanel !== 'undefined' && ResultsPanel.getMenuHTML) {
+            return ResultsPanel.getMenuHTML();
+        }
+        if (panelId === 'jquery-mobile' && typeof jQueryMobilePanel !== 'undefined' && jQueryMobilePanel.getMenuHTML) {
+            return jQueryMobilePanel.getMenuHTML();
+        }
+        if (panelId === 'insertar' && typeof InsertPanel !== 'undefined' && InsertPanel.getMenuHTML) {
+            return InsertPanel.getMenuHTML();
+        }
+        if (panelId === 'activos' && typeof AssetsPanel !== 'undefined' && AssetsPanel.getMenuHTML) {
+            return AssetsPanel.getMenuHTML();
+        }
+        if (panelId === 'comportamientos' && typeof BehaviorsPanel !== 'undefined' && BehaviorsPanel.getMenuHTML) {
+            return BehaviorsPanel.getMenuHTML();
+        }
+        if (panelId === 'bibliotecas' && typeof LibrariesPanel !== 'undefined' && LibrariesPanel.getMenuHTML) {
+            return LibrariesPanel.getMenuHTML();
+        }
+        if (panelId === 'inspector-codigo' && typeof CodeInspectorPanel !== 'undefined' && CodeInspectorPanel.getMenuHTML) {
+            return CodeInspectorPanel.getMenuHTML();
+        }
+        if (panelId === 'disenador-css' && typeof CSSDesignerPanel !== 'undefined' && CSSDesignerPanel.getMenuHTML) {
+            return CSSDesignerPanel.getMenuHTML();
+        }
+        if (panelId === 'transiciones-css' && typeof CSSTransitionsPanel !== 'undefined' && CSSTransitionsPanel.getMenuHTML) {
+            return CSSTransitionsPanel.getMenuHTML();
+        }
+        if (panelId === 'dom' && typeof DOMPanel !== 'undefined' && DOMPanel.getMenuHTML) {
+            return DOMPanel.getMenuHTML();
+        }
+        if (panelId === 'fragmentos' && typeof SnippetsPanel !== 'undefined' && SnippetsPanel.getMenuHTML) {
+            return SnippetsPanel.getMenuHTML();
+        }
+        if (panelId === 'extensiones' && typeof ExtensionsPanel !== 'undefined' && ExtensionsPanel.getMenuHTML) {
+            return ExtensionsPanel.getMenuHTML();
+        }
+        return '<i class="fas fa-bars"></i>';
+    },
+
+    renderMinimizedIcons() {
+        const container = document.getElementById('minimized-panels');
+        if (!container) {
+            console.warn("No se encontró el contenedor #minimized-panels");
+            return;
+        }
+
+        container.innerHTML = '';
+        const minimized = this.floatingPanels.filter(fp => fp.minimized);
+        console.log(`Renderizando ${minimized.length} iconos minimizados`);
+
+        this.floatingPanels.forEach(fp => {
+            if (fp.minimized) {
+                const p = this.registry[fp.id];
+                if (!p) return;
+
+                const icon = document.createElement('div');
+                icon.id = `icon-${fp.id}`;
+                icon.className = 'minimized-panel-icon';
+                icon.style.left = fp.x + 'px';
+                icon.style.top = fp.y + 'px';
+                icon.style.zIndex = this.zIndexCounter;
+                icon.setAttribute('data-title', p.title);
+                icon.innerHTML = `<i class="${p.icon}"></i>`;
+                
+                // Arrastrar el icono
+                icon.onmousedown = (e) => {
+                    this.bringToFront(icon.id);
+                    this.startDrag(e, icon.id);
+                };
+
+                // Restaurar con doble click
+                icon.ondblclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.restorePanel(fp.id);
+                };
+
+                // Opcional: restaurar con click simple si no se arrastra
+                // (Pero startDrag ya maneja el mouseup, así que mejor doble click o un botón interno)
+                // Usaremos un botón pequeño o simplemente doble click como en los IDEs reales.
+                
+                container.appendChild(icon);
+            }
+        });
+    },
+
+    minimizePanel(panelId) {
+        const fp = this.floatingPanels.find(p => p.id === panelId);
+        if (fp) {
+            fp.minimized = true;
+            this.saveLayout();
+            this.render(); // Redibujar todo para mostrar el icono
+        }
+    },
+
+    restorePanel(panelId) {
+        const fp = this.floatingPanels.find(p => p.id === panelId);
+        if (fp) {
+            fp.minimized = false;
+            this.saveLayout();
+            this.render(); // Redibujar todo para ocultar el icono y mostrar la ventana
+        }
+    },
+
     renderFloatingPanels() {
         // Eliminar ventanas que ya no deberían estar flotando
         const validIds = this.floatingPanels.map(fp => fp.id);
@@ -381,6 +508,13 @@ const Panels = {
         });
 
         this.floatingPanels.forEach(fp => {
+            // Si está minimizado, nos aseguramos que el elemento DOM no exista
+            if (fp.minimized) {
+                const win = document.getElementById(`float-${fp.id}`);
+                if (win) win.remove();
+                return;
+            }
+
             let win = document.getElementById(`float-${fp.id}`);
             if (!win) {
                 const p = this.registry[fp.id];
@@ -402,17 +536,18 @@ const Panels = {
                             <div onclick="Panels.dockToZone('${fp.id}', 'right')"></div>
                             <div onclick="Panels.dockToZone('${fp.id}', 'bottom')"></div>
                         
-                            <button class="files-collapse-btn" onclick="FilePanel.collapsePanel()" title="Minimizar a icono">&lt;&lt;</button>
+                            <button class="floating-btn" onclick="Panels.minimizePanel('${fp.id}')" title="Minimizar"><i class="fas fa-minus"></i></button>
                             <button class="floating-btn" title="Cerrar" onclick="Panels.hidePanel('${fp.id}')"><i class="fas fa-times"></i></button>
                         </div>
-                        <span class="floating-title"></i> ${p.title}</span>
-                        <div class="files-menu-trigger" title="Menu y submenus de la ventana">
-                        
-                        
+                        <div class="floating-title">
+                            <span>${p.title}</span>
+                            <div class="files-menu-trigger" title="Menu y submenus de la ventana">
+                                ${this._getPanelMenuHTML(fp.id)}
+                            </div>
                         </div>
-                        <div class="floating-content" id="${win.id}-content"></div>
-                        <div class="floating-resize-handle" onmousedown="Panels.startResize(event, '${win.id}')"></div>
-                        
+                </div>
+                <div class="floating-content" id="${win.id}-content"></div>
+                <div class="floating-resize-handle" onmousedown="Panels.startResize(event, '${win.id}')"></div>
                 `;
                 document.body.appendChild(win);
                 this.renderPanelContent(document.getElementById(`${win.id}-content`), fp.id);
@@ -436,10 +571,18 @@ const Panels = {
             }
         });
         // De flotantes
-        this.floatingPanels = this.floatingPanels.filter(fp => fp.id !== panelId);
-        const floatWin = document.getElementById(`float-${panelId}`);
-        if (floatWin) floatWin.remove();
-        // Del dock izquierdo
+        this.floatingPanels = this.floatingPanels.filter(p => p.id !== panelId);
+        const win = document.getElementById(`float-${panelId}`);
+        if (win) win.remove();
+        
+        // También limpiar de iconos minimizados
+        this.renderMinimizedIcons();
+
+        // Del dock izquierdo e inferior
+        this._removeDockedPanel(panelId);
+    },
+    
+    _removeDockedPanel(panelId) {
         if (this.leftDock && this.leftDock.groups) {
             this.leftDock.groups.forEach(g => {
                 g.panels = g.panels.filter(id => id !== panelId);
@@ -860,6 +1003,57 @@ const Panels = {
     },
 
     /**
+     * Cerrar un panel específico desde cualquier ubicación
+     */
+    closeSpecificPanel(panelId) {
+        this._removePanelFromAllLocations(panelId);
+        if (!this.hiddenPanels.includes(panelId)) {
+            this.hiddenPanels.push(panelId);
+        }
+        this.saveLayout();
+        this.render();
+    },
+
+    /**
+     * Cerrar todo el grupo al que pertenece un panel
+     */
+    closeTabGroupOfPanel(panelId) {
+        let foundGroup = null;
+        
+        // 1. Buscar en grid derecho
+        let group = this.groups.find(g => g.panels.includes(panelId));
+        if (group) foundGroup = group;
+        
+        // 2. Buscar en dock izquierdo
+        if (!foundGroup && this.leftDock && this.leftDock.groups) {
+            group = this.leftDock.groups.find(g => g.panels.includes(panelId));
+            if (group) foundGroup = group;
+        }
+        
+        // 3. Buscar en dock inferior
+        if (!foundGroup && this.bottomDock && this.bottomDock.groups) {
+            group = this.bottomDock.groups.find(g => g.panels.includes(panelId));
+            if (group) foundGroup = group;
+        }
+
+        if (foundGroup) {
+            const panelsToClose = [...foundGroup.panels];
+            panelsToClose.forEach(pId => {
+                this._removePanelFromAllLocations(pId);
+                if (!this.hiddenPanels.includes(pId)) {
+                    this.hiddenPanels.push(pId);
+                }
+            });
+        } else {
+            // Si no está en un grupo (ej. flotante individual), cerrar solo el panel
+            this.closeSpecificPanel(panelId);
+        }
+        
+        this.saveLayout();
+        this.render();
+    },
+
+    /**
      * Acoplar a una zona con modos: tab | split-left | split-right | split-top | split-bottom
      */
     dockToZone(panelId, zone, dropX, dropY, options = {}) {
@@ -1133,7 +1327,16 @@ const Panels = {
      * Alternar Visibilidad desde el Menú Ventana
      */
     togglePanel(panelId) {
-        // 1. Flotando → ocultar
+        // 0. Si está minimizado en modo flotante → restaurar
+        const fp = this.floatingPanels.find(p => p.id === panelId);
+        if (fp && fp.minimized) {
+            fp.minimized = false;
+            this.saveLayout();
+            this.render();
+            return;
+        }
+
+        // 1. Ya está en flotante → traer al frente
         if (document.getElementById(`float-${panelId}`)) {
             this.hidePanel(panelId);
             return;
@@ -1218,50 +1421,112 @@ const Panels = {
         const win = document.getElementById(winId);
         if (!win) return;
 
-        let shiftX = e.clientX - win.getBoundingClientRect().left;
-        let shiftY = e.clientY - win.getBoundingClientRect().top;
-        const panelId = winId.replace('float-', '');
+        this.isDragging = true;
+        const isIcon = winId.startsWith('icon-');
+        const panelId = winId.replace('float-', '').replace('icon-', '');
+        
+        // Elevar el elemento por encima de TODO durante el arrastre
+        const oldZ = win.style.zIndex;
+        win.style.zIndex = 100000;
 
-        function moveAt(pageX, pageY) {
-            win.style.left = pageX - shiftX + 'px';
-            win.style.top = pageY - shiftY + 'px';
+        const startMouseX = e.clientX;
+        const startMouseY = e.clientY;
+        const initialX = parseInt(win.style.left) || win.offsetLeft || 0;
+        const initialY = parseInt(win.style.top) || win.offsetTop || 0;
 
-            // Detectar Zonas
+        const otherIcons = isIcon ? Array.from(document.querySelectorAll('.minimized-panel-icon'))
+            .filter(el => el.id !== winId)
+            .map(el => ({
+                rect: el.getBoundingClientRect(),
+                id: el.id
+            })) : [];
+
+        let rafId = null;
+        let currentX = initialX;
+        let currentY = initialY;
+        let activeZone = null;
+
+        const moveAt = (clientX, clientY) => {
+            const dx = clientX - startMouseX;
+            const dy = clientY - startMouseY;
+            
+            let targetX = initialX + dx;
+            let targetY = initialY + dy;
+            
+            if (isIcon) {
+                const SNAP_DIST = 10; // Reducido para mayor precisión
+                const ICON_SIZE = 44; 
+                const GAP = 2; 
+
+                otherIcons.forEach(other => {
+                    const r = other.rect;
+                    // Snap Vertical
+                    if (Math.abs(targetX - r.left) < SNAP_DIST) targetX = r.left;
+                    else if (Math.abs(targetX - (r.right + GAP)) < SNAP_DIST) targetX = r.right + GAP;
+                    else if (Math.abs((targetX + ICON_SIZE) - (r.left - GAP)) < SNAP_DIST) targetX = r.left - ICON_SIZE - GAP;
+
+                    // Snap Horizontal
+                    if (Math.abs(targetY - r.top) < SNAP_DIST) targetY = r.top;
+                    else if (Math.abs(targetY - (r.bottom + GAP)) < SNAP_DIST) targetY = r.bottom + GAP;
+                    else if (Math.abs((targetY + ICON_SIZE) - (r.top - GAP)) < SNAP_DIST) targetY = r.top - ICON_SIZE - GAP;
+                });
+            }
+            
+            currentX = targetX;
+            currentY = targetY;
+            
+            if (rafId) cancelAnimationFrame(rafId);
+            rafId = requestAnimationFrame(() => {
+                win.style.left = currentX + 'px';
+                win.style.top = currentY + 'px';
+            });
+
+            // Detectar Zonas de Anclaje
             const zones = ['left', 'bottom', 'right'];
-            let activeZone = null;
+            let foundZone = null;
             zones.forEach(z => {
                 const zoneEl = document.getElementById(`dock-${z}`);
+                if (!zoneEl) return;
                 const rect = zoneEl.getBoundingClientRect();
-                if (pageX > rect.left && pageX < rect.right && pageY > rect.top && pageY < rect.bottom) {
+                if (clientX > rect.left && clientX < rect.right && clientY > rect.top && clientY < rect.bottom) {
                     zoneEl.classList.add('active');
-                    activeZone = z;
+                    foundZone = z;
                 } else {
                     zoneEl.classList.remove('active');
                 }
             });
-            return activeZone;
-        }
+            activeZone = foundZone;
+        };
 
-        let currentZone = null;
-        function onMouseMove(event) { currentZone = moveAt(event.pageX, event.pageY); }
+        const onMouseMove = (event) => {
+            moveAt(event.clientX, event.clientY);
+        };
+
         document.addEventListener('mousemove', onMouseMove);
 
-        document.onmouseup = () => {
+        const onMouseUp = () => {
+            this.isDragging = false;
+            win.style.zIndex = oldZ; // Restaurar z-index
+            if (rafId) cancelAnimationFrame(rafId);
             document.removeEventListener('mousemove', onMouseMove);
-            document.onmouseup = null;
+            document.removeEventListener('mouseup', onMouseUp);
+            document.querySelectorAll('.dock-zone').forEach(z => z.classList.remove('active'));
 
-            if (currentZone) {
-                Panels.dockToZone(panelId, currentZone);
+            if (activeZone) {
+                this.dockToZone(panelId, activeZone);
             } else {
-                // Actualizar posición guardada en floatingPanels
-                const fp = Panels.floatingPanels.find(p => p.id === panelId);
+                const fp = this.floatingPanels.find(p => p.id === panelId);
                 if (fp) {
-                    fp.x = parseInt(win.style.left);
-                    fp.y = parseInt(win.style.top);
-                    Panels.saveLayout();
+                    fp.x = currentX;
+                    fp.y = currentY;
+                    this.saveLayout();
+                    // Solo renderizamos si es estrictamente necesario
+                    this.render(); 
                 }
             }
         };
+
+        document.addEventListener('mouseup', onMouseUp);
     },
 
     bringToFront(winId) {
@@ -1380,344 +1645,8 @@ const Panels = {
         });
     },
 
-    /**
-     * Actualiza el contenido del panel Resultados (Salida, Buscar, etc.)
-     * Se llama cada vez que se renderiza el panel "Resultados"
-     */
-    updateResultsContent(container) {
-        const body = container.querySelector('#res-content-body');
-        if (!body) return;
+    // getFilesPanelHTML ha sido movido a files-panel.js,
 
-        const tab = this.resultsState.activeTab;
-        let contentHtml = '';
-
-        // Lógica según la pestaña activa
-        if (tab === 'salida') {
-            contentHtml = `
-                <div class="log-entry">> Servidor iniciado...</div>
-                <div class="log-entry success">> Conectado al localhost:5000</div>
-                <div class="log-entry">> Esperando comandos...</div>
-            `;
-        } else if (tab === 'buscar') {
-            contentHtml = `
-                <div style="padding:5px;">
-                    <input type="text" placeholder="Buscar en archivos..." style="width:100%; border:1px solid var(--border); background: var(--bg-input); color: var(--text-primary); padding:4px;">
-                    <div style="margin-top:10px; font-size: 12px; color: var(--text-secondary);">0 resultados encontrados.</div>
-                </div>
-            `;
-        } else if (tab === 'validacion') {
-            contentHtml = `
-                <div style="padding:5px;">
-                    <button style="font-size:10px;">Validar documento actual</button>
-                    <div style="margin-top:10px; color: var(--success);">Sin errores de marcado HTML5.</div>
-                </div>
-            `;
-        } else if (tab === 'vinculos') {
-            contentHtml = `
-                <div style="padding:5px;">
-                    <div style="margin-bottom:5px;"><strong>Enlace roto:</strong> index.html</div>
-                    <div style="margin-bottom:5px;"><strong>Enlace roto:</strong> contacto.html</div>
-                    <div style="margin-bottom:5px;"><strong>Enlace roto:</strong> sobre-nosotros.html</div>
-                </div>
-            `;
-        } else {
-            contentHtml = `<div style="padding:10px; text-align: center; opacity:0.5;">Vista ${tab} no implementada aún.</div>`;
-        }
-
-        body.innerHTML = contentHtml;
-    },
-
-    // ════════════════════════════════════════════════════════════════
-    // GENERADORES DE HTML (Helper Methods)
-    // ════════════════════════════════════════════════════════════════
-    getResultsPanelHTML() {
-        // Estructura de pestañas para Resultados (Salida, Buscar, etc.)
-        const subTabs = [
-            { id: 'salida', label: 'Salida' },
-            { id: 'buscar', label: 'Buscar' },
-            { id: 'validacion', label: 'Validación' },
-            { id: 'informes', label: 'Informes' },
-            { id: 'ftp', label: 'Registro FTP' }
-        ];
-
-        let tabsHtml = subTabs.map(t =>
-            `<button class="res-sub-tab ${this.resultsState.activeTab === t.id ? 'active' : ''}" 
-                    data-tab="${t.id}">${t.label}</button>`
-        ).join('');
-
-        return `
-            <div style="display:flex; flex-direction:column; height:100%;">
-                <div class="res-tabs-header">
-                    ${tabsHtml}
-                </div>
-                <div id="res-content-body" class="res-content-body">
-                    <!-- El contenido dinámico se carga aquí -->
-                </div>
-            </div>
-        `;
-    },
-
-    getFilesPanelHTML() {
-        return `
-            <div class="files-window-shell">
-                
-                <!-- Barra de titulo: nombre del panel + menu -->
-                <div class="files-panel-title-bar">
-                    <div class="files-title">Archivos</div>
-                    <div class="files-menu-trigger" title="Menu y submenus de la ventana">
-                        <i class="fas fa-bars"></i>
-                        <div class="files-context-menu">
-                        <!-- Archivo -->
-                        <div class="dropdown-item" style="font-weight:600; cursor:pointer;">
-                            <div class="item-main"><i class="fas fa-file"></i>Archivo</div>
-                            <i class="fas fa-chevron-right arrow-sub"></i>
-                            <div class="submenu">
-                                <div class="dropdown-item" onclick="FilePanel.newFile()">
-                                    <div class="item-main"><i class="fas fa-file-alt"></i>Nuevo archivo</div>
-                                    <span class="shortcut">Ctrl+Mayús+N</span>
-                                </div>
-                                <div class="dropdown-item" onclick="FilePanel.newFolder()">
-                                    <div class="item-main"><i class="fas fa-folder-plus"></i>Nueva carpeta</div>
-                                    <span class="shortcut">Ctrl+Alt+Mayús+N</span>
-                                </div>
-                                <div class="dropdown-item" onclick="FilePanel.open()">
-                                    <div class="item-main"><i class="fas fa-folder-open"></i>Abrir</div>
-                                </div>
-                                <div class="divider"></div>
-                                <div class="dropdown-item" onclick="FilePanel.rename()">
-                                    <div class="item-main"><i class="fas fa-i-cursor"></i>Cambiar nombre</div>
-                                    <span class="shortcut">F2</span>
-                                </div>
-                                <div class="dropdown-item" onclick="FilePanel.delete()">
-                                    <div class="item-main"><i class="fas fa-trash"></i>Eliminar</div>
-                                    <span class="shortcut">Supr</span>
-                                </div>
-                                <div class="dropdown-item" onclick="FilePanel.unlock()">
-                                    <div class="item-main"><i class="fas fa-lock-open"></i>Desbloquear</div>
-                                </div>
-                                <div class="divider"></div>
-                                <div class="dropdown-item" onclick="FilePanel.checkFiles()">
-                                    <div class="item-main"><i class="fas fa-check-circle"></i>Comprobar archivos</div>
-                                </div>
-                                <div class="dropdown-item" style="cursor:pointer;">
-                                    <div class="item-main"><i class="fas fa-eye"></i>Vista previa en tiempo real</div>
-                                    <i class="fas fa-chevron-right arrow-sub"></i>
-                                    <div class="submenu">
-                                        <div class="dropdown-item" onclick="FilePanel.previewChrome()">
-                                            <div class="item-main"><i class="fab fa-chrome"></i>Google Chrome</div>
-                                        </div>
-                                        <div class="dropdown-item" onclick="FilePanel.previewIE()">
-                                            <div class="item-main"><i class="fab fa-internet-explorer"></i>Internet Explorer</div>
-                                        </div>
-                                        <div class="dropdown-item" onclick="FilePanel.previewEdge()">
-                                            <div class="item-main"><i class="fab fa-edge"></i>Microsoft Edge</div>
-                                        </div>
-                                        <div class="divider"></div>
-                                        <div class="dropdown-item" onclick="FilePanel.editBrowsersList()">
-                                            <div class="item-main"><i class="fas fa-edit"></i>Editar lista de navegadores...</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Edición -->
-                        <div class="dropdown-item" style="font-weight:600; cursor:pointer;">
-                            <div class="item-main"><i class="fas fa-pen"></i>Edición</div>
-                            <i class="fas fa-chevron-right arrow-sub"></i>
-                            <div class="submenu">
-                                <div class="dropdown-item" onclick="FilePanel.cut()">
-                                    <div class="item-main"><i class="fas fa-cut"></i>Cortar</div>
-                                    <span class="shortcut">Ctrl+X</span>
-                                </div>
-                                <div class="dropdown-item" onclick="FilePanel.copy()">
-                                    <div class="item-main"><i class="fas fa-copy"></i>Copiar</div>
-                                    <span class="shortcut">Ctrl+C</span>
-                                </div>
-                                <div class="dropdown-item" onclick="FilePanel.paste()">
-                                    <div class="item-main"><i class="fas fa-paste"></i>Pegar</div>
-                                    <span class="shortcut">Ctrl+V</span>
-                                </div>
-                                <div class="dropdown-item" onclick="FilePanel.duplicate()">
-                                    <div class="item-main"><i class="fas fa-copy"></i>Duplicar</div>
-                                    <span class="shortcut">Ctrl+D</span>
-                                </div>
-                                <div class="divider"></div>
-                                <div class="dropdown-item" onclick="FilePanel.selectAll()">
-                                    <div class="item-main">Seleccionar todo</div>
-                                    <span class="shortcut">Ctrl+A</span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Administrar sitio -->
-                        <div class="dropdown-item" onclick="FilePanel.manageSite()">
-                            <div class="item-main"><i class="fas fa-cogs"></i>Administrar sitio...</div>
-                        </div>
-                        <!-- Expandir panel -->
-                        <div class="dropdown-item" onclick="FilePanel.expandPanel()">
-                            <div class="item-main"><i class="fas fa-expand"></i>Expandir panel de archivos</div>
-                        </div>
-                        <!-- Actualizar -->
-                        <div class="dropdown-item" onclick="FilePanel.refresh()">
-                            <div class="item-main"><i class="fas fa-sync-alt"></i>Actualizar</div>
-                            <span class="shortcut">F5</span>
-                        </div>
-                        <div class="divider"></div>
-                        <!-- Ayuda -->
-                        <div class="dropdown-item" onclick="FilePanel.help()">
-                            <div class="item-main"><i class="fas fa-question-circle"></i>Ayuda</div>
-                        </div>
-                        <div class="divider"></div>
-                        <!-- Cerrar grupo de fichas -->
-                        <div class="dropdown-item" onclick="FilePanel.closeTabGroup()">
-                            <div class="item-main"><i class="fas fa-times-circle"></i>Cerrar grupo de fichas</div>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Selector y administrar sitios en la misma fila -->
-                <div class="files-location-row">
-                    <div class="files-site-selector">
-                        <select id="site-dropdown" class="files-dropdown" onchange="FilePanel.changeSite(this.value)">
-                            <option value="root">Escritorio</option>
-                            <option value="a">Unidad de disquete (A:)</option>
-                            <option value="c">Disco local (C:)</option>
-                            <option value="d">Unidad de CD (D:)</option>
-                        </select>
-                    </div>
-                    <button class="files-manage-link" onclick="FilePanel.manageSite()">Administrar sitios</button>
-                </div>
-
-                <!-- Cabecera de columnas -->
-                <div class="files-columns-header">
-                    <div class="files-col-name">Archivos locales <i class="fas fa-arrow-down"></i></div>
-                    <div class="files-col-size">Tamaño</div>
-                </div>
-
-                <!-- Arbol de carpetas y discos -->
-                <div id="panel-file-tree-container" class="files-tree-scroll">
-                    <div class="files-tree-item">
-                        <div class="files-tree-header" onclick="FilePanel.toggleTree('desktop', event)">
-                            <i class="fas fa-chevron-down files-tree-arrow rotated" id="arrow-desktop"></i>
-                            <i class="fas fa-desktop files-node-icon"></i>
-                            <span class="files-node-name">Escritorio</span>
-                            <span class="files-node-size"></span>
-                        </div>
-                        <div class="files-tree-children" id="tree-desktop" style="display: block;">
-                            <div class="files-tree-item">
-                                <div class="files-tree-header" onclick="FilePanel.toggleTree('this-pc', event)">
-                                    <i class="fas fa-chevron-down files-tree-arrow rotated" id="arrow-this-pc"></i>
-                                    <i class="fas fa-desktop files-node-icon"></i>
-                                    <span class="files-node-name">Este equipo</span>
-                                    <span class="files-node-size"></span>
-                                </div>
-                                <div class="files-tree-children" id="tree-this-pc" style="display: block;">
-                                    <div class="files-leaf-row">
-                                        <span class="files-leaf-name"><i class="fas fa-compact-disc files-node-icon"></i>Unidad de DVD (D:)</span>
-                                        <span class="files-leaf-size"></span>
-                                    </div>
-                                    <div class="files-leaf-row">
-                                        <span class="files-leaf-name"><i class="fas fa-hdd files-node-icon"></i>Disco local (C:)</span>
-                                        <span class="files-leaf-size">98.40GB</span>
-                                    </div>
-                                    <div class="files-leaf-row">
-                                        <span class="files-leaf-name"><i class="fas fa-floppy-disk files-node-icon"></i>Unidad de disquete (A:)</span>
-                                        <span class="files-leaf-size"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="files-tree-item">
-                                <div class="files-tree-header" onclick="FilePanel.toggleTree('network', event)">
-                                    <i class="fas fa-chevron-down files-tree-arrow rotated" id="arrow-network"></i>
-                                    <i class="fas fa-network-wired files-node-icon"></i>
-                                    <span class="files-node-name">Red</span>
-                                    <span class="files-node-size"></span>
-                                </div>
-                                <div class="files-tree-children" id="tree-network" style="display: block;">
-                                    <div class="files-leaf-row">
-                                        <span class="files-leaf-name"><i class="fas fa-folder files-node-icon"></i>DESKTOP-9HU8...</span>
-                                        <span class="files-leaf-size"></span>
-                                    </div>
-                                    <div class="files-leaf-row">
-                                        <span class="files-leaf-name"><i class="fas fa-folder files-node-icon"></i>tsclient</span>
-                                        <span class="files-leaf-size"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="files-tree-item">
-                                <div class="files-tree-header" onclick="FilePanel.toggleTree('desktop-items', event)">
-                                    <i class="fas fa-chevron-right files-tree-arrow" id="arrow-desktop-items"></i>
-                                    <i class="fas fa-folder files-node-icon"></i>
-                                    <span class="files-node-name">Elementos de escritorio</span>
-                                    <span class="files-node-size"></span>
-                                </div>
-                                <div class="files-tree-children" id="tree-desktop-items" style="display: none;">
-                                    <div class="files-leaf-row">
-                                        <span class="files-leaf-name"><i class="fas fa-file files-node-icon"></i>Vacio</span>
-                                        <span class="files-leaf-size"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Footer del panel -->
-                <div class="files-panel-footer">
-                    <button class="files-footer-btn" onclick="FilePanel.refresh()" title="Actualizar">
-                        <i class="fas fa-redo"></i>
-                    </button>
-                    <button class="files-footer-btn" onclick="FilePanel.refresh()" title="Sincronizar">
-                        <i class="fas fa-sync"></i>
-                    </button>
-                </div>
-            </div>
-        `;
-    },
-
-    getPropertiesPanelHTML() {
-        return `
-            <div class="panel-widget-title">
-                <i class="fas fa-sliders-h"></i> Propiedades
-            </div>
-            <div style="padding: 5px;">
-                <div class="prop-row">
-                    <div class="prop-label">ID</div>
-                    <input type="text" class="prop-input" placeholder="mi_element">
-                </div>
-                <div class="prop-row">
-                    <div class="prop-label">Clase</div>
-                    <input type="text" class="prop-input" placeholder="clase1 clase2">
-                </div>
-            </div>
-        `;
-    },
-
-    getjQueryMobilePanelHTML() {
-        return `
-            <div class="panel-widget-title">
-                <i class="fas fa-mobile-alt"></i> jQuery Mobile
-            </div>
-            <div style="padding: 10px; color: var(--text-muted); text-align: center;">
-                <i class="fas fa-mobile-alt" style="font-size: 32px; display:block; margin-bottom:8px; opacity:0.3;"></i>
-                <p>Componentes jQuery Mobile</p>
-            </div>
-        `;
-    },
-
-    getGitPanelHTML() {
-        return `
-            <div class="panel-widget-title">
-                <i class="fas fa-code-branch"></i> Git
-            </div>
-            <div style="padding:10px; color: var(--text-muted); text-align: center;">
-                <i class="fas fa-code-branch" style="font-size: 24px; display:block; margin-bottom:8px; opacity:0.3;"></i>
-                <p>Control de versiones</p>
-            </div>
-        `;
-    },
 
     // ═══════════════════════════════════════════════════════════
     // RENDERIZAR CONTENIDO DE PANELES
@@ -1731,15 +1660,35 @@ const Panels = {
 
         // Lógica específica para paneles complejos
         if (panelId === 'resultados') {
-            html = this.getResultsPanelHTML();
+            html = (typeof ResultsPanel !== 'undefined' && ResultsPanel.getContentHTML) ? ResultsPanel.getContentHTML() : '';
         } else if (panelId === 'archivos') {
-            html = this.getFilesPanelHTML();
+            html = (typeof FilePanel !== 'undefined' && FilePanel.getContentHTML) ? FilePanel.getContentHTML() : '';
         } else if (panelId === 'propiedades') {
-            html = this.getPropertiesPanelHTML();
+            html = (typeof PropertiesPanel !== 'undefined' && PropertiesPanel.getContentHTML) ? PropertiesPanel.getContentHTML() : '';
         } else if (panelId === 'jquery-mobile') {
-            html = this.getjQueryMobilePanelHTML();
+            html = (typeof jQueryMobilePanel !== 'undefined' && jQueryMobilePanel.getContentHTML) ? jQueryMobilePanel.getContentHTML() : '';
         } else if (panelId === 'git') {
-            html = this.getGitPanelHTML();
+            html = (typeof GitPanel !== 'undefined' && GitPanel.getContentHTML) ? GitPanel.getContentHTML() : '';
+        } else if (panelId === 'insertar') {
+            html = (typeof InsertPanel !== 'undefined' && InsertPanel.getContentHTML) ? InsertPanel.getContentHTML() : '';
+        } else if (panelId === 'activos') {
+            html = (typeof AssetsPanel !== 'undefined' && AssetsPanel.getContentHTML) ? AssetsPanel.getContentHTML() : '';
+        } else if (panelId === 'comportamientos') {
+            html = (typeof BehaviorsPanel !== 'undefined' && BehaviorsPanel.getContentHTML) ? BehaviorsPanel.getContentHTML() : '';
+        } else if (panelId === 'bibliotecas') {
+            html = (typeof LibrariesPanel !== 'undefined' && LibrariesPanel.getContentHTML) ? LibrariesPanel.getContentHTML() : '';
+        } else if (panelId === 'inspector-codigo') {
+            html = (typeof CodeInspectorPanel !== 'undefined' && CodeInspectorPanel.getContentHTML) ? CodeInspectorPanel.getContentHTML() : '';
+        } else if (panelId === 'disenador-css') {
+            html = (typeof CSSDesignerPanel !== 'undefined' && CSSDesignerPanel.getContentHTML) ? CSSDesignerPanel.getContentHTML() : '';
+        } else if (panelId === 'transiciones-css') {
+            html = (typeof CSSTransitionsPanel !== 'undefined' && CSSTransitionsPanel.getContentHTML) ? CSSTransitionsPanel.getContentHTML() : '';
+        } else if (panelId === 'dom') {
+            html = (typeof DOMPanel !== 'undefined' && DOMPanel.getContentHTML) ? DOMPanel.getContentHTML() : '';
+        } else if (panelId === 'fragmentos') {
+            html = (typeof SnippetsPanel !== 'undefined' && SnippetsPanel.getContentHTML) ? SnippetsPanel.getContentHTML() : '';
+        } else if (panelId === 'extensiones') {
+            html = (typeof ExtensionsPanel !== 'undefined' && ExtensionsPanel.getContentHTML) ? ExtensionsPanel.getContentHTML() : '';
         } else {
             // Marco visual base para todos los paneles
             html = `
@@ -1756,23 +1705,53 @@ const Panels = {
         }
         container.innerHTML = html;
 
-        // --- POST-RENDER LOGIC (Vincular eventos a sub-pestañas) ---
-        if (panelId === 'resultados') {
-            const tabs = container.querySelectorAll('.res-sub-tab');
-            tabs.forEach(tab => {
-                tab.addEventListener('click', (e) => {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    this.renderPanelContent(container, panelId);
-                });
-            });
+        // --- POST-RENDER LOGIC ---
+        if (panelId === 'resultados' && typeof ResultsPanel !== 'undefined' && ResultsPanel.init) {
+            ResultsPanel.init(container);
         }
         // Inicializar eventos del panel de archivos si corresponde
         if (panelId === 'archivos' && typeof FilePanel !== 'undefined' && FilePanel.init) {
             FilePanel.init();
         }
-            // Cargar contenido inicial de la sub-pestaña activa
-            this.updateResultsContent(container);
+        if (panelId === 'propiedades' && typeof PropertiesPanel !== 'undefined' && PropertiesPanel.init) {
+            PropertiesPanel.init();
+        }
+        if (panelId === 'git' && typeof GitPanel !== 'undefined' && GitPanel.init) {
+            GitPanel.init();
+        }
+        if (panelId === 'jquery-mobile' && typeof jQueryMobilePanel !== 'undefined' && jQueryMobilePanel.init) {
+            jQueryMobilePanel.init();
+        }
+        if (panelId === 'insertar' && typeof InsertPanel !== 'undefined' && InsertPanel.init) {
+            InsertPanel.init();
+        }
+        if (panelId === 'activos' && typeof AssetsPanel !== 'undefined' && AssetsPanel.init) {
+            AssetsPanel.init();
+        }
+        if (panelId === 'comportamientos' && typeof BehaviorsPanel !== 'undefined' && BehaviorsPanel.init) {
+            BehaviorsPanel.init();
+        }
+        if (panelId === 'bibliotecas' && typeof LibrariesPanel !== 'undefined' && LibrariesPanel.init) {
+            LibrariesPanel.init();
+        }
+        if (panelId === 'inspector-codigo' && typeof CodeInspectorPanel !== 'undefined' && CodeInspectorPanel.init) {
+            CodeInspectorPanel.init();
+        }
+        if (panelId === 'disenador-css' && typeof CSSDesignerPanel !== 'undefined' && CSSDesignerPanel.init) {
+            CSSDesignerPanel.init();
+        }
+        if (panelId === 'transiciones-css' && typeof CSSTransitionsPanel !== 'undefined' && CSSTransitionsPanel.init) {
+            CSSTransitionsPanel.init();
+        }
+        if (panelId === 'dom' && typeof DOMPanel !== 'undefined' && DOMPanel.init) {
+            DOMPanel.init();
+        }
+        if (panelId === 'fragmentos' && typeof SnippetsPanel !== 'undefined' && SnippetsPanel.init) {
+            SnippetsPanel.init();
+        }
+        if (panelId === 'extensiones' && typeof ExtensionsPanel !== 'undefined' && ExtensionsPanel.init) {
+            ExtensionsPanel.init();
+        }
     }
 };
 

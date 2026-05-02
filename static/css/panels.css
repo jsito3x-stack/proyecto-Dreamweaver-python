@@ -448,8 +448,78 @@
     /* Por encima del editor */
     display: flex;
     flex-direction: column;
-    border-radius: var(--radius-md);
-    overflow: hidden;
+    border-radius: 4px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   5. PANELES MINIMIZADOS (ICONOS APILADOS)
+   ═══════════════════════════════════════════════════════════ */
+
+.minimized-panels-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    z-index: 11000;
+    pointer-events: none;
+}
+
+.minimized-panel-icon {
+    pointer-events: auto;
+    position: fixed; /* Posición absoluta en pantalla */
+    width: 44px;
+    height: 44px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    color: var(--text-primary);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.05);
+    transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.2s, background 0.2s;
+    position: relative;
+}
+
+.minimized-panel-icon:active {
+    cursor: grabbing;
+    transform: scale(0.95);
+    border-color: var(--accent);
+}
+
+.minimized-panel-icon:hover {
+    border-color: var(--accent);
+    background: var(--bg-tertiary);
+    z-index: 12000 !important;
+}
+
+.minimized-panel-icon i {
+    font-size: 20px;
+    color: var(--accent);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+/* Tooltip al pasar el ratón */
+.minimized-panel-icon::after {
+    content: attr(data-title);
+    position: absolute;
+    right: 40px;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    border: 1px solid var(--border);
+}
+
+.minimized-panel-icon:hover::after {
+    opacity: 1;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -510,20 +580,7 @@
     cursor: move; /* Esta es la "manija" de arrastre principal */
 }
 
-/* Generar las "Tres Rallas" (Menú) con CSS puro sin tocar HTML */
-.floating-title::after {
-    content: '≡'; /* Carácter unicode de las tres rallas */
-    font-size: 14px;
-    color: var(--text-muted);
-    margin-left: 10px;
-    cursor: pointer;
-    padding: 2px 4px;
-    border-radius: 3px;
-}
-.floating-title::after:hover {
-    background: var(--bg-hover);
-    color: var(--text-primary);
-}
+
 
 .floating-content {
     flex: 1;
@@ -541,7 +598,7 @@
     cursor: se-resize;
     z-index: 10;
     background: transparent;
-    border-bottom-right-radius: var(--radius-md);
+    border-bottom-right-radius: 4px;
 }
 .floating-resize-handle::after {
     content: '';
@@ -650,9 +707,7 @@
     z-index: 10001;
     display: none;
     flex-direction: column;
-    overflow: hidden;
-    max-height: 80vh;
-    overflow-y: auto;
+    margin-top: -2px;
 }
 
 .files-menu-trigger:hover .files-context-menu,
@@ -694,7 +749,6 @@
     opacity: 0.7;
     white-space: nowrap;
 }
-
 .files-context-menu .dropdown-item .arrow-sub {
     font-size: 10px;
     margin-left: 8px;
@@ -705,7 +759,8 @@
 .files-context-menu .dropdown-item .submenu {
     position: absolute;
     left: 100%;
-    top: 0;
+    right: auto;
+    top: -2px;
     background: var(--bg-files-area, #162c3e);
     border: 1px solid var(--border-color);
     border-radius: 4px;
@@ -713,13 +768,24 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     display: none;
     flex-direction: column;
-    margin-left: 2px;
-    max-height: 80vh;
-    overflow-y: auto;
+    margin-left: -4px;
+    z-index: 10002;
+    padding-top: 2px;
 }
 
-.files-context-menu .dropdown-item:hover .submenu {
+.files-context-menu .dropdown-item:hover > .submenu {
     display: flex;
+}
+
+/* Puente invisible para evitar perder el hover al mover el ratón en diagonal */
+.files-context-menu .dropdown-item.has-submenu::after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    top: -10px;
+    bottom: -10px;
+    width: 30px;
+    z-index: 10003;
 }
 
 .files-context-menu .submenu .dropdown-item {
@@ -746,10 +812,7 @@
     background: var(--bg-secondary);
 }
 
-#float-archivos {
-    border-radius: 0;
-    box-shadow: none;
-}
+
 
 
 

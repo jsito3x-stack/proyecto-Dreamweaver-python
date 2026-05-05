@@ -18,12 +18,19 @@ const InsertPanel = {
         return `
             <i class="fas fa-bars"></i>
             <div class="files-context-menu">
-                <div class="dropdown-item" onclick="InsertPanel.refresh()">
-                    <div class="item-main"><i class="fas fa-sync-alt"></i>Actualizar lista</div>
+                <div class="dropdown-item" onclick="InsertPanel.toggleLabels()">
+                    <div class="item-main"><i class="fas fa-eye-slash"></i>Ocultar etiquetas</div>
                 </div>
                 <div class="divider"></div>
                 <div class="dropdown-item" onclick="InsertPanel.help()">
                     <div class="item-main"><i class="fas fa-question-circle"></i>Ayuda</div>
+                </div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="InsertPanel.close()">
+                    <div class="item-main"><i class="fas fa-times"></i>Cerrar</div>
+                </div>
+                <div class="dropdown-item" onclick="InsertPanel.closeTabGroup()">
+                    <div class="item-main"><i class="fas fa-times-circle"></i>Cerrar grupo de fichas</div>
                 </div>
             </div>
         `;
@@ -92,7 +99,19 @@ const InsertPanel = {
         App.showInfo('Actualizando catálogo de elementos...');
     },
 
+    toggleLabels() {
+        App.showInfo('Modo de visualización cambiado: las etiquetas de los elementos se han ocultado.');
+    },
+
     help() {
         App.showInfo('Panel de Inserción: Haz clic en cualquier elemento para añadirlo rápidamente a tu código HTML.');
+    },
+
+    close() {
+        Panels.closeSpecificPanel('insertar');
+    },
+
+    closeTabGroup() {
+        Panels.closeTabGroupOfPanel('insertar');
     }
 };

@@ -7,9 +7,27 @@ const CSSTransitionsPanel = {
         return `
             <i class="fas fa-bars"></i>
             <div class="files-context-menu">
-                <div class="dropdown-item" onclick="CSSTransitionsPanel.create()"><div class="item-main"><i class="fas fa-plus"></i> Nueva transición</div></div>
+                <div class="dropdown-item" onclick="CSSTransitionsPanel.create()">
+                    <div class="item-main"><i class="fas fa-plus"></i>Crear nueva transición...</div>
+                </div>
                 <div class="divider"></div>
-                <div class="dropdown-item" onclick="CSSTransitionsPanel.help()"><div class="item-main">Ayuda</div></div>
+                <div class="dropdown-item" onclick="CSSTransitionsPanel.edit()">
+                    <div class="item-main"><i class="fas fa-edit"></i>Editar transición seleccionada...</div>
+                </div>
+                <div class="dropdown-item" onclick="CSSTransitionsPanel.remove()">
+                    <div class="item-main"><i class="fas fa-trash-alt"></i>Quitar transición seleccionada</div>
+                </div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="CSSTransitionsPanel.help()">
+                    <div class="item-main"><i class="fas fa-question-circle"></i>Ayuda</div>
+                </div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="CSSTransitionsPanel.close()">
+                    <div class="item-main"><i class="fas fa-times"></i>Cerrar</div>
+                </div>
+                <div class="dropdown-item" onclick="CSSTransitionsPanel.closeTabGroup()">
+                    <div class="item-main"><i class="fas fa-times-circle"></i>Cerrar grupo de fichas</div>
+                </div>
             </div>
         `;
     },
@@ -26,5 +44,9 @@ const CSSTransitionsPanel = {
         `;
     },
     create() { App.showInfo('Abriendo editor de transiciones y keyframes...'); },
-    help() { App.showInfo('Define estados iniciales y finales para animar propiedades CSS automáticamente.'); }
+    edit() { App.showInfo('Edita la transición seleccionada actualmente.'); },
+    remove() { App.showInfo('Elimina la transición seleccionada de la hoja de estilos.'); },
+    help() { App.showInfo('Define estados iniciales y finales para animar propiedades CSS automáticamente.'); },
+    close() { Panels.closeSpecificPanel('transiciones-css'); },
+    closeTabGroup() { Panels.closeTabGroupOfPanel('transiciones-css'); }
 };

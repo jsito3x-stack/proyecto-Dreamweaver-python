@@ -7,10 +7,40 @@ const SnippetsPanel = {
         return `
             <i class="fas fa-bars"></i>
             <div class="files-context-menu">
-                <div class="dropdown-item" onclick="SnippetsPanel.create()"><div class="item-main"><i class="fas fa-plus"></i> Nuevo fragmento...</div></div>
-                <div class="dropdown-item" onclick="SnippetsPanel.import()"><div class="item-main"><i class="fas fa-file-import"></i> Importar fragmentos</div></div>
+                <div class="dropdown-item" onclick="SnippetsPanel.create()">
+                    <div class="item-main"><i class="fas fa-plus"></i>Nuevo fragmento</div>
+                </div>
+                <div class="dropdown-item" onclick="SnippetsPanel.newFolder()">
+                    <div class="item-main"><i class="fas fa-folder-plus"></i>Nueva carpeta</div>
+                </div>
+                <div class="dropdown-item" onclick="SnippetsPanel.edit()">
+                    <div class="item-main"><i class="fas fa-pencil-alt"></i>Edicion</div>
+                </div>
+                <div class="dropdown-item" onclick="SnippetsPanel.insert()">
+                    <div class="item-main"><i class="fas fa-share-square"></i>Insertar</div>
+                </div>
                 <div class="divider"></div>
-                <div class="dropdown-item" onclick="SnippetsPanel.help()"><div class="item-main">Ayuda</div></div>
+                <div class="dropdown-item" onclick="SnippetsPanel.rename()">
+                    <div class="item-main"><i class="fas fa-font"></i>Cambiar nombre</div>
+                </div>
+                <div class="dropdown-item" onclick="SnippetsPanel.delete()">
+                    <div class="item-main"><i class="fas fa-trash-alt"></i>Eliminar</div>
+                </div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="SnippetsPanel.addTriggerKey()">
+                    <div class="item-main"><i class="fas fa-keyboard"></i>Añadir tecla de activación</div>
+                </div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="SnippetsPanel.help()">
+                    <div class="item-main"><i class="fas fa-question-circle"></i>Ayuda</div>
+                </div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="SnippetsPanel.close()">
+                    <div class="item-main"><i class="fas fa-times"></i>Cerrar</div>
+                </div>
+                <div class="dropdown-item" onclick="SnippetsPanel.closeTabGroup()">
+                    <div class="item-main"><i class="fas fa-times-circle"></i>Cerrar grupo de fichas</div>
+                </div>
             </div>
         `;
     },
@@ -36,7 +66,14 @@ const SnippetsPanel = {
             </div>
         `;
     },
-    create() { App.showInfo('Abriendo editor de fragmentos personalizados...'); },
-    import() { App.showInfo('Selecciona un archivo JSON de fragmentos.'); },
-    help() { App.showInfo('Guarda bloques de código comunes para reutilizarlos en cualquier proyecto.'); }
+    create() { App.showInfo('Abriendo editor para crear un nuevo fragmento de código...'); },
+    newFolder() { App.showInfo('Creando una nueva carpeta para organizar fragmentos...'); },
+    edit() { App.showInfo('Editando el fragmento seleccionado actualmente...'); },
+    insert() { App.showInfo('Insertando el fragmento de código en el editor...'); },
+    rename() { App.showInfo('Cambiando el nombre del fragmento o carpeta...'); },
+    delete() { App.showInfo('Eliminando el fragmento seleccionado de la biblioteca...'); },
+    addTriggerKey() { App.showInfo('Configurando una tecla de acceso rápido para este fragmento...'); },
+    help() { App.showInfo('Guarda bloques de código comunes para reutilizarlos en cualquier proyecto.'); },
+    close() { Panels.closeSpecificPanel('fragmentos'); },
+    closeTabGroup() { Panels.closeTabGroupOfPanel('fragmentos'); }
 };

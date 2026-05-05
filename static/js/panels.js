@@ -183,10 +183,15 @@ const Panels = {
             { id: 'dom', title: 'DOM', icon: 'fas fa-project-diagram' },
             { id: 'archivos', title: 'Archivos', icon: 'fas fa-folder' },
             { id: 'insertar', title: 'Insertar', icon: 'fas fa-plus-square' },
-            { id: 'jquery-mobile', title: 'jQuery Mobile', icon: 'fas fa-mobile-alt' },
+            { id: 'jquery-mobile', title: 'Muestras de jQuery Mobile', icon: 'fas fa-palette' },
             { id: 'git', title: 'Git', icon: 'fas fa-code-branch' },
             { id: 'propiedades', title: 'Propiedades', icon: 'fas fa-sliders-h' },
-            { id: 'resultados', title: 'Resultados', icon: 'fas fa-terminal' },
+            { id: 'salida', title: 'Salida', icon: 'fas fa-terminal' },
+            { id: 'buscar', title: 'Buscar', icon: 'fas fa-search' },
+            { id: 'validacion', title: 'Validación', icon: 'fas fa-check-circle' },
+            { id: 'vinculos', title: 'Verificador de vínculos', icon: 'fas fa-link' },
+            { id: 'informes', title: 'Informes', icon: 'fas fa-file-alt' },
+            { id: 'ftp', title: 'Registro FTP', icon: 'fas fa-upload' },
             { id: 'fragmentos', title: 'Fragmentos', icon: 'fas fa-puzzle-piece' },
             { id: 'extensiones', title: 'Extensiones', icon: 'fas fa-plug' }
         ];
@@ -395,8 +400,23 @@ const Panels = {
         if (panelId === 'git' && typeof GitPanel !== 'undefined' && GitPanel.getMenuHTML) {
             return GitPanel.getMenuHTML();
         }
-        if (panelId === 'resultados' && typeof ResultsPanel !== 'undefined' && ResultsPanel.getMenuHTML) {
-            return ResultsPanel.getMenuHTML();
+        if (panelId === 'salida' && typeof SalidaPanel !== 'undefined' && SalidaPanel.getMenuHTML) {
+            return SalidaPanel.getMenuHTML();
+        }
+        if (panelId === 'buscar' && typeof BuscarPanel !== 'undefined' && BuscarPanel.getMenuHTML) {
+            return BuscarPanel.getMenuHTML();
+        }
+        if (panelId === 'validacion' && typeof ValidacionPanel !== 'undefined' && ValidacionPanel.getMenuHTML) {
+            return ValidacionPanel.getMenuHTML();
+        }
+        if (panelId === 'vinculos' && typeof VinculosPanel !== 'undefined' && VinculosPanel.getMenuHTML) {
+            return VinculosPanel.getMenuHTML();
+        }
+        if (panelId === 'informes' && typeof InformesPanel !== 'undefined' && InformesPanel.getMenuHTML) {
+            return InformesPanel.getMenuHTML();
+        }
+        if (panelId === 'ftp' && typeof FtpPanel !== 'undefined' && FtpPanel.getMenuHTML) {
+            return FtpPanel.getMenuHTML();
         }
         if (panelId === 'jquery-mobile' && typeof jQueryMobilePanel !== 'undefined' && jQueryMobilePanel.getMenuHTML) {
             return jQueryMobilePanel.getMenuHTML();
@@ -1659,8 +1679,18 @@ const Panels = {
         if (!p) { container.innerHTML = ''; return; }
 
         // Lógica específica para paneles complejos
-        if (panelId === 'resultados') {
-            html = (typeof ResultsPanel !== 'undefined' && ResultsPanel.getContentHTML) ? ResultsPanel.getContentHTML() : '';
+        if (panelId === 'salida') {
+            html = (typeof SalidaPanel !== 'undefined' && SalidaPanel.getContentHTML) ? SalidaPanel.getContentHTML() : '';
+        } else if (panelId === 'buscar') {
+            html = (typeof BuscarPanel !== 'undefined' && BuscarPanel.getContentHTML) ? BuscarPanel.getContentHTML() : '';
+        } else if (panelId === 'validacion') {
+            html = (typeof ValidacionPanel !== 'undefined' && ValidacionPanel.getContentHTML) ? ValidacionPanel.getContentHTML() : '';
+        } else if (panelId === 'vinculos') {
+            html = (typeof VinculosPanel !== 'undefined' && VinculosPanel.getContentHTML) ? VinculosPanel.getContentHTML() : '';
+        } else if (panelId === 'informes') {
+            html = (typeof InformesPanel !== 'undefined' && InformesPanel.getContentHTML) ? InformesPanel.getContentHTML() : '';
+        } else if (panelId === 'ftp') {
+            html = (typeof FtpPanel !== 'undefined' && FtpPanel.getContentHTML) ? FtpPanel.getContentHTML() : '';
         } else if (panelId === 'archivos') {
             html = (typeof FilePanel !== 'undefined' && FilePanel.getContentHTML) ? FilePanel.getContentHTML() : '';
         } else if (panelId === 'propiedades') {
@@ -1706,8 +1736,23 @@ const Panels = {
         container.innerHTML = html;
 
         // --- POST-RENDER LOGIC ---
-        if (panelId === 'resultados' && typeof ResultsPanel !== 'undefined' && ResultsPanel.init) {
-            ResultsPanel.init(container);
+        if (panelId === 'salida' && typeof SalidaPanel !== 'undefined' && SalidaPanel.init) {
+            SalidaPanel.init(container);
+        }
+        if (panelId === 'buscar' && typeof BuscarPanel !== 'undefined' && BuscarPanel.init) {
+            BuscarPanel.init(container);
+        }
+        if (panelId === 'validacion' && typeof ValidacionPanel !== 'undefined' && ValidacionPanel.init) {
+            ValidacionPanel.init(container);
+        }
+        if (panelId === 'vinculos' && typeof VinculosPanel !== 'undefined' && VinculosPanel.init) {
+            VinculosPanel.init(container);
+        }
+        if (panelId === 'informes' && typeof InformesPanel !== 'undefined' && InformesPanel.init) {
+            InformesPanel.init(container);
+        }
+        if (panelId === 'ftp' && typeof FtpPanel !== 'undefined' && FtpPanel.init) {
+            FtpPanel.init(container);
         }
         // Inicializar eventos del panel de archivos si corresponde
         if (panelId === 'archivos' && typeof FilePanel !== 'undefined' && FilePanel.init) {
@@ -1766,7 +1811,7 @@ const menuMap = {
         'inspector de código': 'inspector-codigo', 'diseñador de css': 'disenador-css',
         'transiciones css': 'transiciones-css', 'dom': 'dom', 'archivos': 'archivos',
         'insertar': 'insertar', 'muestras de jquery mobile': 'jquery-mobile', 'git': 'git',
-        'propiedades': 'propiedades', 'resultados': 'resultados', 'fragmentos': 'fragmentos', 'extensiones': 'extensiones'
+        'propiedades': 'propiedades', 'salida': 'salida', 'buscar': 'buscar', 'validación': 'validacion', 'verificador de vínculos': 'vinculos', 'verificación de vínculos': 'vinculos', 'informes': 'informes', 'informes del sitio': 'informes', 'registro ftp': 'ftp', 'fragmentos': 'fragmentos', 'extensiones': 'extensiones'
     };
 document.addEventListener('DOMContentLoaded', () => {
     const ventanaMenu = Array.from(document.querySelectorAll('.menu-item')).find(item => item.querySelector('span').innerText.trim() === 'Ventana');

@@ -7,7 +7,22 @@ const LibrariesPanel = {
         return `
             <i class="fas fa-bars"></i>
             <div class="files-context-menu">
-                <div class="dropdown-item" onclick="LibrariesPanel.login()"><div class="item-main"><i class="fas fa-sign-in-alt"></i> Iniciar sesión...</div></div>
+                <div class="dropdown-item" onclick="LibrariesPanel.info()">
+                    <div class="item-main"><i class="fas fa-info-circle"></i>Más información</div>
+                </div>
+                <div class="dropdown-item" onclick="LibrariesPanel.news()">
+                    <div class="item-main"><i class="fas fa-bullhorn"></i>Novedades</div>
+                </div>
+                <div class="dropdown-item" onclick="LibrariesPanel.feedback()">
+                    <div class="item-main"><i class="fas fa-comment-alt"></i>Facilitar comentarios</div>
+                </div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="LibrariesPanel.close()">
+                    <div class="item-main"><i class="fas fa-times"></i>Cerrar</div>
+                </div>
+                <div class="dropdown-item" onclick="LibrariesPanel.closeTabGroup()">
+                    <div class="item-main"><i class="fas fa-times-circle"></i>Cerrar grupo de fichas</div>
+                </div>
             </div>
         `;
     },
@@ -23,5 +38,10 @@ const LibrariesPanel = {
             </div>
         `;
     },
-    login() { App.showInfo('Abriendo ventana de inicio de sesión de Adobe...'); }
+    login() { App.showInfo('Abriendo ventana de inicio de sesión de Adobe...'); },
+    info() { App.showInfo('Explora las capacidades de Creative Cloud Libraries.'); },
+    news() { App.showInfo('Descubre las últimas novedades en la gestión de recursos en la nube.'); },
+    feedback() { App.showInfo('Tu opinión nos ayuda a mejorar. Cuéntanos qué piensas.'); },
+    close() { Panels.closeSpecificPanel('bibliotecas'); },
+    closeTabGroup() { Panels.closeTabGroupOfPanel('bibliotecas'); }
 };

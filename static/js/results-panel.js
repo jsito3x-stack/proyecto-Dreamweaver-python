@@ -45,16 +45,36 @@ const ResultsPanel = {
         return `
             <i class="fas fa-bars"></i>
             <div class="files-context-menu">
-                <div class="dropdown-item" onclick="ResultsPanel.clearLog()">
-                    <div class="item-main"><i class="fas fa-eraser"></i>Limpiar salida</div>
+                <div class="dropdown-item" onclick="ResultsPanel.openFile()">
+                    <div class="item-main"><i class="fas fa-folder-open"></i>Abrir archivo</div>
                 </div>
                 <div class="divider"></div>
-                <div class="dropdown-item" onclick="ResultsPanel.copyAll()">
-                    <div class="item-main"><i class="fas fa-copy"></i>Copiar todo</div>
+                <div class="dropdown-item" onclick="ResultsPanel.saveResults()">
+                    <div class="item-main"><i class="fas fa-save"></i>Guardar resultados...</div>
+                </div>
+                <div class="dropdown-item" onclick="ResultsPanel.clearLog()">
+                    <div class="item-main"><i class="fas fa-trash-alt"></i>Borrar resultados</div>
+                </div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="ResultsPanel.checkDocLinks()">
+                    <div class="item-main"><i class="fas fa-link"></i>Comprobar vínculos del documento actual</div>
+                </div>
+                <div class="dropdown-item" onclick="ResultsPanel.checkSiteLinks()">
+                    <div class="item-main"><i class="fas fa-globe"></i>Buscar sitio local actual completo en vínculos</div>
+                </div>
+                <div class="dropdown-item" onclick="ResultsPanel.checkSelectedLinks()">
+                    <div class="item-main"><i class="fas fa-file-contract"></i>Buscar archivos seleccionados en el sitio en vínculos</div>
                 </div>
                 <div class="divider"></div>
                 <div class="dropdown-item" onclick="ResultsPanel.help()">
                     <div class="item-main"><i class="fas fa-question-circle"></i>Ayuda</div>
+                </div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="ResultsPanel.close()">
+                    <div class="item-main"><i class="fas fa-times"></i>Cerrar</div>
+                </div>
+                <div class="dropdown-item" onclick="ResultsPanel.closeTabGroup()">
+                    <div class="item-main"><i class="fas fa-times-circle"></i>Cerrar grupo de fichas</div>
                 </div>
             </div>
         `;
@@ -68,6 +88,7 @@ const ResultsPanel = {
             { id: 'salida', label: 'Salida' },
             { id: 'buscar', label: 'Buscar' },
             { id: 'validacion', label: 'Validación' },
+            { id: 'vinculos', label: 'Verificador de vínculos' },
             { id: 'informes', label: 'Informes' },
             { id: 'ftp', label: 'Registro FTP' }
         ];
@@ -126,6 +147,23 @@ const ResultsPanel = {
                     </div>
                 </div>
             `;
+        } else if (tab === 'vinculos') {
+            contentHtml = `
+                <div style="padding:5px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid var(--border); padding-bottom:5px;">
+                        <span style="font-weight:bold; color:var(--text-primary);">Verificador de vínculos</span>
+                        <select class="prop-input" style="font-size:10px; padding:2px;">
+                            <option>Vínculos rotos</option>
+                            <option>Vínculos externos</option>
+                            <option>Archivos huérfanos</option>
+                        </select>
+                    </div>
+                    <div style="text-align:center; padding:30px; opacity:0.6;">
+                        <i class="fas fa-link-slash" style="font-size:30px; margin-bottom:10px; display:block;"></i>
+                        Usa el menú del panel para comprobar los vínculos del sitio o documento.
+                    </div>
+                </div>
+            `;
         } else if (tab === 'validacion') {
             contentHtml = `
                 <div style="padding:5px;">
@@ -148,26 +186,24 @@ const ResultsPanel = {
         body.innerHTML = contentHtml;
     },
 
-    /**
-     * Limpiar el log de salida
-     */
-    clearLog() {
-        console.log('📊 Limpiar log');
-        App.showInfo('Consola de salida limpiada');
-        // Para que funcione realmente, tendríamos que persistir los logs en un array
+    openFile() { App.showInfo('Abriendo archivo de resultados guardado...'); },
+    saveResults() { App.showInfo('Exportando resultados a un archivo de texto...'); },
+    clearLog() { App.showInfo('Consola de resultados limpiada.'); },
+    checkDocLinks() { 
+        this.state.activeTab = 'vinculos';
+        const container = document.querySelector('.right-panel-container'); // Aproximación
+        this.init(container); // Re-vincular
+        App.showInfo('Comprobando vínculos en el documento actual...'); 
     },
-
-    /**
-     * Copiar el contenido al portapapeles
-     */
-    copyAll() {
-        App.showSuccess('Resultados copiados al portapapeles');
+    checkSiteLinks() { 
+        this.state.activeTab = 'vinculos';
+        App.showInfo('Escaneando todo el sitio local en busca de vínculos rotos...'); 
     },
-
-    /**
-     * Ayuda del panel
-     */
-    help() {
-        App.showInfo('El panel de resultados muestra información sobre la ejecución, búsquedas y validación del código.');
-    }
+    checkSelectedLinks() { 
+        this.state.activeTab = 'vinculos';
+        App.showInfo('Comprobando vínculos en los archivos seleccionados...'); 
+    },
+    help() { App.showInfo('El panel de resultados muestra información sobre la ejecución, vínculos y validación del código.'); },
+    close() { Panels.closeSpecificPanel('resultados'); },
+    closeTabGroup() { Panels.closeTabGroupOfPanel('resultados'); }
 };

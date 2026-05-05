@@ -18,17 +18,15 @@ const PropertiesPanel = {
         return `
             <i class="fas fa-bars"></i>
             <div class="files-context-menu">
-                <div class="dropdown-item" onclick="PropertiesPanel.reset()">
-                    <div class="item-main"><i class="fas fa-sync-alt"></i>Restablecer</div>
-                </div>
-                <div class="divider"></div>
                 <div class="dropdown-item" onclick="PropertiesPanel.help()">
                     <div class="item-main"><i class="fas fa-question-circle"></i>Ayuda</div>
                 </div>
                 <div class="divider"></div>
-                <!-- Opción para cerrar el panel -->
-                <div class="dropdown-item" onclick="Panels.hidePanel('propiedades')">
-                    <div class="item-main"><i class="fas fa-times-circle"></i>Cerrar panel</div>
+                <div class="dropdown-item" onclick="PropertiesPanel.close()">
+                    <div class="item-main"><i class="fas fa-times"></i>Cerrar</div>
+                </div>
+                <div class="dropdown-item" onclick="PropertiesPanel.closeTabGroup()">
+                    <div class="item-main"><i class="fas fa-times-circle"></i>Cerrar grupo de fichas</div>
                 </div>
             </div>
         `;
@@ -90,5 +88,13 @@ const PropertiesPanel = {
     help() {
         console.log('🛠️ Ayuda de propiedades');
         App.showInfo('Guía de uso: Selecciona un elemento en el editor para ver sus propiedades aquí.');
+    },
+
+    close() {
+        Panels.closeSpecificPanel('propiedades');
+    },
+
+    closeTabGroup() {
+        Panels.closeTabGroupOfPanel('propiedades');
     }
 };

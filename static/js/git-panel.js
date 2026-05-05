@@ -11,22 +11,15 @@ const GitPanel = {
         return `
             <i class="fas fa-bars"></i>
             <div class="files-context-menu">
-                <div class="dropdown-item" onclick="GitPanel.refresh()">
-                    <div class="item-main"><i class="fas fa-sync-alt"></i>Actualizar estado</div>
-                </div>
-                <div class="divider"></div>
-                <div class="dropdown-item" onclick="GitPanel.commit()">
-                    <div class="item-main"><i class="fas fa-check"></i>Commit...</div>
-                </div>
-                <div class="dropdown-item" onclick="GitPanel.push()">
-                    <div class="item-main"><i class="fas fa-arrow-up"></i>Push</div>
-                </div>
-                <div class="dropdown-item" onclick="GitPanel.pull()">
-                    <div class="item-main"><i class="fas fa-arrow-down"></i>Pull</div>
-                </div>
-                <div class="divider"></div>
                 <div class="dropdown-item" onclick="GitPanel.help()">
                     <div class="item-main"><i class="fas fa-question-circle"></i>Ayuda</div>
+                </div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="GitPanel.close()">
+                    <div class="item-main"><i class="fas fa-times"></i>Cerrar</div>
+                </div>
+                <div class="dropdown-item" onclick="GitPanel.closeTabGroup()">
+                    <div class="item-main"><i class="fas fa-times-circle"></i>Cerrar grupo de fichas</div>
                 </div>
             </div>
         `;
@@ -76,5 +69,13 @@ const GitPanel = {
 
     help() {
         App.showInfo('Ayuda de Git: Conecta tu proyecto con un repositorio remoto para gestionar versiones.');
+    },
+
+    close() {
+        Panels.closeSpecificPanel('git');
+    },
+
+    closeTabGroup() {
+        Panels.closeTabGroupOfPanel('git');
     }
 };

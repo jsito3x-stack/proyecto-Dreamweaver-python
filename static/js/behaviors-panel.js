@@ -7,9 +7,27 @@ const BehaviorsPanel = {
         return `
             <i class="fas fa-bars"></i>
             <div class="files-context-menu">
-                <div class="dropdown-item" onclick="BehaviorsPanel.add()"><div class="item-main"><i class="fas fa-plus"></i> Añadir comportamiento</div></div>
+                <div class="dropdown-item" onclick="BehaviorsPanel.edit()">
+                    <div class="item-main"><i class="fas fa-edit"></i>Editar comportamiento...</div>
+                </div>
+                <div class="dropdown-item" onclick="BehaviorsPanel.remove()">
+                    <div class="item-main"><i class="fas fa-trash-alt"></i>Eliminar comportamiento...</div>
+                </div>
                 <div class="divider"></div>
-                <div class="dropdown-item" onclick="BehaviorsPanel.help()"><div class="item-main">Ayuda</div></div>
+                <div class="dropdown-item" onclick="BehaviorsPanel.addListItem()">
+                    <div class="item-main"><i class="fas fa-list-ul"></i>Añadir nuevo elemento de lista</div>
+                </div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="BehaviorsPanel.help()">
+                    <div class="item-main"><i class="fas fa-question-circle"></i>Ayuda</div>
+                </div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="BehaviorsPanel.close()">
+                    <div class="item-main"><i class="fas fa-times"></i>Cerrar</div>
+                </div>
+                <div class="dropdown-item" onclick="BehaviorsPanel.closeTabGroup()">
+                    <div class="item-main"><i class="fas fa-times-circle"></i>Cerrar grupo de fichas</div>
+                </div>
             </div>
         `;
     },
@@ -24,6 +42,10 @@ const BehaviorsPanel = {
             </div>
         `;
     },
-    add() { App.showInfo('Selecciona un elemento en el editor primero.'); },
-    help() { App.showInfo('Los comportamientos permiten añadir interactividad sin escribir código manualmente.'); }
+    edit() { App.showInfo('Editando los parámetros del comportamiento seleccionado...'); },
+    remove() { App.showInfo('Comportamiento eliminado del elemento seleccionado.'); },
+    addListItem() { App.showInfo('Añadiendo nuevo elemento a la lista de comportamientos disponibles...'); },
+    help() { App.showInfo('Los comportamientos permiten añadir interactividad sin escribir código manualmente.'); },
+    close() { Panels.closeSpecificPanel('comportamientos'); },
+    closeTabGroup() { Panels.closeTabGroupOfPanel('comportamientos'); }
 };

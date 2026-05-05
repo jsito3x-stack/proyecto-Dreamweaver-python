@@ -7,10 +7,16 @@ const CSSDesignerPanel = {
         return `
             <i class="fas fa-bars"></i>
             <div class="files-context-menu">
-                <div class="dropdown-item" onclick="CSSDesignerPanel.addSource()"><div class="item-main"><i class="fas fa-plus"></i> Añadir fuente CSS</div></div>
-                <div class="dropdown-item" onclick="CSSDesignerPanel.addMedia()"><div class="item-main"><i class="fas fa-mobile-alt"></i> Añadir Media Query</div></div>
+                <div class="dropdown-item" onclick="CSSDesignerPanel.help()">
+                    <div class="item-main"><i class="fas fa-question-circle"></i>Ayuda</div>
+                </div>
                 <div class="divider"></div>
-                <div class="dropdown-item" onclick="CSSDesignerPanel.help()"><div class="item-main">Ayuda</div></div>
+                <div class="dropdown-item" onclick="CSSDesignerPanel.close()">
+                    <div class="item-main"><i class="fas fa-times"></i>Cerrar</div>
+                </div>
+                <div class="dropdown-item" onclick="CSSDesignerPanel.closeTabGroup()">
+                    <div class="item-main"><i class="fas fa-times-circle"></i>Cerrar grupo de fichas</div>
+                </div>
             </div>
         `;
     },
@@ -57,5 +63,7 @@ const CSSDesignerPanel = {
     },
     addSource() { App.showInfo('Seleccionando nueva hoja de estilos...'); },
     addMedia() { App.showInfo('Creando nueva regla @media...'); },
-    help() { App.showInfo('El Diseñador CSS permite editar estilos visualmente sin escribir código.'); }
+    help() { App.showInfo('El Diseñador CSS permite editar estilos visualmente sin escribir código.'); },
+    close() { Panels.closeSpecificPanel('disenador-css'); },
+    closeTabGroup() { Panels.closeTabGroupOfPanel('disenador-css'); }
 };

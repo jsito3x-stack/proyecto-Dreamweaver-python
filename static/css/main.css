@@ -115,7 +115,7 @@ body {
     display: flex;
     align-items: center;
     padding: 0 16px;
-    height: 32px;
+    height: 28px;
     background: var(--bg-secondary);
     border-bottom: 1px solid var(--border);
     z-index: 300000;
@@ -164,7 +164,7 @@ body {
 
 .menu-item {
     position: relative;
-    padding: 0 10px;
+    padding: 0 8px;
     height: 100%;
     display: flex;
     align-items: center;
@@ -198,8 +198,6 @@ body {
     box-shadow: var(--shadow-lg);
     z-index: 300001;
     padding: 4px 0;
-    max-height: calc(100vh - 60px);
-    overflow-y: auto;
 }
 
 .menu-item:hover .menu-dropdown {
@@ -207,7 +205,7 @@ body {
 }
 
 .dropdown-item {
-    padding: 3px 16px;
+    padding: 2px 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -247,13 +245,54 @@ body {
 .menu-dropdown .divider {
     height: 1px;
     background: var(--border);
-    margin: 2px 0;
+    margin: 1px 0;
 }
 
 .arrow-sub {
     font-size: 8px;
     opacity: 0.5;
     margin-left: auto;
+}
+
+/* Submenús en el menú principal */
+.menu-dropdown .dropdown-item.has-submenu {
+    position: relative;
+    cursor: pointer;
+}
+
+.menu-dropdown .dropdown-item.has-submenu .submenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background: var(--bg-secondary);
+    min-width: 220px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    box-shadow: var(--shadow-lg);
+    z-index: 300005;
+    padding: 4px 0;
+    margin-left: 0;
+}
+
+.menu-dropdown .dropdown-item.has-submenu:hover > .submenu {
+    display: block;
+}
+
+/* Puente para evitar que el menú se cierre al mover el ratón en diagonal */
+.menu-dropdown .dropdown-item.has-submenu::after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    top: 0;
+    bottom: 0;
+    width: 25px;
+    z-index: 300004;
+    pointer-events: auto;
+}
+
+.menu-dropdown .submenu .dropdown-item {
+    padding: 4px 16px;
 }
 
 /* === CONTENEDOR DE PESTAÑAS === */

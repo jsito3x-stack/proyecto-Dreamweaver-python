@@ -718,7 +718,7 @@
 /* Items del menú contextual */
 .files-context-menu .dropdown-item {
     position: relative;
-    padding: 6px 12px;
+    padding: 3px 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -796,7 +796,7 @@
 .files-context-menu .divider {
     height: 1px;
     background: var(--border-color);
-    margin: 4px 0;
+    margin: 2px 0;
     opacity: 0.5;
 }
 

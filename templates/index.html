@@ -535,8 +535,29 @@
                         <div class="dropdown-item" onclick="App.notify('Propiedades','var(--accent)')">
                             <div class="item-main">Propiedades</div><span class="shortcut">Ctrl+F3</span>
                         </div>
-                        <div class="dropdown-item" onclick="App.notify('Resultados','var(--accent)')">
+                        <div class="dropdown-item has-submenu">
                             <div class="item-main">Resultados</div>
+                            <i class="fas fa-chevron-right arrow-sub"></i>
+                            <div class="submenu">
+                                <div class="dropdown-item" onclick="Panels.togglePanel('salida')">
+                                    <div class="item-main">Salida</div><span class="shortcut">Mayús+F6</span>
+                                </div>
+                                <div class="dropdown-item" onclick="Panels.togglePanel('buscar')">
+                                    <div class="item-main">Buscar</div><span class="shortcut">F7</span>
+                                </div>
+                                <div class="dropdown-item" onclick="Panels.togglePanel('validacion')">
+                                    <div class="item-main">Validación</div>
+                                </div>
+                                <div class="dropdown-item" onclick="Panels.togglePanel('vinculos')">
+                                    <div class="item-main">Verificación de vínculos</div>
+                                </div>
+                                <div class="dropdown-item" onclick="Panels.togglePanel('informes')">
+                                    <div class="item-main">Informes del sitio</div>
+                                </div>
+                                <div class="dropdown-item" onclick="Panels.togglePanel('ftp')">
+                                    <div class="item-main">Registro FTP</div>
+                                </div>
+                            </div>
                         </div>
                         <div class="divider"></div>
                         <div class="dropdown-item" onclick="App.notify('Fragmentos','var(--accent)')">

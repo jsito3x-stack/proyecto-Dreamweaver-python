@@ -17,12 +17,15 @@ const jQueryMobilePanel = {
         return `
             <i class="fas fa-bars"></i>
             <div class="files-context-menu">
-                <div class="dropdown-item" onclick="jQueryMobilePanel.refresh()">
-                    <div class="item-main"><i class="fas fa-sync-alt"></i>Actualizar componentes</div>
-                </div>
-                <div class="divider"></div>
                 <div class="dropdown-item" onclick="jQueryMobilePanel.help()">
                     <div class="item-main"><i class="fas fa-question-circle"></i>Ayuda</div>
+                </div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="jQueryMobilePanel.close()">
+                    <div class="item-main"><i class="fas fa-times"></i>Cerrar</div>
+                </div>
+                <div class="dropdown-item" onclick="jQueryMobilePanel.closeTabGroup()">
+                    <div class="item-main"><i class="fas fa-times-circle"></i>Cerrar grupo de fichas</div>
                 </div>
             </div>
         `;
@@ -35,7 +38,7 @@ const jQueryMobilePanel = {
         return `
             <div class="files-window-shell">
                 <div class="panel-widget-title" style="padding: 10px; border-bottom: 1px solid var(--border);">
-                    <i class="fas fa-mobile-alt"></i> Componentes jQuery Mobile
+                    <i class="fas fa-palette"></i> Muestras de jQuery Mobile
                 </div>
                 
                 <div class="files-panel-content-area" style="flex:1; padding: 15px; overflow-y: auto;">
@@ -92,5 +95,19 @@ const jQueryMobilePanel = {
      */
     help() {
         App.showInfo('Los componentes de jQuery Mobile están diseñados para adaptarse automáticamente a cualquier tamaño de pantalla móvil.');
+    },
+
+    /**
+     * Cerrar panel
+     */
+    close() {
+        Panels.closeSpecificPanel('jquery-mobile');
+    },
+
+    /**
+     * Cerrar grupo de fichas
+     */
+    closeTabGroup() {
+        Panels.closeTabGroupOfPanel('jquery-mobile');
     }
 };

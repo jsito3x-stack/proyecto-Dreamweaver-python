@@ -1134,3 +1134,162 @@
     background: rgba(0, 122, 204, 0.18);
 }
 
+
+/* ═══════════════════════════════════════════════════════════
+   PANEL DE ARCHIVOS DINÁMICO (fp-*)
+   ═══════════════════════════════════════════════════════════ */
+
+.fp-shell {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    background: var(--bg-secondary);
+}
+
+.fp-header {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 8px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+    flex-shrink: 0;
+    min-height: 30px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.fp-project-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 11px;
+    color: var(--text-primary);
+}
+
+.fp-btn-open,
+.fp-btn-refresh {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    transition: color 0.15s, background 0.15s;
+    flex-shrink: 0;
+}
+
+.fp-btn-open:hover,
+.fp-btn-refresh:hover {
+    color: var(--accent);
+    background: var(--bg-hover);
+}
+
+.fp-tree-container {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: var(--bg-files-area, #162c3e);
+}
+
+.fp-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    font-size: 12px;
+    color: var(--text-primary);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    border-left: 2px solid transparent;
+    transition: background 0.12s, border-color 0.12s;
+}
+
+.fp-row:hover {
+    background: var(--bg-hover);
+}
+
+.fp-folder-row {
+    font-weight: 600;
+}
+
+.fp-file-row {
+    font-weight: normal;
+    opacity: 0.9;
+}
+
+.fp-file-row:hover {
+    opacity: 1;
+}
+
+.fp-item-active {
+    background: rgba(0, 122, 204, 0.18) !important;
+    border-left: 2px solid var(--accent) !important;
+    color: var(--accent) !important;
+}
+
+.fp-icon {
+    width: 14px;
+    text-align: center;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.fp-arrow {
+    width: 10px;
+    font-size: 9px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: transform 0.15s;
+}
+
+.fp-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+}
+
+.fp-status-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 120px;
+    padding: 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.fp-open-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.12s;
+}
+
+.fp-open-btn:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+}
+
+.fp-open-btn:active {
+    transform: translateY(0);
+}

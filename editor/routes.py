@@ -184,6 +184,132 @@ def register_routes(app: Flask):
             print("❌ Error al cargar el proyecto")
             return jsonify({'success': False, 'error': 'No se pudo leer la carpeta'})
     
+    @app.route('/api/file-tree')
+    def api_file_tree():
+        """Devuelve la jerarquía de archivos del proyecto como árbol JSON con tamaños y estadísticas."""
+        global editor
+
+        if not editor or not editor.proyecto:
+            return jsonify({'success': False, 'tree': [], 'nombre_proyecto': None,
+                            'stats': {'archivos': 0, 'carpetas': 0, 'total_bytes': 0}})
+
+        def build_tree(archivos_dict):
+            """
+            Construye un árbol jerárquico en dos pasos:
+              1. Insertar SOLO archivos reales (tipo != 'folder') - crea nodos intermedios automáticamente
+              2. Insertar carpetas VACÍAS que no surgieron en el paso 1
+            Así evitamos que una entrada tipo='folder' sobreescriba el nodo intermediario
+            que ya contiene los hijos de esa carpeta.
+            """
+            root = {}
+
+            # ── PASO 1: Archivos reales ─────────────────────────────────────
+            for ruta_relativa, archivo in archivos_dict.items():
+                if archivo.tipo == 'folder':
+                    continue  # Las carpetas no vacías se crean implícitamente
+
+                partes = ruta_relativa.replace('\\', '/').split('/')
+                nodo_actual = root
+
+                for i, parte in enumerate(partes):
+                    es_hoja = (i == len(partes) - 1)
+
+                    if es_hoja:
+                        # Tamaño real del archivo en disco
+                        try:
+                            size_bytes = os.path.getsize(archivo.ruta) if archivo.ruta and os.path.exists(archivo.ruta) else 0
+                        except Exception:
+                            size_bytes = 0
+
+                        nodo_actual[parte] = {
+                            '_is_file': True,
+                            '_ruta': ruta_relativa,
+                            '_tipo': archivo.tipo,
+                            '_size': size_bytes,
+                        }
+                    else:
+                        # Crear nodo carpeta intermediario si no existe,
+                        # o si por error existe como archivo
+                        if parte not in nodo_actual or nodo_actual[parte].get('_is_file'):
+                            nodo_actual[parte] = {}
+                        nodo_actual = nodo_actual[parte]
+
+            # ── PASO 2: Carpetas vacías ─────────────────────────────────────
+            for ruta_relativa, archivo in archivos_dict.items():
+                if archivo.tipo != 'folder':
+                    continue
+
+                partes = ruta_relativa.replace('\\', '/').split('/')
+                nodo_actual = root
+
+                for parte in partes:
+                    # Solo creamos si no existe ya como carpeta
+                    if parte not in nodo_actual:
+                        nodo_actual[parte] = {}
+                    elif nodo_actual[parte].get('_is_file'):
+                        break  # Conflicto: hay un archivo con el mismo nombre que la carpeta
+                    nodo_actual = nodo_actual[parte]
+
+            # ── Convertir dict anidado → lista de nodos ────────────────────
+            def dict_to_list(d):
+                nodos = []
+                carpetas = sorted([k for k, v in d.items()
+                                   if isinstance(v, dict) and not v.get('_is_file') and not k.startswith('_')])
+                archivos_keys = sorted([k for k, v in d.items()
+                                        if isinstance(v, dict) and v.get('_is_file')])
+
+                for nombre_nodo in carpetas:
+                    hijo = d[nombre_nodo]
+                    nodos.append({
+                        'nombre': nombre_nodo,
+                        'tipo': 'folder',
+                        'hijos': dict_to_list(hijo)
+                    })
+
+                for nombre_nodo in archivos_keys:
+                    info = d[nombre_nodo]
+                    nodos.append({
+                        'nombre': nombre_nodo,
+                        'tipo': info['_tipo'],
+                        'ruta': info['_ruta'],
+                        'size': info.get('_size', 0),
+                    })
+
+                return nodos
+
+            return dict_to_list(root)
+
+        # ── Estadísticas del proyecto ────────────────────────────────────────
+        total_archivos = 0
+        total_carpetas = 0
+        total_bytes   = 0
+
+        for ruta_relativa, archivo in editor.proyecto.items():
+            if archivo.tipo == 'folder':
+                total_carpetas += 1
+            else:
+                total_archivos += 1
+                try:
+                    if archivo.ruta and os.path.exists(archivo.ruta):
+                        total_bytes += os.path.getsize(archivo.ruta)
+                except Exception:
+                    pass
+
+        nombre_proyecto = os.path.basename(editor.archivo_principal) if editor.archivo_principal else 'Proyecto'
+        tree = build_tree(editor.proyecto)
+
+        return jsonify({
+            'success': True,
+            'tree': tree,
+            'nombre_proyecto': nombre_proyecto,
+            'archivo_actual': editor.archivo_actual,
+            'stats': {
+                'archivos': total_archivos,
+                'carpetas': total_carpetas,
+                'total_bytes': total_bytes,
+            }
+        })
+
     @app.route('/api/select-file', methods=['POST'])
     def api_select_file():
         """Seleccionar archivo actual y devolver su contenido"""

@@ -1,335 +1,302 @@
 /**
- * PANEL DE ARCHIVOS - Menús y funcionalidades tipo Dreamweaver
- * Maneja todos los eventos del panel de archivos
+ * PANEL DE ARCHIVOS - Explorador real del sistema de archivos
+ * Conectado dinámicamente con el backend Flask
  */
 
 const FilePanel = {
-    // Estado del panel
-    currentSite: 'root',
-    selectedFiles: [],
+    // ─── Estado ────────────────────────────────────────────
+    selectedFile: null,
     clipboardData: null,
-    clipboardMode: 'copy', // 'copy' o 'cut'
+    clipboardMode: 'copy',
+    _treeState: {},          // Guarda qué carpetas están expandidas/colapsadas
 
-    /**
-     * Inicializar el panel de archivos después de renderizar
-     */
+    // ─── Iconos por tipo de archivo ─────────────────────────
+    _icons: {
+        'folder':  { icon: 'fas fa-folder',         color: 'var(--accent)' },
+        'html':    { icon: 'fas fa-code',            color: '#e67e22' },
+        'css':     { icon: 'fab fa-css3-alt',        color: '#3498db' },
+        'js':      { icon: 'fab fa-js-square',       color: '#f1c40f' },
+        'json':    { icon: 'fas fa-file-code',       color: '#2ecc71' },
+        'png':     { icon: 'fas fa-file-image',      color: '#9b59b6' },
+        'jpg':     { icon: 'fas fa-file-image',      color: '#9b59b6' },
+        'jpeg':    { icon: 'fas fa-file-image',      color: '#9b59b6' },
+        'gif':     { icon: 'fas fa-file-image',      color: '#9b59b6' },
+        'svg':     { icon: 'fas fa-vector-square',   color: '#27ae60' },
+        'ico':     { icon: 'fas fa-image',           color: '#8e44ad' },
+        'pdf':     { icon: 'fas fa-file-pdf',        color: '#e74c3c' },
+        'md':      { icon: 'fas fa-file-alt',        color: '#95a5a6' },
+        'txt':     { icon: 'fas fa-file-alt',        color: '#95a5a6' },
+        'py':      { icon: 'fab fa-python',          color: '#3776ab' },
+        'php':     { icon: 'fab fa-php',             color: '#7952b3' },
+        'xml':     { icon: 'fas fa-file-code',       color: '#e67e22' },
+        '_default':{ icon: 'fas fa-file',            color: '#7f8c8d' },
+    },
+
+    // ────────────────────────────────────────────────────────
+    //  INICIALIZACIÓN
+    // ────────────────────────────────────────────────────────
     init() {
         console.log('📁 Panel de Archivos inicializado');
-        
-        // Setup del dropdown de sitios
-        const siteDropdown = document.getElementById('site-dropdown');
-        if (siteDropdown) {
-            siteDropdown.addEventListener('change', (e) => {
-                if (e.target.value === 'manage') {
-                    this.manageSite();
-                } else {
-                    this.changeSite(e.target.value);
-                }
+        this.loadAndRender();
+    },
+
+    // ────────────────────────────────────────────────────────
+    //  CARGA Y RENDERIZADO DEL ÁRBOL
+    // ────────────────────────────────────────────────────────
+
+    /** Solicita el árbol al servidor y lo pinta */
+    async loadAndRender() {
+        const container = document.getElementById('fp-tree-container');
+        if (!container) return;
+
+        container.innerHTML = this._renderLoading();
+
+        try {
+            const res  = await fetch('/api/file-tree');
+            const data = await res.json();
+
+            if (!data.success || !data.tree || data.tree.length === 0) {
+                container.innerHTML = this._renderEmpty();
+                return;
+            }
+
+            // Guardar archivo activo
+            this._activeFile = data.archivo_actual;
+
+            // Actualizar nombre del proyecto en cabecera
+            const titleEl = document.getElementById('fp-project-name');
+            if (titleEl) titleEl.textContent = data.nombre_proyecto || 'Proyecto';
+
+            // Renderizar árbol
+            container.innerHTML = this._buildTree(data.tree, 0);
+
+            // Restaurar scroll y selección
+            if (this._activeFile) {
+                const activeEl = container.querySelector(`[data-ruta="${CSS.escape(this._activeFile)}"]`);
+                if (activeEl) activeEl.classList.add('fp-item-active');
+            }
+        } catch (err) {
+            console.error('Error cargando árbol de archivos:', err);
+            container.innerHTML = this._renderEmpty();
+        }
+    },
+
+    /** Construye el HTML del árbol recursivamente */
+    _buildTree(nodos, nivel) {
+        if (!nodos || nodos.length === 0) return '';
+
+        let html = '';
+        for (const nodo of nodos) {
+            if (nodo.tipo === 'folder') {
+                html += this._renderFolder(nodo, nivel);
+            } else {
+                html += this._renderFile(nodo, nivel);
+            }
+        }
+        return html;
+    },
+
+    _renderFolder(nodo, nivel) {
+        const id      = this._slugify(nodo.nombre + '-' + nivel);
+        const isOpen  = this._treeState[id] !== false; // abierto por defecto
+        const arrow   = isOpen ? 'fa-chevron-down' : 'fa-chevron-right';
+        const display = isOpen ? 'block'           : 'none';
+        const indent  = nivel * 14;
+
+        const childrenHTML = this._buildTree(nodo.hijos || [], nivel + 1);
+
+        return `
+        <div class="fp-folder-item">
+            <div class="fp-row fp-folder-row"
+                 style="padding-left:${8 + indent}px"
+                 onclick="FilePanel.toggleFolder('${id}', this)">
+                <i class="fas ${arrow} fp-arrow" id="fp-arrow-${id}"></i>
+                <i class="fas fa-folder fp-icon" style="color:var(--accent)"></i>
+                <span class="fp-name">${this._escape(nodo.nombre)}</span>
+            </div>
+            <div id="fp-children-${id}" style="display:${display}">
+                ${childrenHTML || ''}
+            </div>
+        </div>`;
+    },
+
+    _renderFile(nodo, nivel) {
+        const icon  = this._icons[nodo.tipo] || this._icons['_default'];
+        const indent = nivel * 14;
+        const isActive = nodo.ruta && nodo.ruta === this._activeFile;
+        const activeClass = isActive ? ' fp-item-active' : '';
+        const rutaEscaped = this._escape(nodo.ruta || '');
+        const rutaAttr    = this._escape(nodo.ruta || '', true);
+
+        return `
+        <div class="fp-row fp-file-row${activeClass}"
+             style="padding-left:${22 + indent}px"
+             data-ruta="${rutaAttr}"
+             title="${rutaAttr}"
+             ondblclick="FilePanel.openFile('${rutaAttr}')">
+            <i class="${icon.icon} fp-icon" style="color:${icon.color}"></i>
+            <span class="fp-name">${this._escape(nodo.nombre)}</span>
+        </div>`;
+    },
+
+    // ────────────────────────────────────────────────────────
+    //  ACCIONES
+    // ────────────────────────────────────────────────────────
+
+    /** Abrir carpeta real usando tkinter */
+    async loadFolder() {
+        App.showInfo('Abriendo selector de carpeta...');
+        try {
+            const res  = await fetch('/api/load-folder', { method: 'POST' });
+            const data = await res.json();
+            if (data.success) {
+                App.showSuccess(`✅ Carpeta cargada (${data.archivos} archivos)`);
+                this._treeState = {};   // Reset expansión
+                this.loadAndRender();
+            } else {
+                App.showWarning('Selección cancelada');
+            }
+        } catch (err) {
+            App.showError('Error al abrir el selector de carpeta');
+        }
+    },
+
+    /** Abrir archivo en el editor */
+    async openFile(ruta) {
+        if (!ruta) return;
+        try {
+            const res  = await fetch('/api/select-file', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ archivo: ruta })
             });
+            const data = await res.json();
+
+            if (data.success) {
+                // Determinar modo del editor
+                const modeMap = { html: 'html', css: 'css', js: 'js' };
+                const mode    = modeMap[data.tipo] || 'html';
+
+                // Cargar en el editor
+                if (window.Editor) {
+                    Editor.setValue(data.contenido, mode);
+                    Editor.refresh();
+                }
+
+                // Actualizar vista previa
+                if (window.Preview) Preview.update();
+
+                // Actualizar estructura
+                if (window.App) App.loadStructure();
+
+                // Marcar item activo visualmente
+                this._activeFile = ruta;
+                document.querySelectorAll('.fp-file-row').forEach(el => {
+                    el.classList.toggle('fp-item-active', el.dataset.ruta === ruta);
+                });
+
+                App.showSuccess(`📄 ${ruta.split(/[\\/]/).pop()}`);
+            } else {
+                App.showWarning('No se pudo abrir el archivo');
+            }
+        } catch (err) {
+            App.showError('Error al abrir el archivo');
         }
     },
 
-    /**
-     * Alternar la visibilidad del árbol de archivos
-     */
-    toggleTree(treeId, event) {
-        event.preventDefault();
-        event.stopPropagation();
+    /** Expandir / contraer carpeta */
+    toggleFolder(id, rowEl) {
+        const children = document.getElementById(`fp-children-${id}`);
+        const arrow    = document.getElementById(`fp-arrow-${id}`);
+        if (!children) return;
 
-        const container = document.getElementById(`tree-${treeId}`);
-        const arrow = document.getElementById(`arrow-${treeId}`);
+        const isOpen = children.style.display !== 'none';
+        children.style.display = isOpen ? 'none' : 'block';
+        this._treeState[id] = !isOpen;
 
-        if (!container || !arrow) return;
-
-        const isHidden = container.style.display === 'none';
-
-        if (isHidden) {
-            container.style.display = 'block';
-            arrow.classList.add('rotated');
-        } else {
-            container.style.display = 'none';
-            arrow.classList.remove('rotated');
+        if (arrow) {
+            arrow.classList.toggle('fa-chevron-down', !isOpen);
+            arrow.classList.toggle('fa-chevron-right', isOpen);
         }
 
-        console.log(`📁 Árbol ${treeId}: ${isHidden ? 'Expandido' : 'Contraído'}`);
-    },
-
-    // ═══════════════════════════════════════════════════════
-    // MENÚ ARCHIVO
-    // ═══════════════════════════════════════════════════════
-
-    /**
-     * Crear un nuevo archivo
-     */
-    newFile() {
-        const fileName = prompt('Nombre del nuevo archivo:', 'nuevo_archivo.html');
-        if (!fileName) return;
-
-        console.log('📄 Nuevo archivo:', fileName);
-        App.showSuccess(`Archivo "${fileName}" creado`);
-    },
-
-    /**
-     * Crear una nueva carpeta
-     */
-    newFolder() {
-        const folderName = prompt('Nombre de la nueva carpeta:', 'nueva_carpeta');
-        if (!folderName) return;
-
-        console.log('📁 Nueva carpeta:', folderName);
-        App.showSuccess(`Carpeta "${folderName}" creada`);
-    },
-
-    /**
-     * Abrir archivo/carpeta
-     */
-    open() {
-        console.log('📂 Abrir...');
-        App.openFile();
-    },
-
-    /**
-     * Cambiar nombre de archivo/carpeta
-     */
-    rename() {
-        if (this.selectedFiles.length === 0) {
-            App.showWarning('Selecciona un archivo para renombrar');
-            return;
-        }
-
-        const currentName = this.selectedFiles[0];
-        const newName = prompt('Nuevo nombre:', currentName);
-        if (!newName || newName === currentName) return;
-
-        console.log(`🔤 Renombrar: "${currentName}" → "${newName}"`);
-        App.showSuccess(`Renombrado a "${newName}"`);
-    },
-
-    /**
-     * Eliminar archivo/carpeta
-     */
-    delete() {
-        if (this.selectedFiles.length === 0) {
-            App.showWarning('Selecciona un archivo para eliminar');
-            return;
-        }
-
-        const confirmed = confirm(`¿Eliminar ${this.selectedFiles.length} elemento(s)?`);
-        if (!confirmed) return;
-
-        console.log('🗑️ Eliminados:', this.selectedFiles);
-        this.selectedFiles = [];
-        App.showSuccess('Elemento(s) eliminado(s)');
-    },
-
-    /**
-     * Desbloquear archivo
-     */
-    unlock() {
-        if (this.selectedFiles.length === 0) {
-            App.showWarning('Selecciona un archivo para desbloquear');
-            return;
-        }
-
-        console.log('🔓 Desbloqueados:', this.selectedFiles);
-        App.showSuccess('Archivo(s) desbloqueado(s)');
-    },
-
-    /**
-     * Comprobar archivos
-     */
-    checkFiles() {
-        console.log('✅ Comprobando archivos...');
-        App.showInfo('Comprobación de archivos iniciada');
-    },
-
-    /**
-     * Vista previa en tiempo real - Google Chrome
-     */
-    previewChrome() {
-        console.log('🌐 Abriendo en Google Chrome');
-        App.showInfo('Abriendo en Google Chrome...');
-    },
-
-    /**
-     * Vista previa en tiempo real - Internet Explorer
-     */
-    previewIE() {
-        console.log('🌐 Abriendo en Internet Explorer');
-        App.showInfo('Abriendo en Internet Explorer...');
-    },
-
-    /**
-     * Vista previa en tiempo real - Microsoft Edge
-     */
-    previewEdge() {
-        console.log('🌐 Abriendo en Microsoft Edge');
-        App.showInfo('Abriendo en Microsoft Edge...');
-    },
-
-    /**
-     * Editar lista de navegadores
-     */
-    editBrowsersList() {
-        console.log('⚙️ Editar lista de navegadores');
-        App.showInfo('Abriendo configuración de navegadores...');
-    },
-
-    // ═══════════════════════════════════════════════════════
-    // MENÚ EDICIÓN
-    // ═══════════════════════════════════════════════════════
-
-    /**
-     * Cortar archivo(s)
-     */
-    cut() {
-        if (this.selectedFiles.length === 0) {
-            App.showWarning('Selecciona un archivo para cortar');
-            return;
-        }
-
-        this.clipboardData = this.selectedFiles;
-        this.clipboardMode = 'cut';
-        console.log('✂️ Cortados:', this.selectedFiles);
-        App.showSuccess('Archivo(s) cortado(s)');
-    },
-
-    /**
-     * Copiar archivo(s)
-     */
-    copy() {
-        if (this.selectedFiles.length === 0) {
-            App.showWarning('Selecciona un archivo para copiar');
-            return;
-        }
-
-        this.clipboardData = this.selectedFiles;
-        this.clipboardMode = 'copy';
-        console.log('📋 Copiados:', this.selectedFiles);
-        App.showSuccess('Archivo(s) copiado(s)');
-    },
-
-    /**
-     * Pegar archivo(s)
-     */
-    paste() {
-        if (!this.clipboardData || this.clipboardData.length === 0) {
-            App.showWarning('No hay archivos en el portapapeles');
-            return;
-        }
-
-        const mode = this.clipboardMode;
-        const files = this.clipboardData;
-        console.log(`📌 ${mode === 'cut' ? 'Movidos' : 'Pegados'}:`, files);
-        App.showSuccess(`Archivo(s) ${mode === 'cut' ? 'movido' : 'pegado'}(s)`);
-
-        if (mode === 'cut') {
-            this.clipboardData = null;
-            this.clipboardMode = 'copy';
+        // Cambiar icono de la carpeta
+        const folderIcon = rowEl.querySelector('.fa-folder, .fa-folder-open');
+        if (folderIcon) {
+            folderIcon.classList.toggle('fa-folder', isOpen);
+            folderIcon.classList.toggle('fa-folder-open', !isOpen);
         }
     },
 
-    /**
-     * Duplicar archivo(s)
-     */
-    duplicate() {
-        if (this.selectedFiles.length === 0) {
-            App.showWarning('Selecciona un archivo para duplicar');
-            return;
-        }
-
-        console.log('📑 Duplicados:', this.selectedFiles);
-        App.showSuccess('Archivo(s) duplicado(s)');
-    },
-
-    /**
-     * Seleccionar todo
-     */
-    selectAll() {
-        console.log('👁️ Seleccionar todo');
-        App.showSuccess('Todos los elementos seleccionados');
-    },
-
-    // ═══════════════════════════════════════════════════════
-    // OTRAS FUNCIONES
-    // ═══════════════════════════════════════════════════════
-
-    /**
-     * Cambiar sitio/ubicación
-     */
-    changeSite(siteValue) {
-        this.currentSite = siteValue;
-        const siteNames = {
-            'root': 'Escritorio',
-            'a': 'Unidad de disquete (A:)',
-            'c': 'Disco local (C:)',
-            'd': 'Unidad de CD (D:)'
-        };
-
-        console.log('🗂️ Cambiado a:', siteNames[siteValue] || siteValue);
-        App.showInfo(`Ubicación: ${siteNames[siteValue] || siteValue}`);
-    },
-
-    /**
-     * Administrar sitios
-     */
-    manageSite() {
-        console.log('⚙️ Administrar sitios');
-        App.showInfo('Abriendo administrador de sitios...');
-        // Aquí se abriría un diálogo de administración de sitios
-    },
-
-    /**
-     * Expandir panel de archivos
-     */
-    expandPanel() {
-        console.log('📈 Expandir panel de archivos');
-        const container = document.querySelector('#panel-file-tree-container');
-        if (container) {
-            container.style.flex = '1';
-        }
-        App.showInfo('Panel de archivos expandido');
-    },
-
-    /**
-     * Actualizar
-     */
+    /** Actualizar árbol (F5) */
     refresh() {
-        console.log('🔄 Actualizar');
+        this.loadAndRender();
         App.showSuccess('Panel de archivos actualizado');
     },
 
-    /**
-     * Ayuda
-     */
-    help() {
-        console.log('❓ Ayuda');
-        App.showInfo('Abriendo ayuda del panel de archivos...');
+    // ────────────────────────────────────────────────────────
+    //  STUBS DE MENÚ
+    // ────────────────────────────────────────────────────────
+    newFile()        { App.showInfo('Nuevo archivo: próximamente'); },
+    newFolder()      { App.showInfo('Nueva carpeta: próximamente'); },
+    open()           { this.loadFolder(); },
+    rename()         { App.showInfo('Cambiar nombre: próximamente'); },
+    delete()         { App.showInfo('Eliminar: próximamente'); },
+    unlock()         { App.showInfo('Desbloquear: próximamente'); },
+    checkFiles()     { App.showInfo('Comprobando archivos...'); },
+    previewChrome()  { App.showInfo('Abriendo en Chrome...'); },
+    previewIE()      { App.showInfo('Abriendo en IE...'); },
+    previewEdge()    { App.showInfo('Abriendo en Edge...'); },
+    editBrowsersList(){ App.showInfo('Editar lista de navegadores...'); },
+    cut()            { App.showWarning('Selecciona un archivo primero'); },
+    copy()           { App.showWarning('Selecciona un archivo primero'); },
+    paste()          { App.showInfo('Pegar: próximamente'); },
+    duplicate()      { App.showInfo('Duplicar: próximamente'); },
+    selectAll()      { App.showInfo('Seleccionar todo: próximamente'); },
+    manageSite()     { App.showInfo('Administrar sitios: próximamente'); },
+    expandPanel()    { App.showInfo('Expandir panel: próximamente'); },
+    help()           { App.showInfo('Haz doble clic en un archivo para abrirlo en el editor.'); },
+    close()          { Panels.closeSpecificPanel('archivos'); },
+    closeTabGroup()  { Panels.closeTabGroupOfPanel('archivos'); },
+
+    // ────────────────────────────────────────────────────────
+    //  HELPERS DE RENDERIZADO
+    // ────────────────────────────────────────────────────────
+    _renderLoading() {
+        return `
+        <div class="fp-status-msg">
+            <i class="fas fa-spinner fa-spin" style="font-size:22px; color:var(--accent); margin-bottom:10px;"></i>
+            <p>Cargando archivos...</p>
+        </div>`;
     },
 
-    /**
-     * Contraer el panel de archivos
-     */
-    collapsePanel() {
-        console.log('◀ Contraer panel de archivos');
-        const panel = document.querySelector('.panel-group');
-        if (panel) {
-            // Contraer la altura del panel
-            panel.style.minHeight = '32px'; // Solo mostrar la pestaña
-            panel.style.flex = '0';
-            App.showInfo('Panel de archivos contraído');
-        }
+    _renderEmpty() {
+        return `
+        <div class="fp-status-msg">
+            <i class="fas fa-folder-open" style="font-size:32px; color:var(--accent); opacity:.5; margin-bottom:10px;"></i>
+            <p style="margin:0 0 14px;">No hay ningún proyecto abierto</p>
+            <button class="fp-open-btn" onclick="FilePanel.loadFolder()">
+                <i class="fas fa-folder-open"></i> Abrir carpeta...
+            </button>
+        </div>`;
     },
 
-    /**
-     * Cerrar el panel
-     */
-    close() { Panels.closeSpecificPanel('archivos'); },
-    closeTabGroup() { Panels.closeTabGroupOfPanel('archivos'); },
+    _slugify(str) {
+        return str.replace(/[^a-zA-Z0-9]/g, '-');
+    },
 
-    /**
-     * Devuelve el HTML del menú contextual de la cabecera
-     */
+    _escape(str, forAttr = false) {
+        if (!str) return '';
+        const s = str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+        return forAttr ? s.replace(/'/g, '&#39;') : s;
+    },
+
+    // ────────────────────────────────────────────────────────
+    //  HTML ESTÁTICO DEL PANEL (esqueleto)
+    // ────────────────────────────────────────────────────────
     getMenuHTML() {
         return `
             <i class="fas fa-bars"></i>
@@ -348,7 +315,7 @@ const FilePanel = {
                             <span class="shortcut">Ctrl+Alt+Mayús+N</span>
                         </div>
                         <div class="dropdown-item" onclick="FilePanel.open()">
-                            <div class="item-main"><i class="fas fa-folder-open"></i>Abrir</div>
+                            <div class="item-main"><i class="fas fa-folder-open"></i>Abrir carpeta...</div>
                         </div>
                         <div class="divider"></div>
                         <div class="dropdown-item" onclick="FilePanel.rename()">
@@ -358,9 +325,6 @@ const FilePanel = {
                         <div class="dropdown-item" onclick="FilePanel.delete()">
                             <div class="item-main"><i class="fas fa-trash"></i>Eliminar</div>
                             <span class="shortcut">Supr</span>
-                        </div>
-                        <div class="dropdown-item" onclick="FilePanel.unlock()">
-                            <div class="item-main"><i class="fas fa-lock-open"></i>Desbloquear</div>
                         </div>
                         <div class="divider"></div>
                         <div class="dropdown-item" onclick="FilePanel.checkFiles()">
@@ -372,9 +336,6 @@ const FilePanel = {
                             <div class="submenu">
                                 <div class="dropdown-item" onclick="FilePanel.previewChrome()">
                                     <div class="item-main"><i class="fab fa-chrome"></i>Google Chrome</div>
-                                </div>
-                                <div class="dropdown-item" onclick="FilePanel.previewIE()">
-                                    <div class="item-main"><i class="fab fa-internet-explorer"></i>Internet Explorer</div>
                                 </div>
                                 <div class="dropdown-item" onclick="FilePanel.previewEdge()">
                                     <div class="item-main"><i class="fab fa-edge"></i>Microsoft Edge</div>
@@ -404,10 +365,6 @@ const FilePanel = {
                             <div class="item-main"><i class="fas fa-paste"></i>Pegar</div>
                             <span class="shortcut">Ctrl+V</span>
                         </div>
-                        <div class="dropdown-item" onclick="FilePanel.duplicate()">
-                            <div class="item-main"><i class="fas fa-copy"></i>Duplicar</div>
-                            <span class="shortcut">Ctrl+D</span>
-                        </div>
                         <div class="divider"></div>
                         <div class="dropdown-item" onclick="FilePanel.selectAll()">
                             <div class="item-main">Seleccionar todo</div>
@@ -419,9 +376,9 @@ const FilePanel = {
                 <div class="dropdown-item" onclick="FilePanel.manageSite()">
                     <div class="item-main"><i class="fas fa-cogs"></i>Administrar sitio...</div>
                 </div>
-                <!-- Expandir panel -->
-                <div class="dropdown-item" onclick="FilePanel.expandPanel()">
-                    <div class="item-main"><i class="fas fa-expand"></i>Expandir panel de archivos</div>
+                <!-- Abrir carpeta -->
+                <div class="dropdown-item" onclick="FilePanel.loadFolder()">
+                    <div class="item-main"><i class="fas fa-folder-open"></i>Abrir carpeta de proyecto...</div>
                 </div>
                 <!-- Actualizar -->
                 <div class="dropdown-item" onclick="FilePanel.refresh()">
@@ -442,131 +399,66 @@ const FilePanel = {
         `;
     },
 
-    /**
-     * Devuelve el HTML del contenido principal del panel (sin cabecera)
-     */
     getContentHTML() {
         return `
-            <div style="display:flex; flex-direction:column; height:100%;">
-                <!-- Selector y administrar sitios en la misma fila -->
-                <div class="files-location-row">
-                    <div class="files-site-selector">
-                        <select id="site-dropdown" class="files-dropdown" onchange="FilePanel.changeSite(this.value)">
-                            <option value="root">Escritorio</option>
-                            <option value="a">Unidad de disquete (A:)</option>
-                            <option value="c">Disco local (C:)</option>
-                            <option value="d">Unidad de CD (D:)</option>
-                        </select>
-                    </div>
-                    <button class="files-manage-link" onclick="FilePanel.manageSite()">Administrar sitios</button>
-                </div>
+        <div class="fp-shell">
+            <!-- Cabecera: nombre del proyecto + botón abrir carpeta -->
+            <div class="fp-header">
+                <i class="fas fa-folder-open" style="color:var(--accent); margin-right:5px;"></i>
+                <span id="fp-project-name" class="fp-project-name">Sin proyecto</span>
+                <button class="fp-btn-open" onclick="FilePanel.loadFolder()" title="Abrir carpeta de proyecto">
+                    <i class="fas fa-folder-open"></i>
+                </button>
+                <button class="fp-btn-refresh" onclick="FilePanel.refresh()" title="Actualizar (F5)">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
 
-                <!-- Cabecera de columnas -->
-                <div class="files-columns-header">
-                    <div class="files-col-name">Archivos locales <i class="fas fa-arrow-down"></i></div>
-                    <div class="files-col-size">Tamaño</div>
-                </div>
+            <!-- Cabecera de columnas -->
+            <div class="files-columns-header">
+                <div class="files-col-name">Archivos locales <i class="fas fa-arrow-down"></i></div>
+                <div class="files-col-size">Tipo</div>
+            </div>
 
-                <!-- Arbol de carpetas y discos -->
-                <div id="panel-file-tree-container" class="files-tree-scroll" style="flex:1;">
-                    <div class="files-tree-item">
-                        <div class="files-tree-header" onclick="FilePanel.toggleTree('desktop', event)">
-                            <i class="fas fa-chevron-down files-tree-arrow rotated" id="arrow-desktop"></i>
-                            <i class="fas fa-desktop files-node-icon"></i>
-                            <span class="files-node-name">Escritorio</span>
-                            <span class="files-node-size"></span>
-                        </div>
-                        <div class="files-tree-children" id="tree-desktop" style="display: block;">
-                            <div class="files-tree-item">
-                                <div class="files-tree-header" onclick="FilePanel.toggleTree('this-pc', event)">
-                                    <i class="fas fa-chevron-down files-tree-arrow rotated" id="arrow-this-pc"></i>
-                                    <i class="fas fa-desktop files-node-icon"></i>
-                                    <span class="files-node-name">Este equipo</span>
-                                    <span class="files-node-size"></span>
-                                </div>
-                                <div class="files-tree-children" id="tree-this-pc" style="display: block;">
-                                    <div class="files-leaf-row">
-                                        <span class="files-leaf-name"><i class="fas fa-compact-disc files-node-icon"></i>Unidad de DVD (D:)</span>
-                                        <span class="files-leaf-size"></span>
-                                    </div>
-                                    <div class="files-leaf-row">
-                                        <span class="files-leaf-name"><i class="fas fa-hdd files-node-icon"></i>Disco local (C:)</span>
-                                        <span class="files-leaf-size">98.40GB</span>
-                                    </div>
-                                    <div class="files-leaf-row">
-                                        <span class="files-leaf-name"><i class="fas fa-floppy-disk files-node-icon"></i>Unidad de disquete (A:)</span>
-                                        <span class="files-leaf-size"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="files-tree-item">
-                                <div class="files-tree-header" onclick="FilePanel.toggleTree('network', event)">
-                                    <i class="fas fa-chevron-down files-tree-arrow rotated" id="arrow-network"></i>
-                                    <i class="fas fa-network-wired files-node-icon"></i>
-                                    <span class="files-node-name">Red</span>
-                                    <span class="files-node-size"></span>
-                                </div>
-                                <div class="files-tree-children" id="tree-network" style="display: block;">
-                                    <div class="files-leaf-row">
-                                        <span class="files-leaf-name"><i class="fas fa-folder files-node-icon"></i>DESKTOP-9HU8...</span>
-                                        <span class="files-leaf-size"></span>
-                                    </div>
-                                    <div class="files-leaf-row">
-                                        <span class="files-leaf-name"><i class="fas fa-folder files-node-icon"></i>tsclient</span>
-                                        <span class="files-leaf-size"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="files-tree-item">
-                                <div class="files-tree-header" onclick="FilePanel.toggleTree('desktop-items', event)">
-                                    <i class="fas fa-chevron-right files-tree-arrow" id="arrow-desktop-items"></i>
-                                    <i class="fas fa-folder files-node-icon"></i>
-                                    <span class="files-node-name">Elementos de escritorio</span>
-                                    <span class="files-node-size"></span>
-                                </div>
-                                <div class="files-tree-children" id="tree-desktop-items" style="display: none;">
-                                    <div class="files-leaf-row">
-                                        <span class="files-leaf-name"><i class="fas fa-file files-node-icon"></i>Vacio</span>
-                                        <span class="files-leaf-size"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Footer del panel -->
-                <div class="files-panel-footer">
-                    <button class="files-footer-btn" onclick="FilePanel.refresh()" title="Actualizar">
-                        <i class="fas fa-redo"></i>
-                    </button>
-                    <button class="files-footer-btn" onclick="FilePanel.refresh()" title="Sincronizar">
-                        <i class="fas fa-sync"></i>
+            <!-- Árbol de archivos dinámico -->
+            <div id="fp-tree-container" class="files-tree-scroll fp-tree-container">
+                <div class="fp-status-msg">
+                    <i class="fas fa-folder-open" style="font-size:32px; color:var(--accent); opacity:.5; margin-bottom:10px;"></i>
+                    <p style="margin:0 0 14px;">No hay ningún proyecto abierto</p>
+                    <button class="fp-open-btn" onclick="FilePanel.loadFolder()">
+                        <i class="fas fa-folder-open"></i> Abrir carpeta...
                     </button>
                 </div>
             </div>
+
+            <!-- Footer -->
+            <div class="files-panel-footer">
+                <button class="files-footer-btn" onclick="FilePanel.refresh()" title="Actualizar">
+                    <i class="fas fa-redo"></i>
+                </button>
+                <button class="files-footer-btn" onclick="FilePanel.loadFolder()" title="Abrir carpeta">
+                    <i class="fas fa-folder-open"></i>
+                </button>
+            </div>
+        </div>
         `;
     }
 };
 
-// Inicializar cuando el DOM esté listo
+// ────────────────────────────────────────────────────────────
+//  Bootstrap: reinicializar cuando el panel se renderice
+// ────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-    // El panel se inicializa cuando se renderiza
-    const filesPanelContainer = document.querySelector('#panel-file-tree-container');
-    if (filesPanelContainer) {
-        FilePanel.init();
-    }
+    const existing = document.getElementById('fp-tree-container');
+    if (existing) FilePanel.init();
 });
 
-// Reinicializar cuando se renderice nuevamente el panel (por cambios dinámicos)
-const originalPanelRender = Panels.renderPanelContent;
-if (originalPanelRender) {
+const _origRender = Panels.renderPanelContent;
+if (_origRender) {
     Panels.renderPanelContent = function(container, panelId) {
-        originalPanelRender.call(this, container, panelId);
+        _origRender.call(this, container, panelId);
         if (panelId === 'archivos') {
-            setTimeout(() => FilePanel.init(), 0);
+            setTimeout(() => FilePanel.init(), 50);
         }
     };
 }

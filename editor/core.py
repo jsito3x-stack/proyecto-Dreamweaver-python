@@ -154,14 +154,15 @@ class EditorCore:
             self.soup = None                  # ← Sin HTML procesado
             self.archivo_principal = directorio
             self._limpiar_historial()
-            
-            print(f"✅ Proyecto cargado: {len(self.proyecto)} archivos")
-            print(f"ℹ️  Esperando que el usuario seleccione un archivo...")
-            
+
+            total = len(self.proyecto)
             return True
-            
+
         except Exception as e:
-            print(f"Error cargando proyecto: {e}")
+            try:
+                print(f"Error cargando proyecto: {e}")
+            except Exception:
+                pass
             return False
     
     def _detectar_archivos_vinculados(self):
